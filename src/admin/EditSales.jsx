@@ -325,16 +325,15 @@ function EditSales() {
             </div>
           </Col>
           <Col md={2}>
-            {/* <img
+            <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
-              // src={img}
-              src={`data:image/jpeg;base64,${values.picture}`}
+              src={img}
+              // src={`data:image/jpeg;base64,${values.picture}`}
               className="img"
               alt="ภาพ"
-            ></img> */}
+            ></img>
 
-            <div>
-              {/* แสดงภาพ */}
+            {/* <div>
               {values.picture && (
                 <img
                   style={{ width: "100px", height: "100px" }}
@@ -342,7 +341,7 @@ function EditSales() {
                   alt="ภาพ"
                 />
               )}
-            </div>
+            </div> */}
           </Col>
         </Row>
 
