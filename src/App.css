@@ -1,0 +1,40 @@
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+/*     
+    background: #495057;
+    color: aliceblue; */
+    /* font-family: fantasy; */
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height:  100vh; */
+
+  }
+
+
+  .back{
+
+    color: #ffffff;
+    background-color: #ff1900;
+
+  }
+  .back:hover{
+    
+    filter: drop-shadow(0 0 2em #ff5e00);
+
+  }
+
+
+  .from-control{
+    margin: auto;
+    padding: auto;
+    position: relative;
+  }

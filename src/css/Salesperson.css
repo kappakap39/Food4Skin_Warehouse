@@ -1,0 +1,155 @@
+body {
+}
+
+.container1 {
+  /* padding: 20px; */
+  
+  /* box-shadow:  0 5px 10px #ffffff; */
+  border-radius: 20px;
+  /* width: ; */
+  height: 595px;
+
+  /* filter: drop-shadow(0 0 0.2em #ffffffbd); */
+  border-radius: 20px;
+  /* padding-top: 30px; */
+  padding-bottom: 20px;
+  /* background: #212529; */
+  margin: 30px;
+
+}
+.container1:hover {
+
+  /* filter: drop-shadow(0 0 0.2em #11ff00); */
+  /* color: #11ff00; */
+
+}
+
+.headernav {
+  filter: drop-shadow(0 0 0.15em #ffffffd7);
+}
+.headernav:hover {
+  /* filter: drop-shadow(0 0 0.15em #11ff00); */
+
+}
+
+.search {
+  /* margin: 20px; */
+  margin-left: 15px;
+  margin-top: 15px;
+  width: 600px;
+  /* background: #1b035f; */
+  padding-right: 50px;
+}
+.add {
+  margin: 17px;
+  background-color: #6de60f;
+  color: #000000;
+}
+
+.add2 {
+  flex: 1 0 0%;
+  display: flex;
+  justify-content: flex-end;
+  height: 78px;
+}
+
+.centericon {
+
+  /* display: flex;
+  justify-content: center; */
+
+}
+.centericon :hover {
+
+  color: #6de60f;
+  cursor: pointer;
+  vertical-align: center;
+  filter: drop-shadow(0 0 5px #eeff00);
+}
+
+.h3 {
+  
+  text-align: center;
+  /* margin-bottom: 20px; */
+  color: #6de60f ;
+  filter: drop-shadow(0 0 2px #23a256);
+
+}
+.h3Editsale {
+  
+  text-align: center;
+  margin-bottom: 40px;
+  color: #6de60f ;
+  filter: drop-shadow(0 0 2px #23a256);
+
+}
+.h3:hover {
+}
+
+button {
+  height: fit-content;
+}
+.readtext {
+  text-align: center;
+}
+
+.read {
+  background-color: rgb(204, 255, 0);
+  margin: 10px;
+  
+}
+.read:hover {
+  background-color: rgb(247, 0, 255);
+  filter: drop-shadow(0 0 2em #cb64ff);
+  color: aliceblue;
+}
+
+.read2 {
+  /* background-color: rgb(204, 255, 0); */
+  margin: 1px;
+  padding-left: 45%;
+  
+}
+.read2:hover {
+  /* background-color: rgb(247, 0, 255); */
+  filter: drop-shadow(0 0 2em #cb64ff);
+  /* color: aliceblue; */
+}
+
+.add:hover {
+  background-color: aqua;
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.seart {
+  filter: drop-shadow(0 0 2em #ffffffaa);
+}
+
+.table-container{
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  overflow: auto;
+  height: 445px;
+  
+}
+
+tbody{
+  /* border-color: chartreuse; */
+  border-style: solid;
+  border-width: 0;
+}
+
+.Nextpage{
+  display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.NextpageB{
+  display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,168 @@
+body {
+}
+
+.containerread {
+  /* border-radius: 20px;
+  padding-top: 30px;
+  padding-bottom: 20px; */
+  /* background: #212529; */
+  margin-top: 50px;
+  height: 100%;
+  width: 99%;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+  
+  /* border-radius: 20px; */
+  /* filter: drop-shadow(0 0 0.2em #ffffffbd); */
+
+}
+
+
+.button2 {
+  display: flex;
+  justify-content: flex-end;
+}
+.bgstatus {
+  font-size: medium;
+  color: rgb(0, 0, 0);
+  background-color: rgba(0, 255, 13, 0.879);
+
+  margin-bottom: 20px;
+
+}
+
+.cancel {
+  display: flex;
+  justify-content: start;
+}
+h6 {
+  color: rgb(255, 0, 0);
+}
+.liferow{
+    display: flex;
+    justify-content: flex-start;
+}
+
+h3{
+    text-align: center;
+    color: rgb(255, 255, 255);
+    /* padding-bottom: 5px; */
+    /* padding-top: 0px; */
+}
+
+.list-group-item{
+    margin-bottom: 10px;
+    background-color: rgba(240, 248, 255, 0.814);
+}
+
+.bgeditModal {
+    color: rgb(251, 255, 0);
+    background-color: rgb(0, 0, 0);
+    height: 41px;
+    width: 70px;
+  }
+  .bgeditModal:hover {
+    color: rgb(0, 0, 0);
+    background-color: rgb(0, 255, 0);
+    display: flex;
+    filter: drop-shadow(0 0 2em #00fc3baa);
+  }
+
+  .bgedit {
+    color: rgb(255, 255, 255);
+    background-color: rgb(212, 181, 0);
+    height: 40px;
+    width: 100px;
+  }
+  .bgedit:hover {
+    color: rgb(0, 0, 0);
+    background-color: rgb(251, 255, 0);
+    filter: drop-shadow(0 0 2em #e9f600aa);
+  }
+
+  .txt{
+    /* background-color: rgb(189, 202, 211); */
+    color: rgb(255, 255, 255);
+    display: flex;
+  }
+
+  /* .passwordIN{
+    background-color: rgb(189, 202, 211);
+    color: rgb(0, 0, 0);
+    width: 525px;
+    border-radius: 6px;
+  } */
+  .Input{
+    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(211, 211, 211);
+    color: rgb(0, 0, 0);
+    width:475px;
+    height: 40px;
+    border-radius: 6px;
+    /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
+    margin-bottom: 15px;
+    padding-left: 10px;
+  }
+  /* .InputST{
+    background-color: rgb(211, 211, 211);
+    color: rgb(0, 0, 0);
+    width:232px;
+    height: 40px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+  } */
+  .Input2{
+    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(211, 211, 211);
+    color: rgb(0, 0, 0);
+    width:450px;
+    height: 40px;
+    border-radius: 6px;
+    /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
+    margin-bottom: 15px;
+    padding-left: 10px;
+  }
+  .Input3{
+    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(211, 211, 211);
+    color: rgb(0, 0, 0);
+    width:224.4px;
+    height: 40px;
+    border-radius: 6px;
+    /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
+    margin-bottom: 15px;
+    padding-left: 10px;
+    margin-right: 0px;
+  }
+  .InputID{
+    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(211, 211, 211);
+    /* color: rgb(103, 103, 103); */
+    color: rgb(0, 0, 0);
+    width: 150px;
+    height: 40px;
+    border-radius: 6px;
+    /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
+    margin-bottom: 15px;
+    padding-left: 10px;
+  }
+  .InputSex{
+    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(211, 211, 211);
+    color: rgb(0, 0, 0);
+    width: 283px;
+    height: 40px;
+    border-radius: 6px;
+    /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
+    margin-bottom: 15px;
+    padding-left: 10px;
+  }
+
+  .input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    margin-left: calc(var(--bs-border-width) * -1);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    /* background: rgb(189, 202, 211); */
+}
