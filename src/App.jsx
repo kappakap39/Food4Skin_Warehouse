@@ -16,6 +16,8 @@ import AboutMe from "./admin/AboutMe";
 import Login from "./admin/Login";
 import EditSales from "./admin/EditSales";
 import EditAboutSale from "./salescomponent/EditAboutSale"
+import Updatesales from "./salescomponent/Updatesales"
+import Product from "./salescomponent/Product"
 
 
 
@@ -34,6 +36,8 @@ function App() {
           <Route path="/AboutMe" element={<AboutMe/>}></Route>
           <Route path="/EditSales/:id" element={<EditSales/>}></Route>
           <Route path="/EditAboutSale/:ID_sales" element={<EditAboutSale/>}></Route>
+          <Route path="/Updatesales" element={<Updatesales/>}></Route>
+          <Route path="/Product" element={<Product/>}></Route>
 
         </Routes>
       </BrowserRouter>

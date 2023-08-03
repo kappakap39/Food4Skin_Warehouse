@@ -129,3 +129,7 @@ button:focus-visible {
   padding-left: 0;
   list-style: none;
 }
+
+.container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+    max-width: 100%;
+}

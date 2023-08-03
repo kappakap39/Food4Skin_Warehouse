@@ -26,7 +26,7 @@ function Login() {
             </div>
 
             <div>
-              <a href="/Salesperson">
+              <a href="/Product">
                 <span></span>
                 <span></span>
                 <span></span>

@@ -3,7 +3,7 @@ body {
 
 .container1 {
   /* padding: 20px; */
-  
+
   /* box-shadow:  0 5px 10px #ffffff; */
   border-radius: 20px;
   /* width: ; */
@@ -15,13 +15,10 @@ body {
   padding-bottom: 20px;
   /* background: #212529; */
   margin: 30px;
-
 }
 .container1:hover {
-
   /* filter: drop-shadow(0 0 0.2em #11ff00); */
   /* color: #11ff00; */
-
 }
 
 .headernav {
@@ -29,7 +26,6 @@ body {
 }
 .headernav:hover {
   /* filter: drop-shadow(0 0 0.15em #11ff00); */
-
 }
 
 .search {
@@ -45,6 +41,11 @@ body {
   background-color: #6de60f;
   color: #000000;
 }
+.addProduct {
+  margin: 5px;
+  background-color: aqua;
+  color: #000000;
+}
 
 .add2 {
   flex: 1 0 0%;
@@ -54,13 +55,10 @@ body {
 }
 
 .centericon {
-
   /* display: flex;
   justify-content: center; */
-
 }
 .centericon :hover {
-
   color: #6de60f;
   cursor: pointer;
   vertical-align: center;
@@ -68,20 +66,16 @@ body {
 }
 
 .h3 {
-  
   text-align: center;
   /* margin-bottom: 20px; */
-  color: #6de60f ;
+  color: #6de60f;
   filter: drop-shadow(0 0 2px #23a256);
-
 }
 .h3Editsale {
-  
   text-align: center;
   margin-bottom: 40px;
-  color: #6de60f ;
+  color: #6de60f;
   filter: drop-shadow(0 0 2px #23a256);
-
 }
 .h3:hover {
 }
@@ -96,7 +90,6 @@ button {
 .read {
   background-color: rgb(204, 255, 0);
   margin: 10px;
-  
 }
 .read:hover {
   background-color: rgb(247, 0, 255);
@@ -108,7 +101,6 @@ button {
   /* background-color: rgb(204, 255, 0); */
   margin: 1px;
   padding-left: 45%;
-  
 }
 .read2:hover {
   /* background-color: rgb(247, 0, 255); */
@@ -120,36 +112,39 @@ button {
   background-color: aqua;
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+.addProduct:hover {
+  background-color: rgb(0, 255, 0);
+  filter: drop-shadow(0 0 2em #2cff4faa);
+}
 
 .seart {
   filter: drop-shadow(0 0 2em #ffffffaa);
 }
 
-.table-container{
+.table-container {
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 0px;
   margin-top: 0px;
   overflow: auto;
   height: 445px;
-  
 }
 
-tbody{
+tbody {
   /* border-color: chartreuse; */
   border-style: solid;
   border-width: 0;
 }
 
-.Nextpage{
+.Nextpage {
   display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 }
-.NextpageB{
+.NextpageB {
   display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 }

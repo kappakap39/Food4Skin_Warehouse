@@ -3,6 +3,11 @@
   color: #ffffff;
   font-size: 18px;
 }
+.menunavSales {
+  /* filter: drop-shadow(0 0 2px #00ff04); */
+  color: #ffffff;
+  font-size: 18px;
+}
 .navname {
   color: #6de60f;
   font-size: 18px;
@@ -10,6 +15,10 @@
   margin-right: 30px;
 }
 .menunav:hover {
+  filter: drop-shadow(0 0 0.5px #ffffff);
+  color: #00ff2a;
+}
+.menunavSales:hover {
   filter: drop-shadow(0 0 0.5px #ffffff);
   color: #00ff2a;
 }
