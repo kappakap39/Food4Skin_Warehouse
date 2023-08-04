@@ -128,7 +128,7 @@ function EditAboutSale() {
                   name="district"
                   id="district"
                   disabled
-                  value={dt.amphures}
+                  value={dt.districts}
                 />
               </InputGroup>
 
@@ -137,9 +137,9 @@ function EditAboutSale() {
                 <Form.Control
                   aria-label="ตำบล"
                   type="text"
-                  name=""
-                  id=""
-                  value={dt.districts}
+                  name="subdistricts"
+                  id="subdistricts"
+                  value={dt.subdistricts}
                   disabled
                 />
               </InputGroup>

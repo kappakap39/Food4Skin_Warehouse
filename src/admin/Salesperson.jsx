@@ -61,11 +61,11 @@ function Salesperson() {
           sales.sex.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.IDcard.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.province.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.amphures.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.districts
+          sales.districts.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          sales.subdistricts
             .toLowerCase()
             .includes(e.target.value.toLowerCase()) ||
-          sales.zipcode.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          sales.zip_code.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.Persistent_status.toLowerCase().includes(
             e.target.value.toLowerCase()
           ) ||

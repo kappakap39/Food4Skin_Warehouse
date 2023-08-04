@@ -70,12 +70,12 @@ function EditSales() {
           sex: res.data[0].sex,
           IDcard: res.data[0].IDcard,
           province: res.data[0].province,
-          amphures: res.data[0].amphures,
+          subdistricts: res.data[0].subdistricts,
           AddressSale: res.data[0].AddressSale,
           Tel: res.data[0].Tel,
           contact: res.data[0].contact,
           picture: res.data[0].picture,
-          zipcode: res.data[0].zipcode,
+          zip_code: res.data[0].zip_code,
           ID_sales: res.data[0].ID_sales,
         });
       })
@@ -91,12 +91,12 @@ function EditSales() {
     sex: "",
     IDcard: "",
     province: "",
-    amphures: "",
+    subdistricts: "",
     AddressSale: "",
     Tel: "",
     contact: "",
     picture: "",
-    zipcode: "",
+    zip_code: "",
     ID_sales: "",
   });
 
@@ -111,6 +111,46 @@ function EditSales() {
       .catch((err) => console.log(err));
   };
 
+  //!
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  // const [cradID, setCradID] = useState("");
+
+  // const handleInput = (event) => {
+  //   const { name, value } = event.target;
+
+  //   if (name === "IDcard") {
+  //     const formattedCardID = value.replace(/-/g, "");
+  //     const formattedText1 = formattedCardID
+  //       .replace(/\D/g, "")
+  //       .slice(0, 13)
+  //       .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+
+  //     setCradID(formattedText1);
+  //     setValues((prev) => ({ ...prev, [name]: formattedText1 }));
+  //   }
+  //   if (name === "Tel") {
+  //     const formattedPhoneNumber = value.replace(/-/g, "");
+  //     const formattedText = formattedPhoneNumber.replace(/\D/g, "");
+
+  //     // ตรวจสอบเงื่อนไขเพื่อให้ตัวเลขในเบอร์โทรศัพท์เป็นเฉพาะตัวเลขและตัดจำนวนให้เหลือเพียง 10 หรือ 9 ตัว
+  //     let formattedPhoneNumberFinal;
+  //     if (formattedText.length === 9) {
+  //       formattedPhoneNumberFinal = formattedText.replace(
+  //         /(\d{2})(\d{3})(\d{4})/,
+  //         "$1-$2-$3"
+  //       );
+  //     } else {
+  //       formattedPhoneNumberFinal = formattedText
+  //         .slice(0, 10)
+  //         .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  //     }
+
+  //     setPhoneNumber(formattedPhoneNumberFinal);
+  //     setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
+  //   } else {
+  //     setValues((prev) => ({ ...prev, [name]: value }));
+  //   }
+  // };
   return (
     // <div className="containerread">
     <div>
@@ -155,6 +195,7 @@ function EditSales() {
               type="text"
               disabled
               value={values.IDcard}
+              
             />
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
@@ -206,10 +247,10 @@ function EditSales() {
                 <input
                   name="text"
                   className="Input3"
-                  id="districts"
+                  id="subdistricts"
                   type="text"
                   disabled
-                  value={values.districts}
+                  value={values.subdistricts}
                 />
               </Col>
               <Col>
@@ -217,10 +258,10 @@ function EditSales() {
                 <input
                   name="text"
                   className="Input3"
-                  id="amphures"
+                  id="districts"
                   type="text"
                   disabled
-                  value={values.amphures}
+                  value={values.districts}
                 />
                 <h6 className="txt">รหัสไปรษณีย์</h6>
                 <input
@@ -229,7 +270,7 @@ function EditSales() {
                   id="zipcode"
                   type="text"
                   disabled
-                  value={values.zipcode}
+                  value={values.zip_code}
                 />
               </Col>
             </Row>

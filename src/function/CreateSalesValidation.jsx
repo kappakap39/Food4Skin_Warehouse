@@ -54,10 +54,10 @@ function Validation(values) {
   } else {
     errors.contact = "";
   }
-  if (values.zipcode === "") {
-    errors.zipcode = "กรอกจังหวัดอำเภอและตำบล!";
+  if (values.zip_code === "") {
+    errors.zip_code = "กรอกจังหวัดอำเภอและตำบล!";
   } else {
-    errors.zipcode = "";
+    errors.zip_code = "";
   }
 
   //*

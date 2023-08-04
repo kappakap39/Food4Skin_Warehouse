@@ -24,48 +24,38 @@ import { AiOutlineSave } from "react-icons/ai";
 
 import Validation from "../function/CreateSalesValidation.jsx";
 import MenuNav from "./MenuNav";
+import FormText from "react-bootstrap/esm/FormText";
+// import { subdistricts } from "../../../../Backend/controller/provinces";
 function AddSales() {
   const navigate = useNavigate();
 
   //จังหวัดอำเภอตำบล
-  const [provinces, setProvinces] = useState([]);
-  const [amphures, setAmphures] = useState([]);
+  const [province, setProvince] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [subdistricts, setSubdistricts] = useState([]);
+
 
   useEffect(() => {
+    //ดึงข้อมูลจังหวัด
     axios
       .get("http://localhost:2001/provinces/provinces")
       .then((res) => {
-        setProvinces(res.data);
+        setProvince(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  const onChangeProvinces = (e) => {
+
+
+  const onChangeProvince = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
     let label = e.nativeEvent.target[index].text;
     setValues({ ...values, [e.target.name]: label });
 
     const id = e.target.value;
     axios
-      .get(`http://localhost:2001/provinces/provinces/${id}/amphures`)
-      .then((res) => {
-        setAmphures(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const onChangeAmphures = (e) => {
-    let index = e.nativeEvent.target.selectedIndex;
-    let label = e.nativeEvent.target[index].text;
-    setValues({ ...values, [e.target.name]: label });
-
-    const id = e.target.value;
-    axios
-      .get(`http://localhost:2001/provinces/amphures/${id}`)
+      .get(`http://localhost:2001/provinces/provinces/${id}/districts`)
       .then((res) => {
         setDistricts(res.data);
       })
@@ -74,22 +64,35 @@ function AddSales() {
       });
   };
 
-  //ดึงรหัสไปรษณีมาด้วย
   const onChangeDistricts = (e) => {
+    let index = e.nativeEvent.target.selectedIndex;
+    let label = e.nativeEvent.target[index].text;
+    setValues({ ...values, [e.target.name]: label });
+
+    const id = e.target.value;
+    axios
+      .get(`http://localhost:2001/provinces/districts/${id}`)
+      .then((res) => {
+        setSubdistricts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const onChangeSubdistricts = (e) => {
     // let index = e.nativeEvent.target.selectedIndex;
     // let label = e.nativeEvent.target[index].text;
-    const filterDistrict = districts.filter((item) => {
+    const filterDistrict = subdistricts.filter((item) => {
       return e.target.value == item.id;
     });
-    console.log(filterDistrict[0].name_th);
+    console.log(filterDistrict[0].name_in_thai);
     console.log(filterDistrict[0].zip_code);
 
     setValues({
       ...values,
-      [e.target.name]: filterDistrict[0].name_th,
-      zipcode: filterDistrict[0].zip_code,
+      [e.target.name]: filterDistrict[0].name_in_thai,
+      zip_code: filterDistrict[0].zip_code,
     });
-
     console.log(e.target.value);
   };
 
@@ -102,13 +105,13 @@ function AddSales() {
     IDcard: "",
     districts: "",
     province: "",
-    amphures: "",
+    subdistricts: "",
     AddressSale: "",
     Tel: "",
     Persistent_status: "",
     contact: "",
     picture: "",
-    zipcode: "",
+    zip_code: "",
   });
 
   // post("http://localhost:2001/addsale", values)
@@ -133,13 +136,9 @@ function AddSales() {
       err.Tel === "" &&
       err.Persistent_status === "" &&
       err.picture === "" &&
-      err.zipcode === "" &&
+      err.zip_code === "" &&
       err.contact === ""
 
-      //*
-      // err.provinces === "" &&
-      // err.amphures === "" &&
-      // err.districts === ""
     ) {
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
       axios
@@ -194,6 +193,7 @@ function AddSales() {
       setValues((prev) => ({ ...prev, [name]: value }));
     }
   };
+  console.log(cradID);
 
   console.log(values);
 
@@ -217,9 +217,7 @@ function AddSales() {
                   id="sex"
                   type="text"
                   onChange={handleInput}
-                  // onChange={(e) =>
-                  //   setValues({ ...values, sex: e.target.value })
-                  // }
+
                 >
                   <option>เพศ</option>
                   <option value="ชาย">ชาย</option>
@@ -242,6 +240,7 @@ function AddSales() {
                       type="text"
                       name="IDcard"
                       id="IDcard"
+                      value={cradID}
                       onChange={handleInput}
                       // onChange={(e) =>
                       //   setValues({ ...values, IDcard: e.target.value })
@@ -270,12 +269,12 @@ function AddSales() {
                     type="text"
                     name="province"
                     id="province"
-                    onChange={(e) => onChangeProvinces(e)}
+                    onChange={(e) => onChangeProvince(e)}
                   >
                     <option>จังหวัด</option>
-                    {provinces.map((item, index) => (
+                    {province.map((item, index) => (
                       <option key={index} value={item.id}>
-                        {item.name_th}
+                        {item.name_in_thai}
                       </option>
                     ))}
                   </Form.Select>
@@ -289,14 +288,14 @@ function AddSales() {
                   <Form.Select
                     aria-label="อำเภอ"
                     type="text"
-                    name="amphures"
-                    id="amphures"
-                    onChange={(e) => onChangeAmphures(e)}
+                    name="districts"
+                    id="districts"
+                    onChange={(e) => onChangeDistricts(e)}
                   >
                     <option>อำเภอ</option>
-                    {amphures.map((item, index) => (
+                    {districts.map((item, index) => (
                       <option key={index} value={item.id}>
-                        {item.name_th}
+                        {item.name_in_thai}
                       </option>
                     ))}
                   </Form.Select>
@@ -373,14 +372,14 @@ function AddSales() {
                   <Form.Select
                     aria-label="ตำบล"
                     type="text"
-                    name="districts"
-                    id="districts"
-                    onChange={(e) => onChangeDistricts(e)}
+                    name="subdistricts"
+                    id="subdistricts"
+                    onChange={(e) => onChangeSubdistricts(e)}
                   >
                     <option>ตำบล</option>
-                    {districts.map((item, index) => (
+                    {subdistricts.map((item, index) => (
                       <option key={index} value={item.id}>
-                        {item.name_th}
+                        {item.name_in_thai}
                       </option>
                     ))}
                   </Form.Select>
@@ -392,18 +391,18 @@ function AddSales() {
               <Col>
                 <h6 className="txt">
                 รหัสไปรษณีย์
-                  <h6></h6>{errors.zipcode && (
-                  <span className="text-danger">{errors.zipcode}</span>
+                  <h6></h6>{errors.zip_code && (
+                  <span className="text-danger">{errors.zip_code}</span>
                 )}
                 </h6>
                 
                 <input
-                  name="zipcode"
+                  name="zip_code"
                   className="Inputadd"
                   id="contact"
                   type="text"
                   disabled
-                  value={values.zipcode}
+                  value={values.zip_code}
                   onChange={handleInput}
                 />
               </Col>
@@ -475,6 +474,8 @@ function AddSales() {
                     id="Tel"
                     maxLength={12}
                     onChange={handleInput}
+                    value={phoneNumber}
+
                   />
                 </InputGroup>
               </Col>
