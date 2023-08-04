@@ -3,24 +3,15 @@ import "../css/Salesperson.css";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
-
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
 import { BiSearchAlt } from "react-icons/bi";
 import { BiSolidUserPlus } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import { Link } from "react-router-dom";
-
-import MenuNav from "./MenuNavSales";
 import MenuNavSales from "./MenuNavSales";
 
 function Product() {
@@ -30,7 +21,7 @@ function Product() {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:2001/showall")
+      .get("http://localhost:2001/selectlot")
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -41,7 +32,7 @@ function Product() {
   useEffect(() => {
     const fetchData = () => {
       axios
-        .get("http://localhost:2001/showall")
+        .get("http://localhost:2001/selectlot")
         .then((res) => {
           setData(res.data);
           setSearchData(res.data);
@@ -55,38 +46,33 @@ function Product() {
       setData(searchData);
     } else {
       const filterResult = searchData.filter(
-        (sales) =>
-          // sales.ID_sales.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.fullname.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.mail.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.sex.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.IDcard.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.province.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.districts
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          sales.subdistricts
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase()) ||
-          sales.zip_code.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.Persistent_status.toLowerCase().includes(
-            e.target.value.toLowerCase()
-          ) ||
-          sales.contact.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.Tel.toLowerCase().includes(e.target.value.toLowerCase())
+        (product) =>
+          
+          product.ID_lot.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Inventories_lot.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.ID_product.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Name_product.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Production_point.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Retail_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Level_1_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Level_2_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.Level_3_price.toLowerCase().includes(e.target.value.toLowerCase())
+          
       );
-
+      
       if (filterResult.length > 0) {
         setData(filterResult);
       } else {
         setData([
           {
-            ID_sales: "ไม่พบข้อมูล",
-            fullname: "ไม่พบข้อมูล",
-            Tel: "ไม่พบข้อมูล",
-            contact: "ไม่พบข้อมูล",
-            mail: "ไม่พบข้อมูล",
-            IDcard: "ไม่พบข้อมูล",
+            ID_lot: "ไม่พบข้อมูล",
+            Name_product: "ไม่พบข้อมูล",
+            Production_point: "ไม่พบข้อมูล",
+            Inventories_lot: "ไม่พบข้อมูล",
+            Retail_price: "ไม่พบข้อมูล",
+            Level_1_price: "ไม่พบข้อมูล",
+            Level_2_price: "ไม่พบข้อมูล",
+            Level_3_price: "ไม่พบข้อมูล",
           },
         ]);
       }
@@ -95,14 +81,14 @@ function Product() {
   };
 
   //!Delete
-  const handleDelete = (ID_sales) => {
-    axios
-      .delete("http://localhost:2001/deleteSales/" + ID_sales)
-      .then((res) => {
-        location.reload();
-      })
-      .catch((err) => console.log(err));
-  };
+  // const handleDelete = (ID_sales) => {
+  //   axios
+  //     .delete("http://localhost:2001/deleteSales/" + ID_sales)
+  //     .then((res) => {
+  //       location.reload();
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   //!next page
   const [currentPage, setCurrentPage] = useState(1);
@@ -145,12 +131,12 @@ function Product() {
             <div className="search">
               <InputGroup className="mb-4">
                 <Form.Control
-                  className="inputsearch"
-                  type="text"
-                  placeholder="ค้นหาโดย..."
-                  aria-describedby="basic-addon2"
-                  value={filterVal}
-                  onInput={(e) => handleFilter(e)}
+                  // className="inputsearch"
+                  // type="text"
+                  // placeholder="ค้นหาโดย..."
+                  // aria-describedby="basic-addon2"
+                  // value={filterVal}
+                  // onInput={(e) => handleFilter(e)}
                 />
               </InputGroup>
             </div>
@@ -176,12 +162,15 @@ function Product() {
           <table className=" table table-striped table-dark ">
             <thead className="table-secondary">
               <tr>
-                <th>รหัสพนักงาน</th>
-                <th>ชื่อ-นามสกุล</th>
-                <th>เบอร์โทรศัพท์</th>
-                <th>ช่องทางการติดต่อ</th>
-                <th>อีเมล</th>
-                <th>เลขบัตรประชาชน</th>
+                <th>รหัสล็อต</th>
+                <th>ชื่อผลิตภัณฑ์</th>
+                <th>จุดต่ำกว่าจุดสั่งผลิต (ชิ้น)</th>
+                <th>จำนวนสินค้า (ชิ้น)</th>
+                <th>ราคาปลีก</th>
+                <th>ราคาส่ง ระดับ1</th>
+                <th>ราคาส่ง ระดับ2</th>
+                <th>ราคาส่ง ระดับ3</th>
+                
                 <th className="readtext">ข้อมูล/แก้ไข</th>
               </tr>
             </thead>
@@ -190,33 +179,21 @@ function Product() {
               {records.map((records, index) => {
                 return (
                   <tr key={index}>
-                    <td scope="row">{records.ID_sales}</td>
-                    <td>{records.fullname}</td>
-                    <td>{records.Tel}</td>
-                    <td>{records.contact}</td>
-                    <td>{records.mail}</td>
-                    <td>{records.IDcard}</td>
+                    <td scope="row">{records.ID_lot}</td>
+                    <td>{records.Name_product}</td>
+                    <td>{records.Production_point}</td>
+                    <td>{records.Inventories_lot}</td>
+                    <td>{records.Retail_price}</td>
+                    <td>{records.Level_1_price}</td>
+                    <td>{records.Level_2_price}</td>
+                    <td>{records.Level_3_price}</td>
 
-                    <td
-                      className="centericon"
-                      // onClick={() => navigate(`/Salesperson/ReadSales`)}
-                    >
-                      {/* <Link to={`/Salesperson/ReadSales/${sales.ID_sales}`}>
-                        <BiSearchAlt />
-                      </Link> */}
-
-                      {/* <button className="read"  onClick={() => navigate(`/Salesperson/ReadSales/${sales.ID_sales}`)}>
-                        <BiSearchAlt />
-                      </button> */}
-
-                      {/* <div className="read2"  onClick={() => navigate(`/Salesperson/ReadSales/${sales.ID_sales}`)}>
-                      <BiSearchAlt />
-                      </div> */}
+                    <td className="centericon">
                       <div
                         className="read2"
-                        onClick={() =>
-                          navigate(`/EditSales/${records.ID_sales}`)
-                        }
+                        // onClick={() =>
+                        //   navigate(`/EditSales/${records.ID_lot}`)
+                        // }
                       >
                         <BiSearchAlt />
                       </div>
