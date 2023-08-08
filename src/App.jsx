@@ -15,9 +15,9 @@ import AddSales from "./admin/AddSales";
 import AboutMe from "./admin/AboutMe";
 import Login from "./admin/Login";
 import EditSales from "./admin/EditSales";
-import EditAboutSale from "./salescomponent/EditAboutSale"
-import Updatesales from "./salescomponent/Updatesales"
-import Product from "./salescomponent/Product"
+import EditAboutSale from "./salescomponent/EditAboutSale";
+import Updatesales from "./salescomponent/Updatesales";
+import Product from "./salescomponent/Product";
 
 
 

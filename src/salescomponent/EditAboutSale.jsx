@@ -87,10 +87,10 @@ function EditAboutSale() {
                 <Form.Control
                   aria-label="อีเมล"
                   type="email"
-                  name="mail"
+                  name="email"
                   id="email"
                   disabled
-                  value={dt.mail}
+                  value={dt.email}
                 />
               </InputGroup>
             </Col>

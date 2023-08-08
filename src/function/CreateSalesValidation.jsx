@@ -13,10 +13,10 @@ function Validation(values) {
     errors.fullname = "";
   }
 
-  if (values.mail === "") {
-    errors.mail = "กรุณากรอกอีเมล!";
+  if (values.email === "") {
+    errors.email = "กรุณากรอกอีเมล!";
   } else {
-    errors.mail = "";
+    errors.email = "";
   }
 
   if (values.password === "") {

@@ -65,7 +65,7 @@ function EditSales() {
           Persistent_status: res.data[0].Persistent_status,
           fullname: res.data[0].fullname,
           districts: res.data[0].districts,
-          mail: res.data[0].mail,
+          email: res.data[0].email,
           password: res.data[0].password,
           sex: res.data[0].sex,
           IDcard: res.data[0].IDcard,
@@ -86,7 +86,7 @@ function EditSales() {
     Persistent_status: "",
     fullname: "",
     districts: "",
-    mail: "",
+    email: "",
     password: "",
     sex: "",
     IDcard: "",
@@ -212,10 +212,10 @@ function EditSales() {
             <input
               name="text"
               className="Input2"
-              id="mail"
+              id="email"
               type="text"
               disabled
-              value={values.mail}
+              value={values.email}
             />
 
             <h6 className="txt">รหัสผ่าน</h6>

@@ -99,7 +99,7 @@ function AddSales() {
   //add
   const [values, setValues] = useState({
     fullname: "",
-    mail: "",
+    email: "",
     password: "",
     sex: "",
     IDcard: "",
@@ -128,7 +128,7 @@ function AddSales() {
 
     if (
       err.fullname === "" &&
-      err.mail === "" &&
+      err.email === "" &&
       err.password === "" &&
       err.sex === "" &&
       err.IDcard === "" &&
@@ -343,16 +343,16 @@ function AddSales() {
                   <Form.Control
                     aria-label="อีเมล"
                     type="email"
-                    name="mail"
+                    name="email"
                     id="email"
-                    // onChange={(e) => setValues({ ...values, mail: e.target.value })}
+                    // onChange={(e) => setValues({ ...values, email: e.target.value })}
                     onChange={handleInput}
                   />
                 </InputGroup>
               </Col>
               <Col>
-                {errors.mail && (
-                  <span className="text-danger">{errors.mail}</span>
+                {errors.email && (
+                  <span className="text-danger">{errors.email}</span>
                 )}
               </Col>
             </Row>

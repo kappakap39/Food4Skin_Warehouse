@@ -57,7 +57,7 @@ function Salesperson() {
         (sales) =>
           // sales.ID_sales.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.fullname.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.mail.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          sales.email.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.sex.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.IDcard.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.province.toLowerCase().includes(e.target.value.toLowerCase()) ||
@@ -82,7 +82,7 @@ function Salesperson() {
             fullname: "ไม่พบข้อมูล",
             Tel: "ไม่พบข้อมูล",
             contact: "ไม่พบข้อมูล",
-            mail: "ไม่พบข้อมูล",
+            email: "ไม่พบข้อมูล",
             IDcard: "ไม่พบข้อมูล",
           },
         ]);
@@ -189,7 +189,7 @@ function Salesperson() {
                     <td>{records.fullname}</td>
                     <td>{records.Tel}</td>
                     <td>{records.contact}</td>
-                    <td>{records.mail}</td>
+                    <td>{records.email}</td>
                     <td>{records.IDcard}</td>
 
                     <td
