@@ -9,18 +9,22 @@ import Validation from "../function/LoginValidation";
 
 //!alert EF
 // npm install --save sweetalert2 sweetalert2-react-content
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+import { AiOutlineEye } from "react-icons/ai";
 
 function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
-  
-  //!alert EF
-  const MySwal = withReactContent(Swal)
 
+  //showpass
+  const [showPassword, setShowPassword] = useState(false);
+
+  //!alert EF
+  const MySwal = withReactContent(Swal);
 
   const navigate = useNavigate();
 
@@ -29,11 +33,23 @@ function Login() {
     password: "",
   });
   const handleInput = (event) => {
+    //showpass
+    const { name, value } = event.target;
+
     setValues((prev) => ({
       ...prev,
       [event.target.name]: [event.target.value],
+
+      //showpass
+      [name]: value,
     }));
   };
+
+  //showpassword
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   // const handleSubmit = (event) => {
   //   event.preventDefault();
   //   setErrors(Validation(values));
@@ -61,37 +77,33 @@ function Login() {
         .post("http://localhost:2001/loginadmin", values)
         .then((res) => {
           if (res.data === "Success") {
-
             MySwal.fire({
               title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
               html: <i>คุณเข้าสู่ระบบในตำแหน่งผู้ดูแลระบบ</i>,
-              icon: 'success'
+              icon: "success",
             }).then((value) => {
               navigate("/Salesperson");
-            })
-            
+            });
           } else {
             axios
               .post("http://localhost:2001/loginsales", values)
               .then((res) => {
                 if (res.data === "Success") {
-
                   MySwal.fire({
                     title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
                     html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
-                    icon: 'success'
+                    icon: "success",
                   }).then((value) => {
                     navigate("/Product");
-                  })
-                  
+                  });
                 } else {
                   // alert("No record existed");
-                  
+
                   MySwal.fire({
                     title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
                     html: <i>ไม่มีข้อมูลของบัญชีนี้</i>,
-                    icon: 'error'
-                  })
+                    icon: "error",
+                  });
                 }
               })
               .catch((err) => console.log(err));
@@ -143,7 +155,7 @@ function Login() {
               )}
             </div>
             <br />
-            <div className="user">
+            {/* <div className="user">
               <input
                 type="password"
                 placeholder="Password"
@@ -151,28 +163,37 @@ function Login() {
                 name="password"
                 onChange={handleInput}
               />
-              {/* <label>Password</label> */}
+              <label>Password</label>
               {errors.password && (
                 <span className="text-danger">{errors.password}</span>
               )}
-            </div>
-            {/* <div>
-              <a name="submit" type="submit" id="submit" href="/Product">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Submit
-              </a>
             </div> */}
-            <div>
-            <button name="submit" type="submit" id="submit">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Submit
-              </button>
+
+            <div className="user">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                aria-label="Password"
+                name="password"
+                value={values.password}
+                onChange={handleInput}
+              />
+              {errors.password && (
+                <span className="text-danger">{errors.password}</span>
+              )}
+
+              <div>
+                <button name="submit" type="submit" id="submit">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  Submit
+                </button>
+                <AiOutlineEye onClick={togglePasswordVisibility} className="IconPassword">
+                  {showPassword ? "Hide" : "Show"}
+                </AiOutlineEye>
+              </div>
             </div>
           </form>
         </div>

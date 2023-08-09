@@ -18,8 +18,8 @@ function Validation(values){
     if(values.password === ""){
         error.password = "กรุณากรอกรหัสผ่าน"
     }
-    else if (!password_pattern.test(values.email)){
-        error.password = "กรุณากรอกรหัสผ่านให้ถูกต้อง"
+    else if (!password_pattern.test(values.password)){
+        error.password = "รหัสผ่านไม่ถูกต้อง"
     }
     else{
         error.password = ""

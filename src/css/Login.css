@@ -379,3 +379,16 @@ button:hover{
     filter: drop-shadow(0 0 2em #2fff00aa);
 
 }
+
+.IconPassword{
+    color: #FFFFFF;
+    font-size: 35px; 
+    float: right;
+    margin-top: 25px;
+
+}
+.IconPassword:hover{
+    filter: drop-shadow(0 0 20px #2fff00aa);
+    color: #09ff00;
+    cursor: pointer;
+}
