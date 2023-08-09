@@ -7,11 +7,21 @@ import axios from "axios";
 
 import Validation from "../function/LoginValidation";
 
+//!alert EF
+// npm install --save sweetalert2 sweetalert2-react-content
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
 function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
+  
+  //!alert EF
+  const MySwal = withReactContent(Swal)
+
+
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({
@@ -51,15 +61,37 @@ function Login() {
         .post("http://localhost:2001/loginadmin", values)
         .then((res) => {
           if (res.data === "Success") {
-            navigate("/Salesperson");
+
+            MySwal.fire({
+              title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
+              html: <i>คุณเข้าสู่ระบบในตำแหน่งผู้ดูแลระบบ</i>,
+              icon: 'success'
+            }).then((value) => {
+              navigate("/Salesperson");
+            })
+            
           } else {
             axios
               .post("http://localhost:2001/loginsales", values)
               .then((res) => {
                 if (res.data === "Success") {
-                  navigate("/Product");
+
+                  MySwal.fire({
+                    title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
+                    html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+                    icon: 'success'
+                  }).then((value) => {
+                    navigate("/Product");
+                  })
+                  
                 } else {
-                  alert("No record existed");
+                  // alert("No record existed");
+                  
+                  MySwal.fire({
+                    title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
+                    html: <i>ไม่มีข้อมูลของบัญชีนี้</i>,
+                    icon: 'error'
+                  })
                 }
               })
               .catch((err) => console.log(err));
@@ -124,7 +156,6 @@ function Login() {
                 <span className="text-danger">{errors.password}</span>
               )}
             </div>
-            <br />
             {/* <div>
               <a name="submit" type="submit" id="submit" href="/Product">
                 <span></span>
@@ -135,7 +166,11 @@ function Login() {
               </a>
             </div> */}
             <div>
-              <button type="submit" name="submit" id="submit">
+            <button name="submit" type="submit" id="submit">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
                 Submit
               </button>
             </div>
