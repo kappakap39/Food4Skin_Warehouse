@@ -1,6 +1,5 @@
 function Validation(values) {
   let errors = {};
-  const regex = /^\S+@\S+\.\S+$/;
 
   if (values.sex === "") {
     errors.sex = "กรุณากรอกเพศ!";
@@ -15,15 +14,21 @@ function Validation(values) {
 
   if (values.email === "") {
     errors.email = "กรุณากรอกอีเมล!";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    errors.email = "กรอกอีเมลให้ถูกต้อง!";
   } else {
     errors.email = "";
   }
+  
 
   if (values.password === "") {
     errors.password = "กรุณากรอกรหัสผ่าน!";
+  } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/.test(values.password)) {
+    errors.password = "กรอกตัวพิมใหญ่และเล็กและตัวเลขอย่างน้อย 8 ตัว";
   } else {
     errors.password = "";
   }
+  
   if (values.IDcard === "") {
     errors.IDcard = "กรุณากรอกเลขบัตรประชาชน!";
   } else {
@@ -76,7 +81,6 @@ function Validation(values) {
   // } else {
   //   errors.contact = "";
   // }
-
 
   return errors;
 }

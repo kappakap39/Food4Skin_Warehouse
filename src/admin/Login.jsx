@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
 
 function Login() {
   const [values, setValues] = useState({
@@ -20,7 +21,7 @@ function Login() {
     password: "",
   });
 
-  //showpass
+  //showpassword
   const [showPassword, setShowPassword] = useState(false);
 
   //!alert EF
@@ -190,9 +191,9 @@ function Login() {
                   <span></span>
                   Submit
                 </button>
-                <AiOutlineEye onClick={togglePasswordVisibility} className="IconPassword">
-                  {showPassword ? "Hide" : "Show"}
-                </AiOutlineEye>
+                <div onClick={togglePasswordVisibility} className="IconPassword">
+                  {showPassword ? <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
+                </div>
               </div>
             </div>
           </form>
