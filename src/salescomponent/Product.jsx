@@ -39,30 +39,39 @@ function Product() {
           setSearchData(res.data);
         })
         .catch((err) => console.log(err));
+        
     };
     fetchData();
   }, []);
 
   const handleFilter = (e) => {
-    const searchValue = e.target.value.toLowerCase();
-    if (searchValue === "") {
+    if (e.target.value === "") {
       setData(searchData);
     } else {
       const filterResult = searchData.filter(
-        (product) =>
-          product.ID_lot.toLowerCase().includes(searchValue) ||
-          product.Inventories_lot.toLowerCase().includes(searchValue) ||
-          product.ID_product.toLowerCase().includes(searchValue) ||
-          product.Name_product.toLowerCase().includes(searchValue) ||
-          product.Production_point.toLowerCase().includes(searchValue) ||
-          product.Retail_price.toLowerCase().includes(searchValue) ||
-          product.Level_1_price.toLowerCase().includes(searchValue) ||
-          product.Level_2_price.toLowerCase().includes(searchValue) ||
-          product.Level_3_price.toLowerCase().includes(searchValue)
+        (records) =>
+        typeof records.ID_lot === "string" &&
+        records.ID_lot.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        typeof records.Inventories_lot === "string" &&
+          records.Inventories_lot.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.ID_product === "string" &&
+          records.ID_product.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.Name_product === "string" &&
+          records.Name_product.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.Production_point === "string" &&
+          records.Production_point.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.Retail_price === "string" &&
+          records.Retail_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.Level_1_price === "string" &&
+          records.Level_1_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.Level_2_price === "string" &&
+          records.Level_2_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          typeof records.Level_3_price === "string" &&
+          records.Level_3_price.toLowerCase().includes(e.target.value.toLowerCase())
       );
   
       if (filterResult.length > 0) {
-        setData(filterResult); // อัปเดตค่า data ด้วยผลลัพธ์ที่กรอง
+        setData(filterResult);
       } else {
         setData([
           {
@@ -78,18 +87,19 @@ function Product() {
         ]);
       }
     }
-    setfilterVal(searchValue);
+    setfilterVal(e.target.value);
   };
+  
 
   //!Delete
-  // const handleDelete = (ID_sales) => {
-  //   axios
-  //     .delete("http://localhost:2001/deleteSales/" + ID_sales)
-  //     .then((res) => {
-  //       location.reload();
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+  const handleDelete = (ID_sales) => {
+    axios
+      .delete("http://localhost:2001/deleteSales/" + ID_sales)
+      .then((res) => {
+        location.reload();
+      })
+      .catch((err) => console.log(err));
+  };
 
   //!next page
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,25 +110,44 @@ function Product() {
   const npage = Math.ceil(data.length / recordsPerPage);
   const number = [...Array(npage + 1).keys()].slice(1);
 
+  // function prePage() {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   } else if (currentPage === 1) {
+  //     changeCPage(1);
+  //   }
+  // }
+  
+
+  // function changeCPage(id) {
+  //   setCurrentPage(id);
+  // }
+
+  // function nextPage() {
+  //   if (currentPage < npage) {
+  //     setCurrentPage(currentPage + 1);
+  //     handleFilter({ target: { value: filterVal } });
+  //   }
+  // }
   function prePage() {
-    if (currentPage > 1) {
+    if (currentPage < firstIndex) {
       setCurrentPage(currentPage - 1);
-    } else if (currentPage === 1) {
-      changeCPage(1);
+    } else if (currentPage === firstIndex) {
+      setCurrentPage(changeCPage + 0);
     }
   }
-  
 
   function changeCPage(id) {
     setCurrentPage(id);
   }
 
   function nextPage() {
-    if (currentPage < npage) {
+    if (currentPage !== npage) {
       setCurrentPage(currentPage + 1);
-      handleFilter({ target: { value: filterVal } });
     }
   }
+
+  console.log(filterVal)
 
   return (
     <div>
@@ -139,12 +168,12 @@ function Product() {
                   placeholder="ค้นหาโดย..."
                   aria-describedby="basic-addon2"
                   value={filterVal}
-                  onChange={(e) => setValue(e.target.value)}
-                  // onInput={(e) => handleFilter(e)}
+                  onInput={(e) => handleFilter(e)}
                 />
               </InputGroup>
             </div>
           </Col>
+
 
           <Col className="add2">
             <Col className="col2">
