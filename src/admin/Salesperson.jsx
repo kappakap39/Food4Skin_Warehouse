@@ -61,7 +61,9 @@ function Salesperson() {
           sales.sex.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.IDcard.toLowerCase().includes(e.target.value.toLowerCase()) ||
           sales.province.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          sales.districts.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          sales.districts
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
           sales.subdistricts
             .toLowerCase()
             .includes(e.target.value.toLowerCase()) ||
@@ -224,7 +226,35 @@ function Salesperson() {
             </tbody>
           </table>
         </div>
+
         <nav className="Nextpage">
+          {/* <ul className="pagination">
+            <li className="page-item">
+              <a href="#" className="page-link" onClick={prePage}>
+                Prev
+              </a>
+            </li>
+            {number.slice(0, 1).map((n, i) => (
+              <li
+                className={`page-item ${currentPage === n ? "active" : ""}`}
+                key={i}
+              >
+                <a
+                  href="#"
+                  className="page-link"
+                  onClick={() => changeCPage(n)}
+                >
+                  {n}
+                </a>
+              </li>
+            ))}
+            <li className="page-item">
+              <a href="#" className="page-link" onClick={nextPage}>
+                Next
+              </a>
+            </li>
+          </ul> */}
+
           <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>

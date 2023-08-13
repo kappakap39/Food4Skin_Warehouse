@@ -39,7 +39,6 @@ function Product() {
           setSearchData(res.data);
         })
         .catch((err) => console.log(err));
-        
     };
     fetchData();
   }, []);
@@ -50,26 +49,44 @@ function Product() {
     } else {
       const filterResult = searchData.filter(
         (records) =>
-        typeof records.ID_lot === "string" &&
-        records.ID_lot.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        typeof records.Inventories_lot === "string" &&
-          records.Inventories_lot.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.ID_product === "string" &&
-          records.ID_product.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.Name_product === "string" &&
-          records.Name_product.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.Production_point === "string" &&
-          records.Production_point.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.Retail_price === "string" &&
-          records.Retail_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.Level_1_price === "string" &&
-          records.Level_1_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.Level_2_price === "string" &&
-          records.Level_2_price.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          typeof records.Level_3_price === "string" &&
-          records.Level_3_price.toLowerCase().includes(e.target.value.toLowerCase())
+          (typeof records.ID_lot === "string" &&
+            records.ID_lot.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Inventories_lot === "string" &&
+            records.Inventories_lot.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.ID_product === "string" &&
+            records.ID_product.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Name_product === "string" &&
+            records.Name_product.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Production_point === "string" &&
+            records.Production_point.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Retail_price === "string" &&
+            records.Retail_price.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Level_1_price === "string" &&
+            records.Level_1_price.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Level_2_price === "string" &&
+            records.Level_2_price.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            )) ||
+          (typeof records.Level_3_price === "string" &&
+            records.Level_3_price.toLowerCase().includes(
+              e.target.value.toLowerCase()
+            ))
       );
-  
+
       if (filterResult.length > 0) {
         setData(filterResult);
       } else {
@@ -89,7 +106,6 @@ function Product() {
     }
     setfilterVal(e.target.value);
   };
-  
 
   //!Delete
   const handleDelete = (ID_sales) => {
@@ -117,7 +133,6 @@ function Product() {
   //     changeCPage(1);
   //   }
   // }
-  
 
   // function changeCPage(id) {
   //   setCurrentPage(id);
@@ -147,7 +162,7 @@ function Product() {
     }
   }
 
-  console.log(filterVal)
+  console.log(filterVal);
 
   return (
     <div>
@@ -173,7 +188,6 @@ function Product() {
               </InputGroup>
             </div>
           </Col>
-
 
           <Col className="add2">
             <Col className="col2">
@@ -240,6 +254,32 @@ function Product() {
           </table>
         </div>
         <nav className="Nextpage">
+          {/* <ul className="pagination">
+            <li className="page-item">
+              <a href="#" className="page-link" onClick={prePage}>
+                Prev
+              </a>
+            </li>
+            {number.slice(0, 1).map((n, i) => (
+              <li
+                className={`page-item ${currentPage === n }`}
+                key={i}
+              >
+                <a
+                  href="#"
+                  className="page-link"
+                >
+                  {currentPage}
+                </a>
+              </li>
+            ))}
+            <li className="page-item">
+              <a href="#" className="page-link" onClick={nextPage}>
+                Next
+              </a>
+            </li>
+          </ul> */}
+
           <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>
@@ -266,6 +306,7 @@ function Product() {
               </a>
             </li>
           </ul>
+          
         </nav>
       </div>
     </div>
