@@ -32,9 +32,9 @@ body {
   /* margin: 20px; */
   margin-left: 15px;
   margin-top: 15px;
-  width: 600px;
+  width: 350px;
   /* background: #1b035f; */
-  padding-right: 50px;
+  padding-right: 10px;
 }
 .add {
   height: 44.5px;
@@ -158,4 +158,10 @@ tbody {
   margin-left: 15px;
   margin-top: 15px;
   width: 160px;
+}
+
+.selectSale{
+  /* margin-left: 15px; */
+  margin-top: 15px;
+  position: absolute;
 }
