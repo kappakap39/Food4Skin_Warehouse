@@ -197,7 +197,7 @@ function Product() {
               <button className="addProduct" onClick={() => navigate("")}>
                 รับเข้าสินค้า
               </button>
-              <button className="add" onClick={() => navigate("")}>
+              <button className="add mb-3" onClick={() => navigate("")}>
                 <BiSolidUserPlus /> เพิ่ม
               </button>
             </Col>

@@ -77,6 +77,8 @@ function EditSales() {
           picture: res.data[0].picture,
           zip_code: res.data[0].zip_code,
           ID_sales: res.data[0].ID_sales,
+          PhoneNumber: res.data[0].PhoneNumber,
+          Card_ID: res.data[0].Card_ID,
         });
       })
       .catch((err) => console.log(err));
@@ -194,7 +196,7 @@ function EditSales() {
               id="IDcard"
               type="text"
               disabled
-              value={values.IDcard}
+              value={values.Card_ID}
               
             />
 
@@ -312,7 +314,7 @@ function EditSales() {
                   type="text"
                   aria-describedby="passwordHelpBlock"
                   disabled
-                  value={values.Tel}
+                  value={values.PhoneNumber}
                 />
               </Col>
               <Col>

@@ -28,31 +28,47 @@ function Validation(values) {
   } else {
     errors.password = "";
   }
-  
-  if (values.IDcard === "") {
-    errors.IDcard = "กรุณากรอกเลขบัตรประชาชน!";
-  } else {
-    errors.IDcard = "";
-  }
   if (values.AddressSale === "") {
     errors.AddressSale = "กรุณากรอกที่อยู่เพิ่มเติม!";
   } else {
     errors.AddressSale = "";
   }
-  if (values.Tel === "") {
-    errors.Tel = "กรุณากรอกเบอร์โทรศัพท์!";
-  } else {
-    errors.Tel = "";
-  }
+
+
+    
+  if (values.IDcard === "") {
+    errors.IDcard = "กรุณากรอกเลขบัตรประชาชน!";
+} else if (values.IDcard.length !== 17) {
+    errors.IDcard = "เลขบัตรประชาชนต้องมีจำนวนตัวอักษร 13 ตัว!";
+} else {
+    errors.IDcard = "";
+}
+
+
+
+if (values.Tel === "") {
+  errors.Tel = "กรุณากรอกเบอร์โทรศัพท์!";
+} else if (!/^\d{9,10}$/.test(values.Tel)) {
+  errors.Tel = "เบอร์โทรศัพท์ต้องมีตัวเลขอย่างน้อย 9 หรือ 10 ตัว!";
+} else {
+  errors.Tel = "";
+}
+
+
+if (values.picture === "") {
+  errors.picture = "กรุณาเลือกที่อยู่ภาพ!";
+} else if (!/\.(jpg|jpeg|png|gif)$/i.test(values.picture)) {
+  errors.picture = "กรุณาอัปโหลดไฟล์ภาพที่มีนามสกุลเป็น .jpg, .jpeg, .png หรือ .gif เท่านั้น!";
+} else {
+  errors.picture = "";
+}
+
+
+
   if (values.Persistent_status === "") {
     errors.Persistent_status = "กรุณากรอกสถานะ!";
   } else {
     errors.Persistent_status = "";
-  }
-  if (values.picture === "") {
-    errors.picture = "กรุณาเลือกที่อยู่ภาพ!";
-  } else {
-    errors.picture = "";
   }
   if (values.contact === "") {
     errors.contact = "กรุณากรอกช่องทางติดต่อ!";

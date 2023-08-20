@@ -37,6 +37,8 @@ function Salesperson() {
   //ค้นหา
   const [filterVal, setfilterVal] = useState("");
   const [searchData, setSearchData] = useState([]);
+  // const [selectedStatus, setSelectedStatus] = useState("สถานะการทำงาน");
+  
   useEffect(() => {
     const fetchData = () => {
       axios
@@ -93,6 +95,63 @@ function Salesperson() {
     setfilterVal(e.target.value);
   };
 
+
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     axios
+  //       .get("http://localhost:2001/showall")
+  //       .then((res) => {
+  //         setData(res.data);
+  //         setSearchData(res.data);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   };
+  //   fetchData();
+  // }, []);
+  // const handleFilter = (e) => {
+  //   if (e.target.value == "") {
+  //     setData(searchData);
+  //   } else {
+  //     const filterResult = searchData.filter(
+  //       (sales) =>
+  //         // sales.ID_sales.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.fullname.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.email.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.sex.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.IDcard.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.province.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.districts
+  //           .toLowerCase()
+  //           .includes(e.target.value.toLowerCase()) ||
+  //         sales.subdistricts
+  //           .toLowerCase()
+  //           .includes(e.target.value.toLowerCase()) ||
+  //         sales.zip_code.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.Persistent_status.toLowerCase().includes(
+  //           e.target.value.toLowerCase()
+  //         ) ||
+  //         sales.contact.toLowerCase().includes(e.target.value.toLowerCase()) ||
+  //         sales.Tel.toLowerCase().includes(e.target.value.toLowerCase())
+  //     );
+
+  //     if (filterResult.length > 0) {
+  //       setData(filterResult);
+  //     } else {
+  //       setData([
+  //         {
+  //           ID_sales: "ไม่พบข้อมูล",
+  //           fullname: "ไม่พบข้อมูล",
+  //           Tel: "ไม่พบข้อมูล",
+  //           contact: "ไม่พบข้อมูล",
+  //           email: "ไม่พบข้อมูล",
+  //           IDcard: "ไม่พบข้อมูล",
+  //         },
+  //       ]);
+  //     }
+  //   }
+  //   setfilterVal(e.target.value);
+  // };
+
   //!Delete
   const handleDelete = (ID_sales) => {
     axios
@@ -130,6 +189,8 @@ function Salesperson() {
     }
   }
 
+  
+
   return (
     <div>
       <header className="headernav ">
@@ -156,12 +217,30 @@ function Salesperson() {
                   variant="outline-secondary"
                   id="button-addon2"
                 >
-                  ค้นหา
+                  สถานะการทำงาน
+                  
                 </Button> */}
               </InputGroup>
             </div>
           </Col>
-          <Col className="add2">
+          <Col>
+            <div className="mb-4">
+              {/* <button className="status">กำลังดำเนินงานอยู่</button>
+              <button className="status">พ้นสภาพการทำงาน</button> */}
+              <select
+                aria-label="Default select example"
+                name="status"
+                id="status"
+                type="text"
+                
+              >
+                <option>สถานะการทำงาน</option>
+                <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
+                <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
+              </select>
+            </div>
+          </Col>
+          <Col className="add2 mb-4">
             <button className="add" onClick={() => navigate("AddSales")}>
               <BiSolidUserPlus /> เพิ่ม
             </button>
@@ -189,10 +268,10 @@ function Salesperson() {
                   <tr key={index}>
                     <td scope="row">{records.ID_sales}</td>
                     <td>{records.fullname}</td>
-                    <td>{records.Tel}</td>
+                    <td>{records.PhoneNumber}</td>
                     <td>{records.contact}</td>
                     <td>{records.email}</td>
-                    <td>{records.IDcard}</td>
+                    <td>{records.Card_ID}</td>
 
                     <td
                       className="centericon"
