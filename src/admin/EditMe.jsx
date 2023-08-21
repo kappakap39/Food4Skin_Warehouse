@@ -97,105 +97,15 @@ function EditMe() {
     };
   
     //add
-    const [values, setValues] = useState({
-      fullname: "",
-      email: "",
-      password: "",
-      sex: "",
-      IDcard: "",
-      districts: "",
-      province: "",
-      subdistricts: "",
-      AddressSale: "",
-      Tel: "",
-      Persistent_status: "",
-      contact: "",
-      picture: "",
-      zip_code: "",
-    });
-  
-    // post("http://localhost:2001/addsale", values)
+    const [values, setValues] = useState({});
     const [errors, setErrors] = useState({});
   
     const handleSubmit = (event) => {
-      event.preventDefault();
-  
-      // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
-      const formattedPhone = values.Tel.replace(/-/g, "");
-  
-      const err = Validation({ ...values, Tel: formattedPhone });
-      setErrors(err);
-  
-      if (
-        err.fullname === "" &&
-        err.email === "" &&
-        err.password === "" &&
-        err.sex === "" &&
-        err.IDcard === "" &&
-        err.AddressSale === "" &&
-        err.Tel === "" &&
-        err.Persistent_status === "" &&
-        err.picture === "" &&
-        err.zip_code === "" &&
-        err.contact === ""
-  
-      ) {
-        // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
-        axios
-          .post("http://localhost:2001/addsale", {
-            ...values,
-            Tel: formattedPhone,
-          })
-          .then((res) => {
-            console.log(res);
-            navigate("/Salesperson");
-          })
-          .catch((err) => console.log(err));
-      }
+        
     };
-  
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [cradID, setCradID] = useState("");
   
     const handleInput = (event) => {
-      const { name, value } = event.target;
-  
-      if (name === "IDcard") {
-        const formattedCardID = value.replace(/-/g, "");
-        const formattedText1 = formattedCardID
-          .replace(/\D/g, "")
-          .slice(0, 13)
-          .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-  
-        setCradID(formattedText1);
-        setValues((prev) => ({ ...prev, [name]: formattedText1 }));
-      }
-      if (name === "Tel") {
-        const formattedPhoneNumber = value.replace(/-/g, "");
-        const formattedText = formattedPhoneNumber.replace(/\D/g, "");
-  
-        // ตรวจสอบเงื่อนไขเพื่อให้ตัวเลขในเบอร์โทรศัพท์เป็นเฉพาะตัวเลขและตัดจำนวนให้เหลือเพียง 10 หรือ 9 ตัว
-        let formattedPhoneNumberFinal;
-        if (formattedText.length === 9) {
-          formattedPhoneNumberFinal = formattedText.replace(
-            /(\d{2})(\d{3})(\d{4})/,
-            "$1-$2-$3"
-          );
-        } else {
-          formattedPhoneNumberFinal = formattedText
-            .slice(0, 10)
-            .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-        }
-  
-        setPhoneNumber(formattedPhoneNumberFinal);
-        setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
-      } else {
-        setValues((prev) => ({ ...prev, [name]: value }));
-      }
     };
-    console.log(cradID);
-  
-    console.log(values);
 
   //!Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
