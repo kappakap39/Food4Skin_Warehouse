@@ -283,7 +283,7 @@ function Product() {
           <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>
-                Prev
+                หน้าก่อน
               </a>
             </li>
             {number.map((n, i) => (
@@ -302,7 +302,7 @@ function Product() {
             ))}
             <li className="page-item">
               <a href="#" className="page-link" onClick={nextPage}>
-                Next
+                หน้าถัดไป
               </a>
             </li>
           </ul>

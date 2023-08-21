@@ -384,7 +384,7 @@ function Salesperson() {
           <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>
-                Prev
+                หน้าก่อน
               </a>
             </li>
             {number.map((n, i) => (
@@ -403,7 +403,7 @@ function Salesperson() {
             ))}
             <li className="page-item">
               <a href="#" className="page-link" onClick={nextPage}>
-                Next
+                หน้าถัดไป
               </a>
             </li>
           </ul>

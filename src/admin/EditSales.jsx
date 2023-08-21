@@ -153,6 +153,7 @@ function EditSales() {
   //     setValues((prev) => ({ ...prev, [name]: value }));
   //   }
   // };
+
   return (
     // <div className="containerread">
     <div>
@@ -197,7 +198,6 @@ function EditSales() {
               type="text"
               disabled
               value={values.Card_ID}
-              
             />
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
@@ -375,16 +375,13 @@ function EditSales() {
               className="img"
               alt="ภาพ"
             ></img>
-
-            {/* <div>
-              {values.picture && (
-                <img
-                  style={{ width: "100px", height: "100px" }}
-                  src={`data:image/jpeg;base64,${values.picture}`}
-                  alt="ภาพ"
-                />
-              )}
-            </div> */}
+            {/* <input
+              type="text"
+              value={values.picture}
+              style={{ marginLeft: "46px", width: "201px" }}
+              // readOnly
+              disabled
+            /> */}
           </Col>
         </Row>
 
