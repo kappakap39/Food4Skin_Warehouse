@@ -38,7 +38,7 @@ function Validation(values) {
     
   if (values.IDcard === "") {
     errors.IDcard = "กรุณากรอกเลขบัตรประชาชน!";
-} else if (values.IDcard.length !== 17) {
+} else if (values.IDcard.length !== 13) {
     errors.IDcard = "เลขบัตรประชาชนต้องมีจำนวนตัวอักษร 13 ตัว!";
 } else {
     errors.IDcard = "";
