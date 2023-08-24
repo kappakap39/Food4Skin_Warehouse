@@ -133,3 +133,32 @@ button:focus-visible {
 .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
     max-width: 100%;
 }
+
+/* styles.css */
+
+/* สีของแถบเลื่อนที่ไม่ได้ถูกเลื่อน */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* สีของแถบที่ถูกเลื่อน */
+::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+}
+
+/* สีของพื้นหลังของแถบที่ถูกเลื่อน */
+::-webkit-scrollbar-track {
+  background-color: #1eff00;
+}
+
+/* กำหนดความยาวของแถบเลื่อนในแนวตั้ง */
+::-webkit-scrollbar-thumb:vertical {
+  min-height: 5%; /* ความยาวขั้นต่ำของแถบเลื่อนในแนวตั้ง */
+}
+
+/* กำหนดความยาวของแถบเลื่อนในแนวนอน */
+::-webkit-scrollbar-thumb:horizontal {
+  /* min-width: 5px; ความยาวขั้นต่ำของแถบเลื่อนในแนวนอน */
+  height: 5%;
+}
+

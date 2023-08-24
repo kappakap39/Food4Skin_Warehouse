@@ -34,7 +34,6 @@ function AddSales() {
   const [districts, setDistricts] = useState([]);
   const [subdistricts, setSubdistricts] = useState([]);
 
-
   useEffect(() => {
     //ดึงข้อมูลจังหวัด
     axios
@@ -46,7 +45,6 @@ function AddSales() {
         console.log(err);
       });
   }, []);
-
 
   const onChangeProvince = (e) => {
     let index = e.nativeEvent.target.selectedIndex;
@@ -138,7 +136,6 @@ function AddSales() {
       err.picture === "" &&
       err.zip_code === "" &&
       err.contact === ""
-
     ) {
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
       axios
@@ -156,6 +153,7 @@ function AddSales() {
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cradID, setCradID] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -192,6 +190,14 @@ function AddSales() {
     } else {
       setValues((prev) => ({ ...prev, [name]: value }));
     }
+
+    if (name === "picture") {
+      const selectedFile = event.target.files[0]; // Get the selected image file
+      if (selectedFile) {
+        setSelectedImage(selectedFile); // Set the selected image to the state
+      }
+    }
+
   };
   console.log(cradID);
 
@@ -204,6 +210,16 @@ function AddSales() {
       </header>
       <form className="containeradd" action="" onSubmit={handleSubmit}>
         <h3 className="h3add">ตารางเพิ่มรายชื่อพนักงานฝ่ายขาย</h3>
+        {selectedImage && (
+                  <div className="imgSale">
+                    <img
+                      src={URL.createObjectURL(selectedImage)} // Create a temporary URL for the selected image
+                      alt="Selected"
+                      style={{ maxWidth: "auto", height: "100px"}}
+                      
+                    />
+                  </div>
+                )}
         <Row>
           <Col md={5}>
             <Row>
@@ -217,7 +233,6 @@ function AddSales() {
                   id="sex"
                   type="text"
                   onChange={handleInput}
-
                 >
                   <option>เพศ</option>
                   <option value="ชาย">ชาย</option>
@@ -390,12 +405,13 @@ function AddSales() {
               </Col>
               <Col>
                 <h6 className="txt">
-                รหัสไปรษณีย์
-                  <h6></h6>{errors.zip_code && (
-                  <span className="text-danger">{errors.zip_code}</span>
-                )}
+                  รหัสไปรษณีย์
+                  <h6></h6>
+                  {errors.zip_code && (
+                    <span className="text-danger">{errors.zip_code}</span>
+                  )}
                 </h6>
-                
+
                 <input
                   name="zip_code"
                   className="Inputadd"
@@ -441,7 +457,7 @@ function AddSales() {
                 <InputGroup className="mb-3">
                   <Form.Control
                     type="file"
-                    accept=" "
+                    accept="image/*"
                     id="picture"
                     name="picture"
                     onChange={handleInput}
@@ -475,7 +491,6 @@ function AddSales() {
                     maxLength={12}
                     onChange={handleInput}
                     value={phoneNumber}
-
                   />
                 </InputGroup>
               </Col>
@@ -589,7 +604,7 @@ function AddSales() {
           </Col>
         </Row>
 
-        <Row style={{ marginTop: "5px" }}>
+        <Row style={{ marginTop: "5px" , marginBottom: "30px"}}>
           <Col className="cancel" md={5}>
             <div></div>
           </Col>

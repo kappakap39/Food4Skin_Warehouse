@@ -19,6 +19,7 @@ function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
+    Persistent_status: "",
   });
 
   //showpassword
@@ -32,6 +33,7 @@ function Login() {
   const [errors, setErrors] = useState({
     email: "",
     password: "",
+    Persistent_status: "",
   });
   const handleInput = (event) => {
     //showpass
@@ -70,68 +72,99 @@ function Login() {
   // }
 
   //!
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrors(Validation(values));
-    if (errors.email === "" && errors.password === "") {
-      axios
-        .post("http://localhost:2001/loginadmin", values)
-        .then((res) => {
-          if (res.data === "Success") {
+    const validationErrors = Validation(values);
+    setErrors(validationErrors);
+
+    const noErrors = Object.values(validationErrors).every(
+      (error) => error === ""
+    );
+    if (noErrors) {
+      try {
+        const adminResponse = await axios.post(
+          "http://localhost:2001/loginadmin",
+          values
+        );
+        const salesResponse = await axios.post(
+          "http://localhost:2001/loginsales",
+          values
+        );
+
+        if (adminResponse.data === "Success") {
+          MySwal.fire({
+            title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
+            html: <i>คุณเข้าสู่ระบบในตำแหน่งผู้ดูแลระบบ</i>,
+            icon: "success",
+          }).then((value) => {
+            navigate("/Salesperson");
+          });
+        } else {
+          if (salesResponse.data === "Success") {
             MySwal.fire({
               title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
-              html: <i>คุณเข้าสู่ระบบในตำแหน่งผู้ดูแลระบบ</i>,
+              html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
               icon: "success",
             }).then((value) => {
-              navigate("/Salesperson");
+              navigate("/Product");
             });
           } else {
-            axios
-              .post("http://localhost:2001/loginsales", values)
-              .then((res) => {
-                if (res.data === "Success") {
-                  MySwal.fire({
-                    title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
-                    html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
-                    icon: "success",
-                  }).then((value) => {
-                    navigate("/Product");
-                  });
-                } else {
-                  // alert("No record existed");
-
-                  MySwal.fire({
-                    title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
-                    html: <i>ไม่มีข้อมูลของบัญชีนี้</i>,
-                    icon: "error",
-                  });
-                }
-              })
-              .catch((err) => console.log(err));
+            MySwal.fire({
+              title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
+              html: <i>ไม่มีข้อมูลของบัญชีนี้หรือบัญชีนี้อาจเป็นของพนักงานแต่พ้นสภาพการทำงานแล้ว</i>,
+              icon: "error",
+            });
           }
-        })
-        .catch((err) => console.log(err));
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
+
   // const handleSubmit = (event) => {
   //   event.preventDefault();
-  //   const validationErrors = Validation(values);
-  // setErrors(validationErrors);
+  //   setErrors(Validation(values));
+  //   if (errors.email === "" && errors.password === "") {
+  //     axios
+  //       .post("http://localhost:2001/loginadmin", values)
+  //       .then((res) => {
+  //         if (res.data === "Success") {
+  //           MySwal.fire({
+  //             title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
+  //             html: <i>คุณเข้าสู่ระบบในตำแหน่งผู้ดูแลระบบ</i>,
+  //             icon: "success",
+  //           }).then((value) => {
+  //             navigate("/Salesperson");
+  //           });
+  //         } else {
+  //           axios
+  //             .post("http://localhost:2001/loginsales", values)
+  //             .then((res) => {
+  //               if (res.data === "Success") {
+  //                 MySwal.fire({
+  //                   title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
+  //                   html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+  //                   icon: "success",
+  //                 }).then((value) => {
+  //                   navigate("/Product");
+  //                 });
+  //               } else {
+  //                 // alert("No record existed");
 
-  //   if(validationErrors.email === "" && validationErrors.password === ""){
-  //     axios.post("http://localhost:2001/loginadmin", values)
-  //     .then(res => {
-  //       if(res.data === "Success"){
-  //         navigate("/Salesperson");
-  //       }
-  //       else{
-  //         alert("No record existed");
-  //       }
-
-  //     })
-  //     .catch(err => console.log(err));
+  //                 MySwal.fire({
+  //                   title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
+  //                   html: <i>ไม่มีข้อมูลของบัญชีนี้</i>,
+  //                   icon: "error",
+  //                 });
+  //               }
+  //             })
+  //             .catch((err) => console.log(err));
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
   //   }
-  // }
+  // };
 
   console.log(values);
 
@@ -156,22 +189,8 @@ function Login() {
               )}
             </div>
             <br />
-            {/* <div className="user">
-              <input
-                type="password"
-                placeholder="Password"
-                aria-label="Password"
-                name="password"
-                onChange={handleInput}
-              />
-              <label>Password</label>
-              {errors.password && (
-                <span className="text-danger">{errors.password}</span>
-              )}
-            </div> */}
-
             <div className="user">
-              <input
+              {/* <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 aria-label="Password"
@@ -181,7 +200,20 @@ function Login() {
               />
               {errors.password && (
                 <span className="text-danger">{errors.password}</span>
-              )}
+              )} */}
+              <div className="user">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  aria-label="Password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleInput}
+                />
+                {errors.password && (
+                  <span className="text-danger">{errors.password}</span>
+                )}
+              </div>
 
               <div>
                 <button name="submit" type="submit" id="submit">
@@ -191,8 +223,11 @@ function Login() {
                   <span></span>
                   Submit
                 </button>
-                <div onClick={togglePasswordVisibility} className="IconPassword">
-                  {showPassword ? <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
+                <div
+                  onClick={togglePasswordVisibility}
+                  className="IconPassword"
+                >
+                  {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                 </div>
               </div>
             </div>

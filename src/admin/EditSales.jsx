@@ -84,6 +84,11 @@ function EditSales() {
       .catch((err) => console.log(err));
   }, []);
 
+  //!
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const file = event.target.files[0]; // Get the first selected file
+  // setSelectedImage(file);
+
   const [values, setValues] = useState({
     Persistent_status: "",
     fullname: "",
@@ -368,21 +373,32 @@ function EditSales() {
             </div>
           </Col>
           <Col md={2}>
+            {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
+              <div>
+                <img
+                  src={values.picture} // ใช้ URL ของรูปภาพจาก state values.picture
+                  // alt={values.picture} 
+                  alt={"ไม่สามารถแสดงภาพได้"} 
+                  style={{ marginLeft: "20%", marginTop: "30px"}}
+                />
+              </div>
+            )}
+          </Col>
+          {/* <Col md={2}>
             <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
               src={img}
-              // src={`data:image/jpeg;base64,${values.picture}`}
               className="img"
               alt="ภาพ"
             ></img>
-            {/* <input
+            <input
               type="text"
               value={values.picture}
               style={{ marginLeft: "46px", width: "201px" }}
               // readOnly
               disabled
-            /> */}
-          </Col>
+            />
+          </Col> */}
         </Row>
 
         <Row style={{ marginTop: "20px" }}>

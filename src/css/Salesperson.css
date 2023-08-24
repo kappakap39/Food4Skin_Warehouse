@@ -8,6 +8,7 @@ body {
   border-radius: 20px;
   /* width: ; */
   height: 595px;
+  /* height: auto; */
 
   /* filter: drop-shadow(0 0 0.2em #ffffffbd); */
   border-radius: 20px;
@@ -15,6 +16,7 @@ body {
   padding-bottom: 20px;
   /* background: #212529; */
   margin: 30px;
+
 }
 .container1:hover {
   /* filter: drop-shadow(0 0 0.2em #11ff00); */
@@ -23,6 +25,11 @@ body {
 
 .headernav {
   filter: drop-shadow(0 0 0.15em #ffffffd7);
+  /* แถบไม่เลื่อน */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* คุณสามารถปรับค่า z-index ตามความเหมาะสม */
 }
 .headernav:hover {
   /* filter: drop-shadow(0 0 0.15em #11ff00); */
@@ -71,7 +78,7 @@ body {
 
 .h3 {
   text-align: center;
-  /* margin-bottom: 20px; */
+  margin-top: 5%;
   color: #6de60f;
   filter: drop-shadow(0 0 2px #23a256);
 }
@@ -80,6 +87,7 @@ body {
   margin-bottom: 40px;
   color: #6de60f;
   filter: drop-shadow(0 0 2px #23a256);
+  margin-top: 8%;
 }
 .h3:hover {
 }

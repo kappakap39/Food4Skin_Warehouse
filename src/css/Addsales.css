@@ -1,5 +1,5 @@
 body {
-    /* 212529 */
+  /* 212529 */
   background: #1c1f21;
   color: rgb(0, 220, 44);
 }
@@ -10,12 +10,10 @@ body {
 }
 
 .containeradd {
-
   margin-left: 30px;
   margin-right: 30px;
-
-
 }
+
 .grid3 {
   display: flex;
   justify-content: flex-end;
@@ -77,36 +75,34 @@ h6 {
 .backadd:hover {
   filter: drop-shadow(0 0 10px #ff0000);
   background-color: rgb(255, 0, 0);
-
 }
 
 .h3add {
-  
   padding-bottom: 30px;
   text-align: center;
   margin-bottom: 0px;
-  margin-top: 20px;
-  color: #6de60f ;
+  margin-top: 5%;
+  color: #6de60f;
   filter: drop-shadow(0 0 2px #23a256);
 }
-.zipcodeaad{
-background-color: rgb(0, 0, 0);
+.zipcodeaad {
+  background-color: rgb(0, 0, 0);
 }
 
-.Inputadd{
+.Inputadd {
   background-color: rgb(211, 211, 211);
   color: rgb(40, 40, 40);
-  width:290px;
+  width: 290px;
   height: 38px;
   border-radius: 6px;
   /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
   margin-bottom: 15px;
   padding-left: 10px;
 }
-.InputZip{
+.InputZip {
   background-color: rgb(211, 211, 211);
   color: rgb(40, 40, 40);
-  width:215px;
+  width: 215px;
   height: 38px;
   border-radius: 6px;
   /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
@@ -114,17 +110,22 @@ background-color: rgb(0, 0, 0);
   padding-left: 10px;
 }
 
-.fromadd{
+.fromadd {
   margin-bottom: 10px;
 }
 
-.col{
+.col {
   flex: 1 0 0%;
   display: grid;
   align-items: center;
 }
-.col2{
+.col2 {
   flex: 1 0 0%;
   display: flex;
   align-items: center;
+}
+.imgSale {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
 }
