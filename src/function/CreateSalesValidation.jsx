@@ -28,6 +28,19 @@ function Validation(values) {
   } else {
     errors.password = "";
   }
+  
+  if (values.password2 === "") {
+    errors.password2 = "กรุณากรอกรหัสผ่านยืนยัน!";
+  } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/.test(values.password2)) {
+    errors.password2 = "กรอกตัวพิมใหญ่และเล็กและตัวเลขอย่างน้อย 8 ตัว";
+  } else if (values.password2 !== values.password) {
+    errors.password2 = "รหัสผ่านยืนยันไม่ตรงกับรหัสผ่าน!";
+  } else {
+    errors.password2 = "";
+  }
+  
+
+  
   if (values.AddressSale === "") {
     errors.AddressSale = "กรุณากรอกที่อยู่เพิ่มเติม!";
   } else {

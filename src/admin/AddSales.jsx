@@ -99,6 +99,7 @@ function AddSales() {
     fullname: "",
     email: "",
     password: "",
+    password2: "",
     sex: "",
     IDcard: "",
     districts: "",
@@ -128,6 +129,7 @@ function AddSales() {
       err.fullname === "" &&
       err.email === "" &&
       err.password === "" &&
+      err.password2 === "" &&
       err.sex === "" &&
       err.IDcard === "" &&
       err.AddressSale === "" &&
@@ -561,12 +563,15 @@ function AddSales() {
                   <Form.Control
                     type="password"
                     aria-describedby="passwordHelpBlock"
+                    name="password2"
+                    id="password2"
+                    onChange={handleInput}
                   />
                 </InputGroup>
               </Col>
               <Col>
-                {errors.password && (
-                  <span className="text-danger">{errors.password}</span>
+                {errors.password2 && (
+                  <span className="text-danger">{errors.password2}</span>
                 )}
               </Col>
             </Row>

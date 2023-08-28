@@ -24,8 +24,10 @@ import Modal from "./Modal";
 
 import img from "../assets/002.png";
 import MenuNav from "./MenuNav";
-function AboutMe() {
+import { useLocation } from "react-router-dom";
 
+function AboutMe() {
+  const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
 
   return (
@@ -34,7 +36,7 @@ function AboutMe() {
         <MenuNav />
       </header>
       <form className="containerread" onSubmit={""}>
-        <h3 className="h3Editsale">ข้อมูลส่วนตัวของฉัน</h3>
+        <h3 className="h3Editsale">ข้อมูลส่วนตัวของ {userLoginData[0].fullname}</h3>
 
         <Row>
           <Col md={4}>
@@ -46,6 +48,7 @@ function AboutMe() {
                   className="InputID"
                   id=""
                   type="text"
+                  value={userLoginData[0].ID_admin}
                   disabled
                   // value={values.ID_sales}
                 />
