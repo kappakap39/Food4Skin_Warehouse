@@ -60,6 +60,7 @@ function AboutMe() {
                   className="InputSex"
                   id="Sex"
                   type="text"
+                  value={userLoginData[0].sex}
                   disabled
                   // value={values.sex}
                 />
@@ -72,6 +73,7 @@ function AboutMe() {
               className="Input2"
               id="IDcard"
               type="text"
+              value={userLoginData[0].IDcard}
               disabled
               // value={values.Card_ID}
               
@@ -83,6 +85,7 @@ function AboutMe() {
               className="Input2"
               id="fullname"
               type="text"
+              value={userLoginData[0].fullname}
               disabled
               // value={values.fullname}
             />
@@ -93,6 +96,7 @@ function AboutMe() {
               className="Input2"
               id="email"
               type="text"
+              value={userLoginData[0].email}
               disabled
               // value={values.email}
             />
@@ -104,6 +108,7 @@ function AboutMe() {
               id="password"
               type="password"
               aria-describedby="passwordHelpBlock"
+              value={userLoginData[0].password}
               disabled
               // value={values.password}
             />
@@ -119,6 +124,7 @@ function AboutMe() {
                   className="Input3"
                   id="province"
                   type="text"
+                  value={userLoginData[0].province}
                   disabled
                   // value={values.province}
                 />
@@ -129,7 +135,7 @@ function AboutMe() {
                   id="subdistricts"
                   type="text"
                   disabled
-                  // value={values.subdistricts}
+                  value={userLoginData[0].subdistricts}
                 />
               </Col>
               <Col>
@@ -140,16 +146,16 @@ function AboutMe() {
                   id="districts"
                   type="text"
                   disabled
-                  // value={values.districts}
+                  value={userLoginData[0].districts}
                 />
                 <h6 className="txt">รหัสไปรษณีย์</h6>
                 <input
                   name="text"
                   className="Input3"
-                  id="zipcode"
+                  id="zip_code"
                   type="text"
                   disabled
-                  // value={values.zip_code}
+                  value={userLoginData[0].zip_code}
                 />
               </Col>
             </Row>
@@ -162,7 +168,7 @@ function AboutMe() {
               type="text"
               aria-describedby="passwordHelpBlock"
               disabled
-              // value={values.AddressSale}
+              value={userLoginData[0].Address}
             />
             <h6 className="txt">ช่องทางติดต่อ</h6>
             <input
@@ -171,7 +177,7 @@ function AboutMe() {
               id="contact"
               type="text"
               disabled
-              // value={values.contact}
+              value={userLoginData[0].contact}
             />
 
             <Row>
@@ -191,7 +197,7 @@ function AboutMe() {
                   type="text"
                   aria-describedby="passwordHelpBlock"
                   disabled
-                  // value={values.PhoneNumber}
+                  value={userLoginData[0].Tel}
                 />
               </Col>
               <Col>

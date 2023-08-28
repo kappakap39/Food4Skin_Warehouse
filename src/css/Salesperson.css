@@ -7,7 +7,7 @@ body {
   /* box-shadow:  0 5px 10px #ffffff; */
   border-radius: 20px;
   /* width: ; */
-  height: 595px;
+  height: 555px;
   /* height: auto; */
 
   /* filter: drop-shadow(0 0 0.2em #ffffffbd); */
@@ -15,8 +15,9 @@ body {
   /* padding-top: 30px; */
   padding-bottom: 20px;
   /* background: #212529; */
-  margin: 30px;
-
+  margin: 20px;
+  /* overflow: hidden; */
+  
 }
 .container1:hover {
   /* filter: drop-shadow(0 0 0.2em #11ff00); */
@@ -139,7 +140,7 @@ button {
   margin-bottom: 0px;
   margin-top: 0px;
   overflow: auto;
-  height: 445px;
+  height: 442px;
 }
 
 tbody {
@@ -153,6 +154,7 @@ tbody {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 .NextpageB {
   display: flex;
