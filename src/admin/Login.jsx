@@ -19,7 +19,6 @@ function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
-    Persistent_status: "",
   });
 
   //showpassword
@@ -33,7 +32,6 @@ function Login() {
   const [errors, setErrors] = useState({
     email: "",
     password: "",
-    Persistent_status: "",
   });
   const handleInput = (event) => {
     //showpass
@@ -91,12 +89,20 @@ function Login() {
           values
         );
 
-        if (adminResponse.data === "Success") {
+        if (adminResponse.data[0].Success === "Success") {
+          const userLoginData = sessionStorage.getItem("userlogin");
+          const parsedUserLoginData = JSON.parse(userLoginData);
+
+          console.log(parsedUserLoginData);
           MySwal.fire({
             title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
             html: <i>คุณเข้าสู่ระบบในตำแหน่งผู้ดูแลระบบ</i>,
             icon: "success",
           }).then((value) => {
+            sessionStorage.setItem(
+              "userlogin",
+              JSON.stringify(adminResponse.data)
+            );
             navigate("/Salesperson");
           });
         } else {
@@ -109,13 +115,18 @@ function Login() {
               navigate("/Product");
             });
           } else {
-            MySwal.fire({
-              title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
-              html: <i>ไม่มีข้อมูลของบัญชีนี้หรือบัญชีนี้อาจเป็นของพนักงานแต่พ้นสภาพการทำงานแล้ว</i>,
-              icon: "error",
-            });
+            // MySwal.fire({
+            //   title: <strong>เข้าสู่ระบบไม่สำเร็จ</strong>,
+            //   html: (
+            //     <i>
+            //       ไม่มีข้อมูลของบัญชีนี้หรือบัญชีนี้อาจเป็นของพนักงานแต่พ้นสภาพการทำงานแล้ว
+            //     </i>
+            //   ),
+            //   icon: "error",
+            // });
           }
         }
+        setSubmitted(true);
       } catch (error) {
         console.error(error);
       }
@@ -168,8 +179,542 @@ function Login() {
 
   console.log(values);
 
+    // Submit status
+    const [submitted, setSubmitted] = useState(false); // เพิ่มบรรทัดนี้
+
   return (
     <div className="bodyLogin">
+      <div className="containerBG">
+        <div className="rowlg 1">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg altline2">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg line2">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg altline3">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg line3">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg altline4">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg line4">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg altline5">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg line5">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+        <div className="rowlg">
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+          <div className="hexagon"></div>
+        </div>
+      </div>
+
       <div className="login">
         <div className="formlogin">
           <form action="" onSubmit={handleSubmit}>
@@ -212,6 +757,12 @@ function Login() {
                 />
                 {errors.password && (
                   <span className="text-danger">{errors.password}</span>
+                )}
+                {/* แสดงเมื่อผู้ใช้กด Submit และไม่มีข้อผิดพลาดที่เกี่ยวข้องกับอีเมลและรหัสผ่าน */}
+                {submitted && !errors.email && !errors.password && (
+                  <span className="text-danger">
+                    ไม่มีข้อมูลของบัญชีนี้หรือบัญชีนี้อาจเป็นของพนักงานแต่พ้นสภาพการทำงานแล้ว
+                  </span>
                 )}
               </div>
 

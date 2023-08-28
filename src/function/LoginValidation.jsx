@@ -20,7 +20,7 @@ function Validation(values){
         error.password = "กรุณากรอกรหัสผ่าน"
     }
     else if (!password_pattern.test(values.password)){
-        error.password = "รหัสผ่านไม่ถูกต้อง"
+        error.password = "รหัสผ่านไม่ถูกต้องตรวจสอบว่ามีตัวพิมพ์ใหญ่และเล็กและมีตัวเลขรวมกันถึง8ตัวหรือไม่"
     }
     else{
         error.password = ""

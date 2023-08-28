@@ -164,15 +164,14 @@ function AddSales() {
         .replace(/\D/g, "")
         .slice(0, 13)
         .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-
+    
       setCradID(formattedText1);
-      setValues((prev) => ({ ...prev, [name]: formattedText1 }));
+      setValues((prev) => ({ ...prev, IDcard: value })); // เก็บค่าที่ไม่ผ่านการจัดรูปแบบและเครื่องหมาย "-"
     }
     if (name === "Tel") {
       const formattedPhoneNumber = value.replace(/-/g, "");
       const formattedText = formattedPhoneNumber.replace(/\D/g, "");
 
-      // ตรวจสอบเงื่อนไขเพื่อให้ตัวเลขในเบอร์โทรศัพท์เป็นเฉพาะตัวเลขและตัดจำนวนให้เหลือเพียง 10 หรือ 9 ตัว
       let formattedPhoneNumberFinal;
       if (formattedText.length === 9) {
         formattedPhoneNumberFinal = formattedText.replace(
@@ -197,7 +196,6 @@ function AddSales() {
         setSelectedImage(selectedFile); // Set the selected image to the state
       }
     }
-
   };
   console.log(cradID);
 
@@ -211,15 +209,15 @@ function AddSales() {
       <form className="containeradd" action="" onSubmit={handleSubmit}>
         <h3 className="h3add">ตารางเพิ่มรายชื่อพนักงานฝ่ายขาย</h3>
         {selectedImage && (
-                  <div className="imgSale">
-                    <img
-                      src={URL.createObjectURL(selectedImage)} // Create a temporary URL for the selected image
-                      alt="Selected"
-                      style={{ maxWidth: "auto", height: "100px"}}
-                      
-                    />
-                  </div>
-                )}
+          <div className="imgSale">
+            <img
+              src={URL.createObjectURL(selectedImage)} // Create a temporary URL for the selected image
+              alt="Selected"
+              style={{ maxWidth: "auto", height: "100px" }}
+            />
+            {/* <p>{URL.createObjectURL(selectedImage)} </p> */}
+          </div>
+        )}
         <Row>
           <Col md={5}>
             <Row>
@@ -428,15 +426,14 @@ function AddSales() {
                 <h6>*</h6>ที่อยู่เพิ่มเติม
               </h6>
               <Col md={8}>
-                <InputGroup className="mb-3">
-                  <Form.Control
-                    aria-label="ที่อยู่เพิ่มเติม"
-                    type="text"
-                    name="AddressSale"
-                    id="AddressSale"
-                    onChange={handleInput}
-                  />
-                </InputGroup>
+                <textarea
+                  className="textareaadd mb-3"
+                  aria-label="ที่อยู่เพิ่มเติม"
+                  type="text"
+                  name="AddressSale"
+                  id="AddressSale"
+                  onChange={handleInput}
+                ></textarea>
               </Col>
               <Col>
                 {errors.AddressSale && (
@@ -604,7 +601,7 @@ function AddSales() {
           </Col>
         </Row>
 
-        <Row style={{ marginTop: "5px" , marginBottom: "30px"}}>
+        <Row style={{ marginTop: "5px", marginBottom: "30px" }}>
           <Col className="cancel" md={5}>
             <div></div>
           </Col>

@@ -20,26 +20,25 @@ import Updatesales from "./salescomponent/Updatesales";
 import Product from "./salescomponent/Product";
 import EditMe from "./admin/EditMe";
 
-
-
 function App() {
   return (
     <div>
-
       {/* เป็นเส้นทางติดต่อไปยัง Component อื่นๆ */}
       <BrowserRouter>
         <Routes>
           {/* <Route path="/MenuNavbar" element={<MenuNav />}></Route> */}
-          <Route path="/" element={<Login/>}></Route>
+          <Route path="/" element={<Login />}></Route>
           <Route path="/Salesperson" element={<Salesperson />}></Route>
           <Route path="/Salesperson/AddSales" element={<AddSales />}></Route>
-          <Route path="/AboutMe" element={<AboutMe/>}></Route>
-          <Route path="/EditSales/:id" element={<EditSales/>}></Route>
-          <Route path="/EditAboutSale/:ID_sales" element={<EditAboutSale/>}></Route>
-          <Route path="/Updatesales" element={<Updatesales/>}></Route>
-          <Route path="/Product" element={<Product/>}></Route>
-          <Route path="/EditMe" element={<EditMe/>}></Route>
-
+          <Route path="/AboutMe" element={<AboutMe />}></Route>
+          <Route path="/EditSales/:id" element={<EditSales />}></Route>
+          <Route
+            path="/EditAboutSale/:ID_sales"
+            element={<EditAboutSale />}
+          ></Route>
+          <Route path="/Updatesales" element={<Updatesales />}></Route>
+          <Route path="/Product" element={<Product />}></Route>
+          <Route path="/EditMe" element={<EditMe />}></Route>
         </Routes>
       </BrowserRouter>
 

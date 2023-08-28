@@ -283,9 +283,9 @@ function EditSales() {
             </Row>
 
             <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
-            <input
+            <textarea
               name="text"
-              className="Input"
+              className="textarea"
               id="AddressSale"
               type="text"
               aria-describedby="passwordHelpBlock"
@@ -401,7 +401,7 @@ function EditSales() {
           </Col> */}
         </Row>
 
-        <Row style={{ marginTop: "20px" }}>
+        <Row style={{ marginTop: "20px", marginBottom:"40px" }}>
           <Col className="cancel" md={5}></Col>
           <Col className="button2" md={6}>
             <Row style={{ marginRight: "25px" }}>

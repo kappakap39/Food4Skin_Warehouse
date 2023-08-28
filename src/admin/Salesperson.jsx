@@ -19,11 +19,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { Link } from "react-router-dom";
-
-import MenuNav from "./MenuNav";
+import MenuNav from "./MenuNav"; // Make sure the path is correct
 
 function Salesperson() {
   const navigate = useNavigate();
+
+  const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
 
   //แสดงข้อมูลทั้งหมด
   const [data, setData] = useState([]);
