@@ -94,6 +94,21 @@ if (values.picture === "") {
   } else {
     errors.zip_code = "";
   }
+  if (values.subdistricts === "") {
+    errors.subdistricts = "กรอกตำบล!";
+  } else {
+    errors.subdistricts = "";
+  }
+  if (values.districts === "") {
+    errors.districts = "กรอกอำเภอ!";
+  } else {
+    errors.districts = "";
+  }
+  if (values.province === "") {
+    errors.province = "กรอกจังหวัด!";
+  } else {
+    errors.province = "";
+  }
 
   //*
   // if (values.contact === "") {

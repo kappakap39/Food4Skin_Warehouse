@@ -92,23 +92,15 @@ h6 {
 .Inputadd {
   background-color: rgb(211, 211, 211);
   color: rgb(40, 40, 40);
-  width: 290px;
+  width: 100%;
+  /* width: 290px; */
   height: 38px;
   border-radius: 6px;
   /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   padding-left: 10px;
 }
-.InputZip {
-  background-color: rgb(211, 211, 211);
-  color: rgb(40, 40, 40);
-  width: 215px;
-  height: 38px;
-  border-radius: 6px;
-  /* filter: drop-shadow(0 0 0.25em #ffffffaa); */
-  margin-bottom: 15px;
-  padding-left: 10px;
-}
+
 
 .fromadd {
   margin-bottom: 10px;
@@ -117,7 +109,8 @@ h6 {
 .col {
   flex: 1 0 0%;
   display: grid;
-  align-items: center;
+  align-items: start;
+  align-content: baseline;
 }
 .col2 {
   flex: 1 0 0%;

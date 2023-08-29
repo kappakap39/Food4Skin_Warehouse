@@ -16,7 +16,9 @@ import logo from "../assets/logo1.png";
 import { useLocation } from "react-router-dom";
 
 function MenuNav() {
+
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
+
   console.log("NAV", userLoginData);
   return (
     <form action="" className="">

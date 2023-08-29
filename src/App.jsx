@@ -13,7 +13,7 @@ import MenuNav from "./admin/MenuNav";
 import Salesperson from "./admin/Salesperson";
 import AddSales from "./admin/AddSales";
 import AboutMe from "./admin/AboutMe";
-import Login from "./admin/Login";
+import Login from "./Login";
 import EditSales from "./admin/EditSales";
 import EditAboutSale from "./salescomponent/EditAboutSale";
 import Updatesales from "./salescomponent/Updatesales";
@@ -27,7 +27,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* <Route path="/MenuNavbar" element={<MenuNav />}></Route> */}
-          <Route path="/" element={<Login />}></Route>
+          <Route path="/" element={<Login/>}></Route>
           <Route path="/Salesperson" element={<Salesperson />}></Route>
           <Route path="/Salesperson/AddSales" element={<AddSales />}></Route>
           <Route path="/AboutMe" element={<AboutMe />}></Route>
@@ -38,7 +38,7 @@ function App() {
           ></Route>
           <Route path="/Updatesales" element={<Updatesales />}></Route>
           <Route path="/Product" element={<Product />}></Route>
-          <Route path="/EditMe" element={<EditMe />}></Route>
+          <Route path="/EditMe/:id" element={<EditMe />}></Route>
         </Routes>
       </BrowserRouter>
 

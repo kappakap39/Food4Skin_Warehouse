@@ -281,27 +281,6 @@ function EditSales() {
                 />
               </Col>
             </Row>
-
-            <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
-            <textarea
-              name="text"
-              className="textarea"
-              id="AddressSale"
-              type="text"
-              aria-describedby="passwordHelpBlock"
-              disabled
-              value={values.AddressSale}
-            />
-            <h6 className="txt">ช่องทางติดต่อ</h6>
-            <input
-              name="text"
-              className="Input"
-              id="contact"
-              type="text"
-              disabled
-              value={values.contact}
-            />
-
             <Row>
               <Col>
                 {/* <Link
@@ -334,7 +313,25 @@ function EditSales() {
                 />
               </Col>
             </Row>
-
+            <h6 className="txt">ช่องทางติดต่อ</h6>
+            <input
+              name="text"
+              className="Input"
+              id="contact"
+              type="text"
+              disabled
+              value={values.contact}
+            />
+            <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
+            <textarea
+              name="text"
+              className="textarea"
+              id="AddressSale"
+              type="text"
+              aria-describedby="passwordHelpBlock"
+              disabled
+              value={values.AddressSale}
+            />
             <div className="AppModal">
               <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                 <h3>แก้ไขสถานะ</h3>
@@ -351,14 +348,7 @@ function EditSales() {
 
                   //   disabled
                 >
-                  <option
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        Persistent_status: e.target.value,
-                      })
-                    }
-                  >
+                  <option>
                     {values.Persistent_status}
                   </option>
                   <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
@@ -377,9 +367,9 @@ function EditSales() {
               <div>
                 <img
                   src={values.picture} // ใช้ URL ของรูปภาพจาก state values.picture
-                  // alt={values.picture} 
-                  alt={"ไม่สามารถแสดงภาพได้"} 
-                  style={{ marginLeft: "20%", marginTop: "30px"}}
+                  // alt={values.picture}
+                  alt={"ไม่สามารถแสดงภาพได้"}
+                  style={{ marginLeft: "20%", marginTop: "30px" }}
                 />
               </div>
             )}
@@ -401,7 +391,7 @@ function EditSales() {
           </Col> */}
         </Row>
 
-        <Row style={{ marginTop: "20px", marginBottom:"40px" }}>
+        <Row style={{ marginTop: "20px", marginBottom: "40px" }}>
           <Col className="cancel" md={5}></Col>
           <Col className="button2" md={6}>
             <Row style={{ marginRight: "25px" }}>

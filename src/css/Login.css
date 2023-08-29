@@ -28,6 +28,7 @@
     flex-wrap: wrap;
     overflow: hidden;
     background: #1c1f21;
+    overflow: hidden;
 }
 .bodyLogin .login {
     position: absolute;
@@ -400,8 +401,15 @@ button:hover{
     color: #FFFFFF;
     font-size: 35px; 
     float: right;
-    margin-top: 20px;
-
+    margin-top: -25px;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+}
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 .IconPassword:hover{
     filter: drop-shadow(0 0 20px #2fff00aa);

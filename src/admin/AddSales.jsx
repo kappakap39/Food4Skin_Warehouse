@@ -166,7 +166,7 @@ function AddSales() {
         .replace(/\D/g, "")
         .slice(0, 13)
         .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-    
+
       setCradID(formattedText1);
       setValues((prev) => ({ ...prev, IDcard: value })); // เก็บค่าที่ไม่ผ่านการจัดรูปแบบและเครื่องหมาย "-"
     }
@@ -276,45 +276,54 @@ function AddSales() {
                 <h6 className="txt">
                   <h6>*</h6>จังหวัด
                 </h6>
-                {/* <h6 className="txt">*จังหวัด</h6> */}
-                <InputGroup className="mb-3">
-                  {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
-                  <Form.Select
-                    aria-label="จังหวัด"
-                    type="text"
-                    name="province"
-                    id="province"
-                    onChange={(e) => onChangeProvince(e)}
-                  >
-                    <option>จังหวัด</option>
-                    {province.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name_in_thai}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
+                <div>
+                  <InputGroup className="">
+                    {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
+                    <Form.Select
+                      aria-label="จังหวัด"
+                      type="text"
+                      name="province"
+                      id="province"
+                      onChange={(e) => onChangeProvince(e)}
+                    >
+                      <option>จังหวัด</option>
+                      {province.map((item, index) => (
+                        <option key={index} value={item.id}>
+                          {item.name_in_thai}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </InputGroup>
+                  {errors.province && (
+                    <span className="text-danger">{errors.province}</span>
+                  )}
+                </div>
               </Col>
               <Col>
                 <h6 className="txt">
                   <h6>*</h6>อำเภอ
                 </h6>
-                <InputGroup className="mb-3">
-                  <Form.Select
-                    aria-label="อำเภอ"
-                    type="text"
-                    name="districts"
-                    id="districts"
-                    onChange={(e) => onChangeDistricts(e)}
-                  >
-                    <option>อำเภอ</option>
-                    {districts.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name_in_thai}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
+                <div>
+                  <InputGroup className="">
+                    <Form.Select
+                      aria-label="อำเภอ"
+                      type="text"
+                      name="districts"
+                      id="districts"
+                      onChange={(e) => onChangeDistricts(e)}
+                    >
+                      <option>อำเภอ</option>
+                      {districts.map((item, index) => (
+                        <option key={index} value={item.id}>
+                          {item.name_in_thai}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </InputGroup>
+                  {errors.districts && (
+                    <span className="text-danger">{errors.districts}</span>
+                  )}
+                </div>
               </Col>
             </Row>
           </Col>
@@ -326,7 +335,7 @@ function AddSales() {
               <h6 className="txt">
                 <h6>*</h6>ชื่อ-นามสกุล
               </h6>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   {/* <InputGroup.Text>ชื่อ-นามสกุล</InputGroup.Text> */}
                   <Form.Control
@@ -341,18 +350,19 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.fullname && (
+
+              {errors.fullname && (
+                <Col md={4}>
                   <span className="text-danger">{errors.fullname}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
 
             <Row>
               <h6 className="txt">
                 <h6>*</h6>อีเมล
               </h6>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   {/* <InputGroup.Text>อีเมล</InputGroup.Text> */}
                   <Form.Control
@@ -365,11 +375,11 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.email && (
+              {errors.email && (
+                <Col md={4}>
                   <span className="text-danger">{errors.email}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
 
             {/* <h6 className="txt">*อีเมล</h6> */}
@@ -381,67 +391,75 @@ function AddSales() {
                 <h6 className="txt">
                   <h6>*</h6>ตำบล
                 </h6>
-                {/* <h6 className="txt">*ตำบล</h6> */}
-                <InputGroup className="mb-3">
-                  {/* <InputGroup.Text>ตำบล</InputGroup.Text> */}
-                  <Form.Select
-                    aria-label="ตำบล"
-                    type="text"
-                    name="subdistricts"
-                    id="subdistricts"
-                    onChange={(e) => onChangeSubdistricts(e)}
-                  >
-                    <option>ตำบล</option>
-                    {subdistricts.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name_in_thai}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
-                {/* {errors.districts && (
-                  <span className="text-danger">{errors.districts}</span>
-                )} */}
+                <div style={{ marginBottom: "15px" }}>
+                  <InputGroup className="">
+                    {/* <InputGroup.Text>ตำบล</InputGroup.Text> */}
+                    <Form.Select
+                      aria-label="ตำบล"
+                      type="text"
+                      name="subdistricts"
+                      id="subdistricts"
+                      onChange={(e) => onChangeSubdistricts(e)}
+                    >
+                      <option>ตำบล</option>
+                      {subdistricts.map((item, index) => (
+                        <option key={index} value={item.id}>
+                          {item.name_in_thai}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </InputGroup>
+                  {errors.subdistricts && (
+                    <span className="text-danger">{errors.subdistricts}</span>
+                  )}
+                </div>
               </Col>
               <Col>
-                <h6 className="txt">
-                  รหัสไปรษณีย์
-                  <h6></h6>
+                <h6 className="txt mb-2">รหัสไปรษณีย์</h6>
+                <div className="input-container">
+                  <input
+                    name="zip_code"
+                    className="Inputadd"
+                    id="contact"
+                    type="text"
+                    disabled
+                    value={values.zip_code}
+                    onChange={handleInput}
+                  />
                   {errors.zip_code && (
                     <span className="text-danger">{errors.zip_code}</span>
                   )}
-                </h6>
-
-                <input
-                  name="zip_code"
-                  className="Inputadd"
-                  id="contact"
-                  type="text"
-                  disabled
-                  value={values.zip_code}
-                  onChange={handleInput}
-                />
+                </div>
               </Col>
             </Row>
             <Row>
               <h6 className="txt">
-                <h6>*</h6>ที่อยู่เพิ่มเติม
+                <h6>*</h6>สถานะ
               </h6>
-              <Col md={8}>
-                <textarea
-                  className="textareaadd mb-3"
-                  aria-label="ที่อยู่เพิ่มเติม"
-                  type="text"
-                  name="AddressSale"
-                  id="AddressSale"
-                  onChange={handleInput}
-                ></textarea>
-              </Col>
-              <Col>
-                {errors.AddressSale && (
-                  <span className="text-danger">{errors.AddressSale}</span>
+              
+                <Col className="mb-3">
+                  <Form.Select
+                    aria-label="Default select example"
+                    type="text"
+                    name="Persistent_status"
+                    id="Persistent_status"
+                    onChange={handleInput}
+                  >
+                    <option>สถานะการทำงาน</option>
+                    <option value="กำลังดำเนินงานอยู่">
+                      กำลังดำเนินงานอยู่
+                    </option>
+                    <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
+                  </Form.Select>
+                </Col>
+                {errors.Persistent_status && (
+                  <Col md={4}>
+                    <span className="text-danger">
+                      {errors.Persistent_status}
+                    </span>
+                  </Col>
                 )}
-              </Col>
+              
             </Row>
           </Col>
         </Row>
@@ -452,7 +470,7 @@ function AddSales() {
               <h6 className="txt">
                 <h6>*</h6>ภาพถ่ายพร้อมบัตรประชาชน
               </h6>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   <Form.Control
                     type="file"
@@ -463,11 +481,11 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.picture && (
+              {errors.picture && (
+                <Col md={4}>
                   <span className="text-danger">{errors.picture}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
 
             {/* <h6 className="txt">ภาพถ่ายพร้อมบัตรประชาชน</h6> */}
@@ -480,7 +498,7 @@ function AddSales() {
               <h6>*</h6>เบอร์โทรศัพท์
             </h6>
             <Row>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   <Form.Control
                     aria-label="เบอร์โทรศัพท์"
@@ -493,11 +511,11 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.Tel && (
+              {errors.Tel && (
+                <Col md={4}>
                   <span className="text-danger">{errors.Tel}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>
@@ -508,7 +526,7 @@ function AddSales() {
               <h6>*</h6>รหัสผ่าน
             </h6>
             <Row>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   <Form.Control
                     type="password"
@@ -519,11 +537,11 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.password && (
+              {errors.password && (
+                <Col md={4}>
                   <span className="text-danger">{errors.password}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
           </Col>
 
@@ -532,7 +550,7 @@ function AddSales() {
               <h6>*</h6>ช่องทางติดต่อ
             </h6>
             <Row>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   <Form.Control
                     aria-label="ช่องทางติดต่อออนไลน์"
@@ -543,11 +561,11 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.contact && (
+              {errors.contact && (
+                <Col md={4}>
                   <span className="text-danger">{errors.contact}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>
@@ -558,7 +576,7 @@ function AddSales() {
               <h6>*</h6>ยืนยันรหัสผ่าน
             </h6>
             <Row>
-              <Col md={8}>
+              <Col>
                 <InputGroup className="mb-3">
                   <Form.Control
                     type="password"
@@ -569,44 +587,39 @@ function AddSales() {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                {errors.password2 && (
+              {errors.password2 && (
+                <Col md={4}>
                   <span className="text-danger">{errors.password2}</span>
-                )}
-              </Col>
+                </Col>
+              )}
             </Row>
           </Col>
 
           <Col md={5}>
-            <h6 className="txt">
-              <h6>*</h6>สถานะ
-            </h6>
             <Row>
-              <Col md={8}>
-                <Form.Select
-                  aria-label="Default select example"
-                  type="text"
-                  name="Persistent_status"
-                  id="Persistent_status"
-                  onChange={handleInput}
-                >
-                  <option>สถานะการทำงาน</option>
-                  <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
-                  <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
-                </Form.Select>
-              </Col>
+              <h6 className="txt">
+                <h6>*</h6>ที่อยู่เพิ่มเติม
+              </h6>
               <Col>
-                {errors.Persistent_status && (
-                  <span className="text-danger">
-                    {errors.Persistent_status}
-                  </span>
-                )}
+                <textarea
+                  className="textareaadd mb-3"
+                  aria-label="ที่อยู่เพิ่มเติม"
+                  type="text"
+                  name="AddressSale"
+                  id="AddressSale"
+                  onChange={handleInput}
+                ></textarea>
               </Col>
+              {errors.AddressSale && (
+                <Col md={4}>
+                  <span className="text-danger">{errors.AddressSale}</span>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>
 
-        <Row style={{ marginTop: "5px", marginBottom: "30px" }}>
+        <Row style={{ marginTop: "15px", marginBottom: "30px" }}>
           <Col className="cancel" md={5}>
             <div></div>
           </Col>

@@ -14,6 +14,8 @@ import {FcMenu} from "react-icons/fc";
 import logo from "../assets/logo1.png";
 function MenuNavSales() {
   // const navigate = useNavigate();
+  const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
+  console.log("NAV", userLoginData);
   return (
     <form action="" className="">
 
@@ -28,9 +30,13 @@ function MenuNavSales() {
 
           {/* <Navbar.Toggle aria-controls="basic-navbar-nav" className="menunav" /> */}
           <div>
-          <Navbar.Brand className="navname">
-            นาย ภูวดลย์ เหล่าธง
-          </Navbar.Brand>
+          {userLoginData && userLoginData.length > 0 ? (
+              <Navbar.Brand className="navname">
+                {userLoginData[0].fullname}
+              </Navbar.Brand>
+            ) : (
+              <Navbar.Brand className="navname">Welcome</Navbar.Brand>
+            )}
           <Navbar.Toggle className="menunav"><FcMenu/></Navbar.Toggle>
           </div>
           
