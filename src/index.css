@@ -162,3 +162,7 @@ button:focus-visible {
   height: 5%;
 }
 
+::-webkit-scrollbar{
+  height: 5px;
+}
+

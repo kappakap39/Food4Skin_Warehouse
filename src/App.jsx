@@ -17,8 +17,12 @@ import Login from "./Login";
 import EditSales from "./admin/EditSales";
 import EditAboutSale from "./salescomponent/EditAboutSale";
 import Updatesales from "./salescomponent/Updatesales";
-import Product from "./salescomponent/Product";
+import ProductLOT from "./salescomponent/ProductLOT";
 import EditMe from "./admin/EditMe";
+import Product from "./salescomponent/Product";
+import AddProduct from "./salescomponent/AddProduct";
+import UpdateProduct from "./salescomponent/UpdateProduct";
+import ReadProduct from "./salescomponent/ReadProduct";
 
 function App() {
   return (
@@ -37,8 +41,12 @@ function App() {
             element={<EditAboutSale />}
           ></Route>
           <Route path="/Updatesales" element={<Updatesales />}></Route>
-          <Route path="/Product" element={<Product />}></Route>
+          <Route path="/UpdateProduct/:id" element={<UpdateProduct />}></Route>
+          <Route path="/ReadProduct/:id" element={<ReadProduct />}></Route>
+          <Route path="/ProductLOT" element={<ProductLOT />}></Route>
           <Route path="/EditMe/:id" element={<EditMe />}></Route>
+          <Route path="/Product" element={<Product/>}></Route>
+          <Route path="/AddProduct" element={<AddProduct/>}></Route>
         </Routes>
       </BrowserRouter>
 

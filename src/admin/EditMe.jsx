@@ -30,7 +30,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 function EditMe() {
-  const MySwal = withReactContent(Swal);//icon aleart
+  const MySwal = withReactContent(Swal); //icon aleart
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -168,20 +168,77 @@ function EditMe() {
   const [errors, setErrors] = useState({});
   const handleUpdate = (event) => {
     event.preventDefault();
+    // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
+    const formattedPhone = values.Tel.replace(/-/g, "");
+
+    const err = Validation({ ...values, Tel: formattedPhone });
+    setErrors(err);
     axios
-      .put("http://localhost:2001/adminUpdate/" + id, values)
+      .put("http://localhost:2001/adminUpdate/" + id, {
+        ...values,
+        Tel: formattedPhone,
+      })
       .then((res) => {
         console.log(res);
         MySwal.fire({
           title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
           html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
           icon: "warning",
-        })
+        });
         navigate("/");
       })
       .catch((err) => console.log(err));
   };
   console.log("values :", values);
+  //Check
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [cradID, setCradID] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+  
+    if (name === "IDcard") {
+      const formattedCardID = value.replace(/-/g, "");
+      const formattedText1 = formattedCardID.replace(/\D/g, "")
+        
+        .slice(0, 13)
+        .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+  
+      setCradID(formattedText1);
+      setValues((prev) => ({ ...prev, [name]: formattedText1 }));
+    }
+    if (name === "Tel") {
+      const formattedPhoneNumber = value.replace(/-/g, "");
+      const formattedText = formattedPhoneNumber.replace(/\D/g, "");
+  
+      let formattedPhoneNumberFinal;
+      if (formattedText.length === 9) {
+        formattedPhoneNumberFinal = formattedText.replace(
+          /(\d{2})(\d{3})(\d{4})/,
+          "$1-$2-$3"
+        );
+      } else {
+        formattedPhoneNumberFinal = formattedText 
+          .slice(0, 10)
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+      }
+  
+      setPhoneNumber(formattedPhoneNumberFinal);
+      setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
+    } else {
+      setValues((prev) => ({ ...prev, [name]: value }));
+    }
+  
+    if (name === "picture") {
+      const selectedFile = event.target.files[0];
+      if (selectedFile) {
+        setSelectedImage(selectedFile);
+      }
+    }
+  };
+  
+
   return (
     <div>
       <header className="headernav ">
@@ -208,20 +265,21 @@ function EditMe() {
               <Col md={8}>
                 <h6 className="txt">เพศ</h6>
                 <Form.Select
-                className="InputSex0"
-                aria-label="เพศ"
-                name="sex"
-                type="text"
-                id="Sex"
-                value={values.sex}
-                onChange={(e) =>
-                  setValues({ ...values, sex: e.target.value })
-                }
-              >
-                <option value="ชาย">ชาย</option>
-                <option value="หญิง">หญิง</option>
-                {/* <option value="อื่น ๆ">อื่น ๆ</option> */}
-              </Form.Select>
+                  className="InputSex0"
+                  aria-label="เพศ"
+                  name="sex"
+                  type="text"
+                  id="Sex"
+                  value={values.sex}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, sex: e.target.value })
+                  // }
+                  onChange={handleInput}
+                >
+                  <option value="ชาย">ชาย</option>
+                  <option value="หญิง">หญิง</option>
+                  {/* <option value="อื่น ๆ">อื่น ๆ</option> */}
+                </Form.Select>
               </Col>
             </Row>
 
@@ -231,11 +289,17 @@ function EditMe() {
               className="Input20"
               id="IDcard"
               type="text"
+              // value={values.IDcard}
+              // value={cradID}
               value={values.IDcard}
-              onChange={(e) =>
-                setValues({ ...values, IDcard: e.target.value })
-              }
+              // onChange={(e) =>
+              //   setValues({ ...values, IDcard: e.target.value })
+              // }
+              onChange={handleInput}
             />
+            {errors.IDcard && (
+              <span className="text-danger">{errors.IDcard}</span>
+            )}
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
             <input
@@ -256,9 +320,10 @@ function EditMe() {
               id="email"
               type="text"
               value={values.email}
-              onChange={(e) =>
-                setValues({ ...values, email: e.target.value })
-              }
+              // onChange={(e) =>
+              //   setValues({ ...values, email: e.target.value })
+              // }
+              onChange={handleInput}
             />
             <Row>
               <Col>
@@ -282,9 +347,10 @@ function EditMe() {
                       type="password"
                       aria-describedby="passwordHelpBlock"
                       // value={values.password}
-                      onChange={(e) =>
-                        setValues({ ...values, password: e.target.value })
-                      }
+                      // onChange={(e) =>
+                      //   setValues({ ...values, password: e.target.value })
+                      // }
+                      onChange={handleInput}
                     />
                     <h6 className="txt">ยืนยันรหัสผ่าน</h6>
                     <input
@@ -389,6 +455,7 @@ function EditMe() {
                   type="text"
                   disabled
                   value={values.zip_code}
+                  onChange={handleInput}
                 />
                 {errors.zip_code && (
                   <span className="text-danger">{errors.zip_code}</span>
@@ -403,11 +470,11 @@ function EditMe() {
               id="Tel"
               type="text"
               aria-describedby="passwordHelpBlock"
+              // value={phoneNumber}
               value={values.Tel}
-              onChange={(e) =>
-                setValues({ ...values, Tel: e.target.value })
-              }
+              onChange={handleInput}
             />
+
             <h6 className="txt">ช่องทางติดต่อ</h6>
             <input
               name="contact"
@@ -415,9 +482,10 @@ function EditMe() {
               id="contact"
               type="text"
               value={values.contact}
-              onChange={(e) =>
-                setValues({ ...values, contact: e.target.value })
-              }
+              // onChange={(e) =>
+              //   setValues({ ...values, contact: e.target.value })
+              // }
+              onChange={handleInput}
             />
 
             <Row>
@@ -438,9 +506,10 @@ function EditMe() {
                   type="text"
                   aria-describedby="passwordHelpBlock"
                   value={values.Address}
-                  onChange={(e) =>
-                    setValues({ ...values, Address: e.target.value })
-                  }
+                  // onChange={(e) =>
+                  //   setValues({ ...values, Address: e.target.value })
+                  // }
+                  onChange={handleInput}
                 />
               </Col>
               <Col>

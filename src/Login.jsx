@@ -120,7 +120,7 @@ function Login() {
                 "userlogin",
                 JSON.stringify(salesResponse.data)
               );
-              navigate("/Product");
+              navigate("/ProductLOT");
             });
           } else {
             // MySwal.fire({

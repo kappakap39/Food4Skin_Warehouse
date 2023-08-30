@@ -22,7 +22,7 @@ function MenuNavSales() {
       <Navbar expand="xg" className="nav">
         <Container>
           
-          <Navbar.Brand href="/Product" className="menunav">
+          <Navbar.Brand href="/ProductLot" className="menunav">
           {/* <img src={logo} alt="" style={{height: "50px"}} /> */}
             Food4Skin
           </Navbar.Brand>
@@ -56,11 +56,19 @@ function MenuNavSales() {
                 ข้อมูลตัวแทนจำหน่าย<hr />
               </Nav.Link>
 
-              <Nav.Link href="" className="menunavSales">
+              <Nav.Link href="/Product" className="menunavSales">
                 จัดการข้อมูลสินค้า<hr />
               </Nav.Link>
 
+              <Nav.Link href="/ProductLOT" className="menunavSales">
+                จัดการข้อมูลคลังสินค้า<hr />
+              </Nav.Link>
+
               <Nav.Link href="" className="menunavSales">
+                รายงาน<hr />
+              </Nav.Link>
+
+              {/* <Nav.Link href="" className="menunavSales">
                 ตรวจสอบสินค้าหมดอายุ<hr />
               </Nav.Link>
 
@@ -70,7 +78,7 @@ function MenuNavSales() {
 
               <Nav.Link href="" className="menunavSales">
                 รายงานรายการรับเข้า<hr />
-              </Nav.Link>
+              </Nav.Link> */}
               
               <Nav.Link href="/" className="menunavSales">
                 ออกจากระบบ<hr />

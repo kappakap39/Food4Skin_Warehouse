@@ -158,7 +158,7 @@ function EditSales() {
   //     setValues((prev) => ({ ...prev, [name]: value }));
   //   }
   // };
-
+  const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   return (
     // <div className="containerread">
     <div>
@@ -212,6 +212,7 @@ function EditSales() {
               id="fullname"
               type="text"
               disabled
+              // value={values.fullname}
               value={values.fullname}
             />
 
