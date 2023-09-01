@@ -16,13 +16,17 @@ import AboutMe from "./admin/AboutMe";
 import Login from "./Login";
 import EditSales from "./admin/EditSales";
 import EditAboutSale from "./salescomponent/EditAboutSale";
-import Updatesales from "./salescomponent/Updatesales";
 import ProductLOT from "./salescomponent/ProductLOT";
 import EditMe from "./admin/EditMe";
 import Product from "./salescomponent/Product";
 import AddProduct from "./salescomponent/AddProduct";
 import UpdateProduct from "./salescomponent/UpdateProduct";
 import ReadProduct from "./salescomponent/ReadProduct";
+import TableAgent from "./salescomponent/TableAgent";
+import AboutSale from "./salescomponent/AboutSale";
+import AddAgent from "./salescomponent/AddAgent";
+import ShowAgent from "./salescomponent/ShowAgent";
+import EditAgent from "./salescomponent/EditAgent";
 
 function App() {
   return (
@@ -37,16 +41,21 @@ function App() {
           <Route path="/AboutMe" element={<AboutMe />}></Route>
           <Route path="/EditSales/:id" element={<EditSales />}></Route>
           <Route
-            path="/EditAboutSale/:ID_sales"
+            path="/EditAboutSale/:id"
             element={<EditAboutSale />}
           ></Route>
-          <Route path="/Updatesales" element={<Updatesales />}></Route>
           <Route path="/UpdateProduct/:id" element={<UpdateProduct />}></Route>
           <Route path="/ReadProduct/:id" element={<ReadProduct />}></Route>
           <Route path="/ProductLOT" element={<ProductLOT />}></Route>
           <Route path="/EditMe/:id" element={<EditMe />}></Route>
           <Route path="/Product" element={<Product/>}></Route>
           <Route path="/AddProduct" element={<AddProduct/>}></Route>
+          <Route path="/TableAgent" element={<TableAgent/>} ></Route>
+          <Route path="/AboutSale" element={<AboutSale/>} ></Route>
+          <Route path="/TableAgent/AddAgent" element={<AddAgent/>} ></Route>
+          <Route path="/ShowAgent/:id" element={<ShowAgent/>} ></Route>
+          <Route path="/EditAgent/:id" element={<EditAgent/>} ></Route>
+
         </Routes>
       </BrowserRouter>
 

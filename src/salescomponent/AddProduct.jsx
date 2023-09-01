@@ -19,7 +19,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AiOutlineSave } from "react-icons/ai";
 import { BiSolidUserPlus } from "react-icons/bi";
-import Validation from "../function/CreateSalesValidation.jsx";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
 

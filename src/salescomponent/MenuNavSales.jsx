@@ -48,11 +48,11 @@ function MenuNavSales() {
               <h5 style={{textAlign:"center",marginBottom:"20px",marginTop:"10px"}}>Menu</h5>
               
               
-              <Nav.Link href="" className="menunavSales">
+              <Nav.Link href="/AboutSale" className="menunavSales">
                 ข้อมูลส่วนตัว<hr />
               </Nav.Link>
               
-              <Nav.Link href="" className="menunavSales">
+              <Nav.Link href="/TableAgent" className="menunavSales">
                 ข้อมูลตัวแทนจำหน่าย<hr />
               </Nav.Link>
 

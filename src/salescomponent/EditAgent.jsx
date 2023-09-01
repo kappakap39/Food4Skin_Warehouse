@@ -23,15 +23,19 @@ import { useParams } from "react-router-dom";
 import Modal from "./Modal";
 
 import img from "../assets/002.png";
-import MenuNav from "./MenuNav";
+import MenuNavSales from "./MenuNavSales";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-function EditMe() {
+function EditAgent() {
   const MySwal = withReactContent(Swal); //icon aleart
   const { id } = useParams();
   const navigate = useNavigate();
+  console.log("id", id);
+
+  //!ข้อมูลคนล็อคอิน
+  //   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
 
   //จังหวัดอำเภอตำบล
   const [province, setProvince] = useState([]);
@@ -98,31 +102,20 @@ function EditMe() {
     console.log(e.target.value);
   };
 
-  //!Modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   //!update
   const [update, setUpdate] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:2001/getupdateAdmin/" + id)
+      .get("http://localhost:2001/getupdateAgent/" + id)
       .then((res) => {
         console.log(res);
         setValues({
           ...values,
+          level: res.data[0].level,
           fullname: res.data[0].fullname,
           districts: res.data[0].districts,
           email: res.data[0].email,
-          password: res.data[0].password,
           sex: res.data[0].sex,
           IDcard: res.data[0].IDcard,
           province: res.data[0].province,
@@ -132,9 +125,11 @@ function EditMe() {
           contact: res.data[0].contact,
           picture: res.data[0].picture,
           zip_code: res.data[0].zip_code,
-          ID_admin: res.data[0].ID_admin,
+          ID_agent: res.data[0].ID_agent,
+          ID_sales: res.data[0].ID_sales,
           PhoneNumber: res.data[0].PhoneNumber,
           Card_ID: res.data[0].Card_ID,
+          Sales_Fullname: res.data[0].Sales_Fullname,
         });
       })
       .catch((err) => console.log(err));
@@ -146,10 +141,10 @@ function EditMe() {
   // setSelectedImage(file);
 
   const [values, setValues] = useState({
+    level: "",
     fullname: "",
     districts: "",
     email: "",
-    password: "",
     sex: "",
     IDcard: "",
     province: "",
@@ -159,32 +154,42 @@ function EditMe() {
     contact: "",
     picture: "",
     zip_code: "",
-    ID_admin: "",
-    // PhoneNumber: "",
-    // Card_ID: "",
+    ID_agent: "",
+    // ID_sales: `${userLoginData[0].ID_sales}`,
   });
-  //add
-  const [errors, setErrors] = useState({});
+
+  //   const handleUpdate = (event) => {
+  //     event.preventDefault();
+  //     axios
+  //       .put("http://localhost:2001/agentUpdate/" + id, values)
+  //       .then((res) => {
+  //         console.log(res);
+  //         navigate("/TableAgent");
+  //       })
+  //       .catch((err) => console.log(err));
+  //   };
+
+  //!
+  //   const [errors, setErrors] = useState({});
   const handleUpdate = (event) => {
     event.preventDefault();
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
     const formattedPhone = values.Tel.replace(/-/g, "");
-
-    const err = Validation({ ...values, Tel: formattedPhone });
-    setErrors(err);
+    // const err = Validation({ ...values, Tel: formattedPhone });
+    // setErrors(err);
     axios
-      .put("http://localhost:2001/adminUpdate/" + id, {
+      .put("http://localhost:2001/agentUpdate/" + id, {
         ...values,
         Tel: formattedPhone,
       })
       .then((res) => {
         console.log(res);
-        MySwal.fire({
-          title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
-          html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
-          icon: "warning",
-        });
-        navigate("/");
+        // MySwal.fire({
+        //   title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
+        //   html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
+        //   icon: "warning",
+        // });
+        navigate("/TableAgent");
       })
       .catch((err) => console.log(err));
   };
@@ -196,21 +201,22 @@ function EditMe() {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
-  
+
     if (name === "IDcard") {
       const formattedCardID = value.replace(/-/g, "");
-      const formattedText1 = formattedCardID.replace(/\D/g, "")
-        
+      const formattedText1 = formattedCardID
+        .replace(/\D/g, "")
+
         .slice(0, 13)
         .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-  
+
       setCradID(formattedText1);
       setValues((prev) => ({ ...prev, [name]: formattedText1 }));
     }
     if (name === "Tel") {
       const formattedPhoneNumber = value.replace(/-/g, "");
       const formattedText = formattedPhoneNumber.replace(/\D/g, "");
-  
+
       let formattedPhoneNumberFinal;
       if (formattedText.length === 9) {
         formattedPhoneNumberFinal = formattedText.replace(
@@ -218,17 +224,17 @@ function EditMe() {
           "$1-$2-$3"
         );
       } else {
-        formattedPhoneNumberFinal = formattedText 
+        formattedPhoneNumberFinal = formattedText
           .slice(0, 10)
           .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
       }
-  
+
       setPhoneNumber(formattedPhoneNumberFinal);
       setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
     } else {
       setValues((prev) => ({ ...prev, [name]: value }));
     }
-  
+
     if (name === "picture") {
       const selectedFile = event.target.files[0];
       if (selectedFile) {
@@ -236,15 +242,14 @@ function EditMe() {
       }
     }
   };
-  
 
   return (
     <div>
       <header className="headernav ">
-        <MenuNav />
+        <MenuNavSales />
       </header>
       <form className="containerread" onSubmit={handleUpdate}>
-        <h3 className="h3Editsale">แก้ไขข้อมูลส่วนตัวของ {values.fullname}</h3>
+        <h3 className="h3Editsale">ข้อมูลของ {values.fullname}</h3>
 
         <Row>
           <Col md={4}>
@@ -254,11 +259,10 @@ function EditMe() {
                 <input
                   name="text"
                   className="InputID"
-                  id=""
+                  id="ID_sales"
                   type="text"
-                  value={values.ID_admin}
                   disabled
-                  // value={values.ID_sales}
+                  value={values.ID_agent}
                 />
               </Col>
               <Col md={8}>
@@ -285,137 +289,68 @@ function EditMe() {
             <h6 className="txt">เลขบัตรประชาชน</h6>
             <input
               name="IDcard"
-              className="Input20"
+              className="Input2"
               id="IDcard"
               type="text"
-              // value={values.IDcard}
-              // value={cradID}
-              value={values.IDcard}
-              // onChange={(e) =>
-              //   setValues({ ...values, IDcard: e.target.value })
-              // }
               onChange={handleInput}
+              value={values.IDcard}
             />
-            
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
             <input
-              className="Input20"
-              id="fullname"
               name="fullname"
+              className="Input2"
+              id="fullname"
               type="text"
+              onChange={handleInput}
+              // value={values.fullname}
               value={values.fullname}
-              onChange={(e) =>
-                setValues({ ...values, fullname: e.target.value })
-              }
             />
 
             <h6 className="txt">อีเมล</h6>
             <input
               name="email"
-              className="Input20"
+              className="Input2"
               id="email"
               type="text"
-              value={values.email}
-              // onChange={(e) =>
-              //   setValues({ ...values, email: e.target.value })
-              // }
               onChange={handleInput}
+              value={values.email}
             />
+
+            <h6 className="txt">พนักงานที่เพิ่มตัวแทน</h6>
+            <input
+              name=""
+              className="Input2"
+              id=""
+              type="text"
+              disabled
+              value={values.Sales_Fullname}
+            />
+          </Col>
+
+          <Col md={4}>
             <Row>
               <Col>
-                <h6 className="txt">รหัสผ่าน</h6>
-                <input
-                  // name="password"
-                  className="Input20"
-                  // id="password"
-                  type="password"
-                  // aria-describedby="passwordHelpBlock"
-                  value={values.password}
-                />
+                <h6 className="txt mb-2">จังหวัด</h6>
+                {/* <h6 className="txt">*จังหวัด</h6> */}
+                <InputGroup className="mb-3">
+                  {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
+                  <Form.Select
+                    aria-label="จังหวัด"
+                    type="text"
+                    name="province"
+                    id="province"
+                    onChange={(e) => onChangeProvince(e)}
+                  >
+                    <option>{values.province}</option>
+                    {province.map((item, index) => (
+                      <option key={index} value={item.id}>
+                        {item.name_in_thai}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </InputGroup>
 
-                <div className="AppModal">
-                  <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <h6 className="txt">รหัสผ่าน</h6>
-                    <input
-                      name="password"
-                      className="Input40"
-                      id="password"
-                      type="password"
-                      aria-describedby="passwordHelpBlock"
-                      // value={values.password}
-                      // onChange={(e) =>
-                      //   setValues({ ...values, password: e.target.value })
-                      // }
-                      onChange={handleInput}
-                    />
-                    <h6 className="txt">ยืนยันรหัสผ่าน</h6>
-                    <input
-                      // name="password"
-                      className="Input40"
-                      // id="password"
-                      type="password"
-                      // aria-describedby="passwordHelpBlock"
-                      // value={values.password}
-                    />
-
-                    <div>
-                      <button type="submit" className="bgeditModalPass">
-                        แก้ไข
-                      </button>
-                    </div>
-                  </Modal>
-                </div>
-              </Col>
-            </Row>
-          </Col>
-          <Col md={4}>
-            <Col md={12}>
-              <Row>
-                <Col md={6}>
-                  <h6 className="txt mb-2">จังหวัด</h6>
-                  {/* <h6 className="txt">*จังหวัด</h6> */}
-                  <InputGroup className="mb-3">
-                    {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
-                    <Form.Select
-                      aria-label="จังหวัด"
-                      type="text"
-                      name="province"
-                      id="province"
-                      onChange={(e) => onChangeProvince(e)}
-                    >
-                      <option>{values.province}</option>
-                      {province.map((item, index) => (
-                        <option key={index} value={item.id}>
-                          {item.name_in_thai}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </InputGroup>
-                </Col>
-                <Col md={6}>
-                  <h6 className="txt mb-2">อำเภอ</h6>
-                  <InputGroup className="" style={{ width: "225px" }}>
-                    <Form.Select
-                      aria-label="อำเภอ"
-                      type="text"
-                      name="districts"
-                      id="districts"
-                      onChange={(e) => onChangeDistricts(e)}
-                    >
-                      <option>{values.districts}</option>
-                      {districts.map((item, index) => (
-                        <option key={index} value={item.id}>
-                          {item.name_in_thai}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </InputGroup>
-                </Col>
-              </Row>
-            </Col>
-            <Row md={5}>
-              <Col>
                 <h6 className="txt mb-2">ตำบล</h6>
                 {/* <h6 className="txt">*ตำบล</h6> */}
                 <InputGroup className="">
@@ -435,16 +370,33 @@ function EditMe() {
                     ))}
                   </Form.Select>
                 </InputGroup>
-                {errors.districts && (
+                {/* {errors.districts && (
                   <span className="text-danger">{errors.districts}</span>
-                )}
+                )} */}
               </Col>
               <Col>
+                <h6 className="txt mb-2">อำเภอ</h6>
+                <InputGroup className="" style={{ width: "225px" }}>
+                  <Form.Select
+                    aria-label="อำเภอ"
+                    type="text"
+                    name="districts"
+                    id="districts"
+                    onChange={(e) => onChangeDistricts(e)}
+                  >
+                    <option>{values.districts}</option>
+                    {districts.map((item, index) => (
+                      <option key={index} value={item.id}>
+                        {item.name_in_thai}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </InputGroup>
+
                 <h6 className="txt mb-2">
                   รหัสไปรษณีย์
                   <h6></h6>
                 </h6>
-
                 <input
                   name="zip_code"
                   className="InputZip"
@@ -454,37 +406,11 @@ function EditMe() {
                   value={values.zip_code}
                   onChange={handleInput}
                 />
-                {errors.zip_code && (
+                {/* {errors.zip_code && (
                   <span className="text-danger">{errors.zip_code}</span>
-                )}
+                )} */}
               </Col>
             </Row>
-
-            <h6 className="txt">เบอร์โทรศัพท์</h6>
-            <input
-              name="Tel"
-              className="Input0"
-              id="Tel"
-              type="text"
-              aria-describedby="passwordHelpBlock"
-              // value={phoneNumber}
-              value={values.Tel}
-              onChange={handleInput}
-            />
-
-            <h6 className="txt">ช่องทางติดต่อ</h6>
-            <input
-              name="contact"
-              className="Input0"
-              id="contact"
-              type="text"
-              value={values.contact}
-              // onChange={(e) =>
-              //   setValues({ ...values, contact: e.target.value })
-              // }
-              onChange={handleInput}
-            />
-
             <Row>
               <Col>
                 {/* <Link
@@ -494,115 +420,94 @@ function EditMe() {
               >
                 แก้ไข
               </Link> */}
-
-                <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
-                <textarea
-                  name="Address"
-                  className="textareaedit"
-                  id="Address"
+                <h6 className="txt">เบอร์โทรศัพท์</h6>
+                <input
+                  name="Tel"
+                  className="Input3"
+                  id="Tel"
                   type="text"
                   aria-describedby="passwordHelpBlock"
-                  value={values.Address}
-                  // onChange={(e) =>
-                  //   setValues({ ...values, Address: e.target.value })
-                  // }
                   onChange={handleInput}
+                  value={values.Tel}
                 />
               </Col>
               <Col>
-                {/* <h6 className="txt">สถานะ</h6>
-                <input
-                  name="text"
-                  className="Input3"
-                  id="Persistent_status"
-                  type="text"
-                  disabled
-                /> */}
-              </Col>
-            </Row>
-
-            {/* <div className="AppModal">
-              <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <h3>แก้ไขสถานะ</h3>
+                <h6 className="txt">ระดับขั้นตัวแทนจำหน่าย</h6>
                 <Form.Select
                   aria-label="Default select example"
-                  className="bgstatus"
                   type="text"
-                  name="Persistent_status"
-                  id="Persistent_status"
-                  value={values.Persistent_status}
-                  onChange={(e) =>
-                    setValues({ ...values, Persistent_status: e.target.value })
-                  }
+                  name="level"
+                  id="level"
+                  onChange={handleInput}
                 >
-                  <option
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        Persistent_status: e.target.value,
-                      })
-                    }
-                  >
-                    {values.Persistent_status}
-                  </option>
-                  <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
-                  <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
+                  <option value={values.level}>{values.level}</option>
+                  <option value="ระดับขั้น 1">ระดับขั้น 1</option>
+                  <option value="ระดับขั้น 2">ระดับขั้น 2</option>
+                  <option value="ระดับขั้น 3">ระดับขั้น 3</option>
                 </Form.Select>
-                <div className="bgedit2">
-                  <button type="submit" className="bgeditModal">
-                    แก้ไข
-                  </button>
-                </div>
-              </Modal>
-            </div> */}
+              </Col>
+            </Row>
+            <h6 className="txt">ช่องทางติดต่อ</h6>
+            <input
+              name="contact"
+              className="Input"
+              id="contact"
+              type="text"
+              onChange={handleInput}
+              value={values.contact}
+            />
+            <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
+            <textarea
+              name="Address"
+              className="textarea"
+              id="Address"
+              type="text"
+              aria-describedby="passwordHelpBlock"
+              onChange={handleInput}
+              value={values.Address}
+            />
           </Col>
           <Col md={2}>
+            {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
+              <div>
+                <img
+                  src={values.picture} // ใช้ URL ของรูปภาพจาก state values.picture
+                  // alt={values.picture}
+                  alt={"ไม่สามารถแสดงภาพได้"}
+                  style={{ marginLeft: "20%", marginTop: "30px" }}
+                />
+              </div>
+            )}
+          </Col>
+          {/* <Col md={2}>
             <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
               src={img}
-              // src={`data:image/jpeg;base64,${values.picture}`}
               className="img"
               alt="ภาพ"
             ></img>
-
-            {/* <div>
-              {values.picture && (
-                <img
-                  style={{ width: "100px", height: "100px" }}
-                  src={`data:image/jpeg;base64,${values.picture}`}
-                  alt="ภาพ"
-                />
-              )}
-            </div> */}
-          </Col>
+            <input
+              type="text"
+              value={values.picture}
+              style={{ marginLeft: "46px", width: "201px" }}
+              // readOnly
+              disabled
+            />
+          </Col> */}
         </Row>
 
-        <Row style={{ marginTop: "20px" }}>
-          <Col className="editme" md={5}>
-            <Link to="/AboutMe" className="back btn btn-danger">
-              {" "}
-              กลับ{" "}
-            </Link>
-          </Col>
+        <Row style={{ marginTop: "20px", marginBottom: "40px" }}>
+          <Col className="cancel" md={5}></Col>
           <Col className="button2" md={6}>
             <Row style={{ marginRight: "25px" }}>
               <Col>
-                <Link
-                  // style={{ alignItems: "end", marginTop: "26px" }}
-                  className="editpassword btn"
-                  onClick={handleOpenModal}
-                >
-                  แก้ไขรหัสผ่าน
+                <Link to="/TableAgent" className="back btn btn-danger">
+                  {" "}
+                  กลับ{" "}
                 </Link>
               </Col>
               <Col>
-                <button
-                  // style={{ alignItems: "end", marginTop: "26px" }}
-                  className="bgedit btn"
-                  type="submit"
-                >
-                  ยืนยัน
-                </button>
+                <button type="submit">แก้ไข</button>
               </Col>
             </Row>
           </Col>
@@ -612,4 +517,4 @@ function EditMe() {
   );
 }
 
-export default EditMe;
+export default EditAgent;
