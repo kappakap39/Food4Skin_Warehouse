@@ -17,11 +17,24 @@ import MenuNavSales from "./MenuNavSales";
 function ProductLOT() {
   const navigate = useNavigate();
 
+  //!date
+  function formatDate(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString(undefined, options);
+  }
+
+  //!
   // http://localhost:2001/NameProduct
   const [nameproduct, setNameproduct] = useState([]);
   const [saveoption, setSaveoption] = useState(""); // กำหนดค่าเริ่มต้นเป็นสตริงว่าง
   const [showtable, setShowtable] = useState([]);
-  
+
   // useEffect(() => {
   //   if (saveoption !== "") { // ตรวจสอบว่า saveoption ไม่ใช่สตริงว่าง
   //     axios
@@ -35,23 +48,23 @@ function ProductLOT() {
 
   const [initialData, setInitialData] = useState([]);
 
-useEffect(() => {
-  axios
-    .get("http://localhost:2001/selectlot")
-    .then((res) => setInitialData(res.data))
-    .catch((err) => console.log(err));
-}, []);
-
-useEffect(() => {
-  if (saveoption === "") {
-    setShowtable(initialData); // แสดงข้อมูลเริ่มต้นเมื่อยังไม่ได้เลือกสินค้า
-  } else {
+  useEffect(() => {
     axios
-      .get("http://localhost:2001/ShowProduct/" + saveoption)
-      .then((res) => setShowtable(res.data))
+      .get("http://localhost:2001/selectlot")
+      .then((res) => setInitialData(res.data))
       .catch((err) => console.log(err));
-  }
-}, [saveoption, initialData]);
+  }, []);
+
+  useEffect(() => {
+    if (saveoption === "") {
+      setShowtable(initialData); // แสดงข้อมูลเริ่มต้นเมื่อยังไม่ได้เลือกสินค้า
+    } else {
+      axios
+        .get("http://localhost:2001/ShowProduct/" + saveoption)
+        .then((res) => setShowtable(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [saveoption, initialData]);
 
   console.log("showtable", showtable);
   console.log("saveoption", saveoption);
@@ -100,7 +113,7 @@ useEffect(() => {
     }
   }
 
-  console.log("records",records);
+  console.log("records", records);
 
   return (
     <div>
@@ -120,7 +133,7 @@ useEffect(() => {
                 type="text"
                 className="form-select mb-4"
                 onChange={(e) => setSaveoption(e.target.value)}
-                style={{ marginLeft: '15px' }} 
+                style={{ marginLeft: "15px" }}
               >
                 <option value="">เลือกสินค้า</option>
                 {nameproduct.map((item, index) => (
@@ -133,11 +146,18 @@ useEffect(() => {
           </Col>
 
           <Col className="add2">
-            <Col className="col2" style={{ marginRight: '15px' ,marginBottom: '10px', marginTop: '10px'}} >
+            <Col
+              className="col2"
+              style={{
+                marginRight: "15px",
+                marginBottom: "10px",
+                marginTop: "10px",
+              }}
+            >
               <button className="addProduct" onClick={() => navigate("")}>
                 เบิกสินค้า
               </button>
-              <button className="addProduct" onClick={() => navigate("")}>
+              <button className="addProduct" onClick={() => navigate("/ImportProduct")}>
                 รับเข้าสินค้า
               </button>
               {/* <button className="add mb-3" onClick={() => navigate("")}>
@@ -155,68 +175,69 @@ useEffect(() => {
                 <th>รหัสล็อต</th>
                 <th>ชื่อผลิตภัณฑ์</th>
                 <th>จุดต่ำกว่าจุดสั่งผลิต (ชิ้น)</th>
-                <th>จำนวนสินค้า (ชิ้น)</th>
-                <th>ราคาปลีก</th>
-                <th>ราคาส่ง ระดับ1</th>
-                <th>ราคาส่ง ระดับ2</th>
-                <th>ราคาส่ง ระดับ3</th>
+                <th>สินค้าทั้งหมด (ชิ้น)</th>
+                <th>สินค้าคงเหลือ (ชิ้น)</th>
+                <th>วันที่ทำรายการ</th>
+                <th>วันที่หมดอายุ</th>
                 <th>พนักงานที่เพิ่มสินค้า</th>
+                <th>หมายเหตุ</th>
 
-                <th className="readtext">ข้อมูล/แก้ไข</th>
+                <th className="readtext">ข้อมูล</th>
               </tr>
             </thead>
 
-<tbody>
-  {saveoption === "" ? ( // เช็คว่ายังไม่ได้เลือกตัวเลือก
-    initialData.map((data, index) => (
-      <tr key={index}>
-        <td scope="row">{data.ID_lot}</td>
-        <td>{data.Name_product}</td>
-        <td>{data.Production_point}</td>
-        <td>{data.Inventories_lot}</td>
-        <td>{data.Retail_price}</td>
-        <td>{data.Level_1_price}</td>
-        <td>{data.Level_2_price}</td>
-        <td>{data.Level_3_price}</td>
-        <td>{data.fullname}</td>
+            <tbody>
+              {saveoption === "" // เช็คว่ายังไม่ได้เลือกตัวเลือก
+                ? initialData.map((data, index) => (
+                    <tr key={index}>
+                      <td scope="row">{data.ID_lot}</td>
+                      <td>{data.Name_product}</td>
+                      <td>{data.Production_point}</td>
+                      <td>{data.Quantity}</td>
+                      <td>{data.Inventories_lot}</td>
+                      <td>{formatDate(data.date_list)}</td>
+                      <td>{formatDate(data.date_list_EXP)}</td>
+                      <td>{data.fullname}</td>
+                      <td>{data.remark}</td>
 
-        <td className="centericon">
-          <div className="read2">
-            <BiSearchAlt />
-          </div>
-        </td>
-      </tr>
-    ))
-  ) : (
-    showtable.map((data, index) => (
-      <tr key={index}>
-        <td scope="row">{data.ID_lot}</td>
-        <td>{data.Name_product}</td>
-        <td>{data.Production_point}</td>
-        <td>{data.Inventories_lot}</td>
-        <td>{data.Retail_price}</td>
-        <td>{data.Level_1_price}</td>
-        <td>{data.Level_2_price}</td>
-        <td>{data.Level_3_price}</td>
-        <td>{data.fullname}</td>
+                      <td className="centericon">
+                        <div className="read2" 
+                        onClick={() =>
+                          navigate(`/ReadLOT/${data.ID_lot}`)
+                        }
+                        >
+                          <BiSearchAlt />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                : showtable.map((data, index) => (
+                  <tr key={index}>
+                  <td scope="row">{data.ID_lot}</td>
+                  <td>{data.Name_product}</td>
+                  <td>{data.Production_point}</td>
+                  <td>{data.Quantity}</td>
+                  <td>{data.Inventories_lot}</td>
+                  <td>{formatDate(data.date_list)}</td>
+                  <td>{formatDate(data.date_list_EXP)}</td>
+                  <td>{data.fullname}</td>
+                  <td>{data.remark}</td>
 
-        <td className="centericon">
-          <div className="read2">
-            <BiSearchAlt />
-          </div>
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
-
-
-
-
+                  <td className="centericon">
+                    <div className="read2" 
+                    onClick={() =>
+                      navigate(`/ReadLOT/${records.ID_lot}`)
+                    }
+                    >
+                      <BiSearchAlt />
+                    </div>
+                  </td>
+                </tr>
+                  ))}
+            </tbody>
           </table>
         </div>
         <nav className="Nextpage">
-
           <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>

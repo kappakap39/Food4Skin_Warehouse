@@ -27,6 +27,8 @@ import AboutSale from "./salescomponent/AboutSale";
 import AddAgent from "./salescomponent/AddAgent";
 import ShowAgent from "./salescomponent/ShowAgent";
 import EditAgent from "./salescomponent/EditAgent";
+import ImportProduct from "./salescomponent/ImportProduct";
+import ReadLOT from "./salescomponent/ReadLOT";
 
 function App() {
   return (
@@ -46,6 +48,7 @@ function App() {
           ></Route>
           <Route path="/UpdateProduct/:id" element={<UpdateProduct />}></Route>
           <Route path="/ReadProduct/:id" element={<ReadProduct />}></Route>
+          <Route path="/ReadLOT/:id" element={<ReadLOT />}></Route>
           <Route path="/ProductLOT" element={<ProductLOT />}></Route>
           <Route path="/EditMe/:id" element={<EditMe />}></Route>
           <Route path="/Product" element={<Product/>}></Route>
@@ -55,6 +58,7 @@ function App() {
           <Route path="/TableAgent/AddAgent" element={<AddAgent/>} ></Route>
           <Route path="/ShowAgent/:id" element={<ShowAgent/>} ></Route>
           <Route path="/EditAgent/:id" element={<EditAgent/>} ></Route>
+          <Route path="/ImportProduct" element={<ImportProduct/>} ></Route>
 
         </Routes>
       </BrowserRouter>

@@ -122,8 +122,10 @@ function ReadProduct() {
           <button
             onClick={() => navigate(`/UpdateProduct/${values.ID_product}`)}
           >
-            บันทึก
+            แก้ไข
           </button>
+          <button onClick={() => navigate(`/Product`)}>กลับ</button>
+
         </div>
       </form>
     </div>

@@ -47,7 +47,7 @@ function AddProduct() {
       })
       .then((res) => {
         console.log(res);
-        navigate("/ProductLOT");
+        navigate("/Product");
       })
       .catch((err) => console.log(err));
   };
@@ -79,8 +79,6 @@ function AddProduct() {
               <input name="Level_2_price" type="text" onChange={handleInput}/>
               <span>ราคาระดับขั้น3</span>
               <input name="Level_3_price" type="text" onChange={handleInput}/>
-              {/* <span>พนักงานที่เพิ่มสินค้า</span> */}
-              {/* <input type="text" disabled value={userLoginData[0].fullname} /> */}
             </Col>
 
             <Col className="add2"></Col>
