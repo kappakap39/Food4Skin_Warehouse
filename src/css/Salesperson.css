@@ -139,7 +139,8 @@ button {
   margin-right: 10px;
   margin-bottom: 0px;
   margin-top: 0px;
-  overflow: auto;
+  overflow: hidden;
+  /* overflow: auto; */
   height: 442px;
 }
 

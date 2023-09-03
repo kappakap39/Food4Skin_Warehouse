@@ -165,6 +165,7 @@ function AddAgent() {
   //       .catch((err) => console.log(err));
   //   }
   // };
+  
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cradID, setCradID] = useState("");
@@ -174,14 +175,13 @@ function AddAgent() {
     const { name, value } = event.target;
 
     if (name === "IDcard") {
-      const formattedCardID = value.replace(/-/g, "");
+      const formattedCardID = value.replace(/-/g, ""); // ลบเครื่องหมาย "-"
       const formattedText1 = formattedCardID
         .replace(/\D/g, "")
         .slice(0, 13)
         .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-
       setCradID(formattedText1);
-      setValues((prev) => ({ ...prev, IDcard: value })); // เก็บค่าที่ไม่ผ่านการจัดรูปแบบและเครื่องหมาย "-"
+      setValues((prev) => ({ ...prev, IDcard: formattedCardID }));
     }
     if (name === "Tel") {
       const formattedPhoneNumber = value.replace(/-/g, "");
@@ -270,9 +270,7 @@ function AddAgent() {
                       id="IDcard"
                       value={cradID}
                       onChange={handleInput}
-                      // onChange={(e) =>
-                      //   setValues({ ...values, IDcard: e.target.value })
-                      // }
+                      maxLength={17} 
                     />
                   </InputGroup>
                   {/* {errors.IDcard && (
@@ -577,7 +575,7 @@ function AddAgent() {
           <Col className="button2" md={5}>
             <Row>
               <Col>
-                <Link to="/Salesperson" className="backadd btn btn-danger ">
+                <Link to="/TableAgent" className="backadd btn btn-danger ">
                   {" "}
                   ยกเลิก{" "}
                 </Link>

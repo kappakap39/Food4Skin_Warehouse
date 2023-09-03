@@ -292,8 +292,7 @@ function EditAboutSale() {
               className="Input20"
               id="IDcard"
               type="text"
-              // value={values.IDcard}
-              // value={cradID}
+              maxLength={17} 
               value={values.IDcard}
               // onChange={(e) =>
               //   setValues({ ...values, IDcard: e.target.value })

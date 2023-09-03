@@ -86,23 +86,29 @@ function UpdateProduct() {
       <header className="headernav ">
         <MenuNavSales />
       </header>
-      <form form className="containerread" onSubmit={handleUpdate}>
+      <form form className="containerPRODUCT" onSubmit={handleUpdate}>
         <h3 className="h3">แก้ไขข้อมูลสินค้า</h3>
-        <div>
+        <div className="bodyImport">
           <Row>
             <Col>
               <span>ชื่อสินค้า</span>
               <input
+                class="form-control"
                 name="Name_product"
                 type="text"
-                className=""
                 value={values.Name_product}
                 onChange={(e) =>
                   setValues({ ...values, Name_product: e.target.value })
                 }
               />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
               <span>จุดต่ำกว่าจุดสั่งผลิต</span>
               <input
+                class="form-control"
                 name="Production_point"
                 type="text"
                 value={values.Production_point}
@@ -110,8 +116,11 @@ function UpdateProduct() {
                   setValues({ ...values, Production_point: e.target.value })
                 }
               />
+            </Col>
+            <Col>
               <span>ราคาปลีก</span>
               <input
+                class="form-control"
                 name="Retail_price"
                 type="text"
                 value={values.Retail_price}
@@ -119,8 +128,13 @@ function UpdateProduct() {
                   setValues({ ...values, Retail_price: e.target.value })
                 }
               />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <span>ราคาระดับขั้น1</span>
               <input
+                class="form-control"
                 name="Level_1_price"
                 type="text"
                 value={values.Level_1_price}
@@ -128,8 +142,11 @@ function UpdateProduct() {
                   setValues({ ...values, Level_1_price: e.target.value })
                 }
               />
+            </Col>
+            <Col>
               <span>ราคาระดับขั้น2</span>
               <input
+                class="form-control"
                 name="Level_2_price"
                 type="text"
                 value={values.Level_2_price}
@@ -137,8 +154,11 @@ function UpdateProduct() {
                   setValues({ ...values, Level_2_price: e.target.value })
                 }
               />
+            </Col>
+            <Col>
               <span>ราคาระดับขั้น3</span>
               <input
+                class="form-control"
                 name="Level_3_price"
                 type="text"
                 value={values.Level_3_price}
@@ -146,14 +166,25 @@ function UpdateProduct() {
                   setValues({ ...values, Level_3_price: e.target.value })
                 }
               />
-              {/* <span>พนักงานที่เพิ่มสินค้า</span> */}
-              {/* <input type="text" disabled value={userLoginData[0].fullname} /> */}
             </Col>
-
-            <Col className="add2"></Col>
           </Row>
-          <br />
-          <button>บันทึก</button>
+
+          <div style={{ marginTop: "20px" }} className="spanProduct">
+            <Row>
+              <Col>
+                <Link to="/Product" className="backProduct btn btn-danger">
+                  {" "}
+                  กลับ{" "}
+                </Link>
+              </Col>
+
+              <Col>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                  <button className="save btn btn-success">บันทึก</button>
+                </div>
+              </Col>
+            </Row>
+          </div>
         </div>
       </form>
     </div>

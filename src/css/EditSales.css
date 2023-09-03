@@ -310,7 +310,7 @@ h3 {
 .textareaaddAgent {
   max-width: 100%;
   max-height: 100%;
-  /* width: 482px; */
+  width: 100%;
   border-radius: 6px;
   background-color: rgb(255, 255, 255);
   padding-left: 10px; /* เพิ่มระยะห่างจากด้านซ้าย 10px */

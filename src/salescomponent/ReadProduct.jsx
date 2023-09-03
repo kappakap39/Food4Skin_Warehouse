@@ -34,6 +34,7 @@ function ReadProduct() {
     Level_2_price: "",
     Level_3_price: "",
     ID_sales: "",
+    fullname: "",
     // ID_sales: `${userLoginData[0].ID_sales}`,
   });
 
@@ -60,6 +61,7 @@ function ReadProduct() {
           Level_2_price: res.data[0].Level_2_price,
           Level_3_price: res.data[0].Level_3_price,
           ID_sales: res.data[0].ID_sales,
+          fullname: res.data[0].fullname,
         });
       })
       .catch((err) => console.log(err));
@@ -70,62 +72,118 @@ function ReadProduct() {
       <header className="headernav ">
         <MenuNavSales />
       </header>
-      <form form className="containerread">
+      <form form className="containerPRODUCT">
         <h3 className="h3">แสดงข้อมูล {values.Name_product} </h3>
-        <div>
+        <div className="bodyImport">
           <Row>
             <Col>
-              <span>ชื่อสินค้า</span>
-              <input
-                name="Name_product"
-                type="text"
-                className=""
-                value={values.Name_product}
-              />
-              <span>จุดต่ำกว่าจุดสั่งผลิต</span>
-              <input
-                name="Production_point"
-                type="text"
-                value={values.Production_point}
-              />
-              <span>ราคาปลีก</span>
-              <input
-                name="Retail_price"
-                type="text"
-                value={values.Retail_price}
-              />
-              <span>ราคาระดับขั้น1</span>
-              <input
-                name="Level_1_price"
-                type="text"
-                value={values.Level_1_price}
-              />
-              <span>ราคาระดับขั้น2</span>
-              <input
-                name="Level_2_price"
-                type="text"
-                value={values.Level_2_price}
-              />
-              <span>ราคาระดับขั้น3</span>
-              <input
-                name="Level_3_price"
-                type="text"
-                value={values.Level_3_price}
-              />
-              {/* <span>พนักงานที่เพิ่มสินค้า</span> */}
-              {/* <input type="text" disabled value={userLoginData[0].fullname} /> */}
+            <div className="spanProduct">
+            <span style={{ color: "white" }}>ชื่อสินค้า</span>
+            <input
+              style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+              class="form-control"
+              name="Name_product"
+              type="text"
+              value={values.Name_product}
+            />
+          </div>
             </Col>
-
-            <Col className="add2"></Col>
+            <Col>
+            <div className="spanProduct">
+            <span style={{ color: "white" }}>ชื่อพนักงานที่เพิ่ม</span>
+            <input
+              style={{
+                backgroundColor: " rgba(240, 248, 255, 0.814)",
+                
+              }}
+              class="form-control"
+              name="fullname"
+              type="text"
+              value={values.fullname}
+            />
+          </div>
+            </Col>
           </Row>
-          <br />
-          <button
-            onClick={() => navigate(`/UpdateProduct/${values.ID_product}`)}
-          >
-            แก้ไข
-          </button>
-          <button onClick={() => navigate(`/Product`)}>กลับ</button>
-
+          <Row>
+            <Col>
+            <div className="spanProduct">
+            <span style={{ color: "white" }}>จุดต่ำกว่าจุดสั่งผลิต</span>
+            <input
+              style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+              class="form-control"
+              name="Production_point"
+              type="text"
+              value={values.Production_point}
+            />
+          </div>
+            </Col>
+            <Col>
+            <div className="spanProduct">
+            <span style={{ color: "white" }}>ราคาปลีก</span>
+            <input
+              style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+              class="form-control"
+              name="Retail_price"
+              type="text"
+              value={values.Retail_price}
+            />
+          </div>
+            </Col>
+          </Row>
+          
+          
+          <Row>
+            <Col>
+              <div className="spanProduct">
+                <span style={{ color: "white" }}>ราคาระดับขั้น1</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Level_1_price"
+                  type="text"
+                  value={values.Level_1_price}
+                />
+              </div>
+            </Col>
+            <Col>
+              <div className="spanProduct">
+                <span style={{ color: "white" }}>ราคาระดับขั้น2</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Level_2_price"
+                  type="text"
+                  value={values.Level_2_price}
+                />
+              </div>
+            </Col>
+            <Col>
+              <div className="spanProduct">
+                <span style={{ color: "white" }}>ราคาระดับขั้น3</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Level_3_price"
+                  type="text"
+                  value={values.Level_3_price}
+                />
+              </div>
+            </Col>
+          </Row>
+          
+          <Row style={{marginTop: "20px"}}>
+            <Col>
+              <button onClick={() => navigate(`/Product`)} className="backProduct btn btn-danger">กลับ</button>
+            </Col>
+            <Col style={{ display: "flex", justifyContent: "end" }}>
+              <button
+                onClick={() => navigate(`/UpdateProduct/${values.ID_product}`)}
+                className="bgedit btn"
+              >
+                แก้ไข
+              </button>
+            </Col>
+          </Row>
         </div>
       </form>
     </div>

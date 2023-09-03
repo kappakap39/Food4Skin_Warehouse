@@ -203,6 +203,7 @@ function EditSales() {
               type="text"
               disabled
               value={values.Card_ID}
+              maxLength={17} 
             />
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>

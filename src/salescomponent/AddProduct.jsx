@@ -36,7 +36,7 @@ function AddProduct() {
     Level_3_price: "",
     ID_sales: `${userLoginData[0].ID_sales}`,
   });
- console.log(values)
+  console.log(values);
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -54,7 +54,7 @@ function AddProduct() {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
-      setValues((prev) => ({ ...prev, [name]: value }));
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -62,29 +62,108 @@ function AddProduct() {
       <header className="headernav ">
         <MenuNavSales />
       </header>
-      <form className="containeradd" action="" onSubmit={handleSubmit}>
+      <form className="containerPRODUCT" action="" onSubmit={handleSubmit}>
         <h3 className="h3">เพิ่มข้อมูลสินค้า</h3>
-        <div>
+        <div className="bodyImport">
+          <span className="txt">
+            <h6>*</h6>ชื่อสินค้า
+          </span>
+          <input
+            class="form-control"
+            name="Name_product"
+            type="text"
+            onChange={handleInput}
+          />
           <Row>
             <Col>
-              <span>ชื่อสินค้า</span>
-              <input name="Name_product" type="text" className="" onChange={handleInput}/>
-              <span>จุดต่ำกว่าจุดสั่งผลิต</span>
-              <input name="Production_point" type="text" onChange={handleInput}/>
-              <span>ราคาปลีก</span>
-              <input name="Retail_price" type="text" onChange={handleInput}/>
-              <span>ราคาระดับขั้น1</span>
-              <input name="Level_1_price" type="text" onChange={handleInput}/>
-              <span>ราคาระดับขั้น2</span>
-              <input name="Level_2_price" type="text" onChange={handleInput}/>
-              <span>ราคาระดับขั้น3</span>
-              <input name="Level_3_price" type="text" onChange={handleInput}/>
+              <div className="spanProduct">
+                <span className="txt">
+                  <h6>*</h6>จุดต่ำกว่าจุดสั่งผลิต
+                </span>
+                <input
+                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Production_point"
+                  type="text"
+                  onChange={handleInput}
+                />
+              </div>
             </Col>
-
-            <Col className="add2"></Col>
+            <Col>
+              <div className="spanProduct">
+                <span className="txt">
+                  <h6>*</h6>ราคาปลีก
+                </span>
+                <input
+                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Retail_price"
+                  type="text"
+                  onChange={handleInput}
+                />
+              </div>
+            </Col>
           </Row>
-          <br />
-          <button>บันทึก</button>
+          <Row>
+            <Col>
+              <div className="spanProduct">
+                <span className="txt">
+                  <h6>*</h6>ราคาระดับขั้น1
+                </span>
+                <input
+                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Level_1_price"
+                  type="text"
+                  onChange={handleInput}
+                />
+              </div>
+            </Col>
+            <Col>
+              <div className="spanProduct">
+                <span className="txt">
+                  <h6>*</h6>ราคาระดับขั้น2
+                </span>
+                <input
+                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Level_2_price"
+                  type="text"
+                  onChange={handleInput}
+                />
+              </div>
+            </Col>
+            <Col>
+              <div className="spanProduct">
+                <span className="txt">
+                  <h6>*</h6>ราคาระดับขั้น3
+                </span>
+                <input
+                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Level_3_price"
+                  type="text"
+                  onChange={handleInput}
+                />
+              </div>
+            </Col>
+          </Row>
+          <div style={{ marginTop: "20px" }} className="spanProduct">
+            <Row>
+              <Col>
+                <Link to="/Product" className="backProduct btn btn-danger">
+                  {" "}
+                  กลับ{" "}
+                </Link>
+              </Col>
+
+              <Col>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                  <button className="save btn btn-success">บันทึก</button>
+                </div>
+              </Col>
+            </Row>
+          </div>
         </div>
       </form>
     </div>

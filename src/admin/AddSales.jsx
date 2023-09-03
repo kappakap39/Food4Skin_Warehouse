@@ -257,9 +257,7 @@ function AddSales() {
                       id="IDcard"
                       value={cradID}
                       onChange={handleInput}
-                      // onChange={(e) =>
-                      //   setValues({ ...values, IDcard: e.target.value })
-                      // }
+                      maxLength={17} 
                     />
                   </InputGroup>
                   {errors.IDcard && (

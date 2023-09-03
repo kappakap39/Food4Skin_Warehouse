@@ -68,54 +68,129 @@ function ReadLOT() {
       .catch((err) => console.log(err));
   }, []);
 
-    //!date
-    function formatDate(dateString) {
-        if (!dateString) {
-          return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
-        }
-    
-        const options = { year: "numeric", month: "numeric", day: "numeric" };
-        const date = new Date(dateString);
-    
-        return date.toLocaleDateString(undefined, options);
-      }
+  //!date
+  function formatDate(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString(undefined, options);
+  }
 
   return (
     <div>
       <header className="headernav ">
         <MenuNavSales />
       </header>
-      <form form className="containerread">
+      <form form className="containerPRODUCT">
         <h3 className="h3">แสดงข้อมูลล็อตสินค้า</h3>
-        <div>
+
+        <div className="bodyImport">
+          {/* <input name="Name_product" type="text" className="" onChange={handleInput}/> */}
           <Row>
             <Col>
-              <span>ชื่อสินค้า</span>
-              <input
-                name="Name_product"
-                type="text"
-                className=""
-                value={values.Name_product}
-              />
-              <span>จำนวนสินค้า</span>
-              <input name="Quantity" type="text" value={values.Quantity}/>
-              <span>สินค้าคงเหลือ</span>
-              <input name="Inventories_lot" type="text" value={values.Inventories_lot}/>
-              <span>วันที่ทำรายการ</span>
-              <input name="date_list" type="text" value={formatDate(values.date_list)}/>
-              <span>วันที่หมดอายุ</span>
-              <input name="date_list_EXP" type="text" value={formatDate(values.date_list_EXP)}/>
-              <span>หมายเหตุ</span>
-              <textarea name="remark" type="text" value={values.remark}/>
-              <span>พนักงานที่เพิ่มสินค้า</span>
-              <input name="fullname" type="text" value={values.fullname}/>
+              <div className="spanProduct">
+                <span>ชื่อสินค้า</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="fullname"
+                  type="text"
+                  value={values.Name_product}
+                />
+              </div>
             </Col>
-
-            <Col className="add2"></Col>
+            <Col>
+              <div className="spanProduct">
+                <span>พนักงานที่เพิ่มสินค้า</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="fullname"
+                  type="text"
+                  value={values.fullname}
+                />
+              </div>
+            </Col>
           </Row>
-          <br />
-          <button onClick={() => navigate(`/ProductLOT`)}>กลับ</button>
+          <Row>
+            <Col>
+              <div className="spanProduct">
+                <span>จำนวนสินค้า</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Quantity"
+                  type="text"
+                  value={values.Quantity}
+                />
+              </div>
+            </Col>
+            <Col>
+              <div className="spanProduct">
+                <span>สินค้าคงเหลือ</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="Inventories_lot"
+                  type="text"
+                  value={values.Inventories_lot}
+                />
+              </div>
+            </Col>
+          </Row>
+
+          <div className="spanProduct">
+            <Row>
+              <Col>
+                <span>วันที่ทำรายการ</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="date_list"
+                  type="text"
+                  value={formatDate(values.date_list)}
+                />
+              </Col>
+              <Col>
+                <span>วันที่หมดอายุ</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="date_list_EXP"
+                  type="text"
+                  value={formatDate(values.date_list_EXP)}
+                />
+              </Col>
+            </Row>
+          </div>
+          <div className="spanProduct">
+            <span>หมายเหตุ</span>
+            <textarea
+              style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+              class="form-control"
+              name="remark"
+              type="text"
+              value={values.remark}
+            />
+          </div>
+          <div style={{ marginTop: "20px" }} className="spanProduct">
+            <Row>
+              <Col>
+                <Link to="/ProductLOT" className="backProduct btn btn-danger">
+                  {" "}
+                  กลับ{" "}
+                </Link>
+              </Col>
+
+              <Col></Col>
+            </Row>
+          </div>
         </div>
+        <div></div>
       </form>
     </div>
   );

@@ -1254,12 +1254,12 @@ function Login() {
       <div className="login">
         <div className="formlogin">
           <form action="" onSubmit={handleSubmit}>
-            <h2 className="lo">Log in</h2>
+            <h2 className="lo">เข้าสู่ระบบ</h2>
 
             <div className="user">
               <input
                 type="email"
-                placeholder="E-mail"
+                placeholder=" อีเมล"
                 aria-label="email"
                 name="email"
                 onChange={handleInput}
@@ -1286,7 +1286,7 @@ function Login() {
                 <div className="password-container">
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Password"
+                    placeholder=" รหัสผ่าน"
                     aria-label="Password"
                     name="password"
                     value={values.password}
@@ -1316,12 +1316,12 @@ function Login() {
               </div>
 
               <div>
-                <button name="submit" type="submit" id="submit">
+                <button className="loginme" name="submit" type="submit" id="submit">
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
-                  Submit
+                  เข้าสู่ระบบ
                 </button>
               </div>
             </div>

@@ -279,23 +279,19 @@ function ShowAgent() {
         </Row>
 
         <Row style={{ marginTop: "20px", marginBottom: "40px" }}>
-          <Col className="cancel" md={5}></Col>
+          <Col className="cancel" md={5}>
+            <Link to="/TableAgent" className="back btn btn-danger">
+              {" "}
+              กลับ{" "}
+            </Link>
+          </Col>
           <Col className="button2" md={6}>
-            <Row style={{ marginRight: "25px" }}>
-              <Col>
-                <Link to="/TableAgent" className="back btn btn-danger">
-                  {" "}
-                  กลับ{" "}
-                </Link>
-              </Col>
-              <Col>
-                <button
-                  onClick={() => navigate(`/EditAgent/${values.ID_agent}`)}
-                >
-                  แก้ไข
-                </button>
-              </Col>
-            </Row>
+            <button
+              className="bgedit btn"
+              onClick={() => navigate(`/EditAgent/${values.ID_agent}`)}
+            >
+              แก้ไข
+            </button>
           </Col>
         </Row>
       </form>

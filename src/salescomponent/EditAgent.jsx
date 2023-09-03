@@ -273,6 +273,7 @@ function EditAgent() {
                   name="sex"
                   type="text"
                   id="Sex"
+                  style={{ width: "275px" }}
                   value={values.sex}
                   // onChange={(e) =>
                   //   setValues({ ...values, sex: e.target.value })
@@ -293,7 +294,9 @@ function EditAgent() {
               id="IDcard"
               type="text"
               onChange={handleInput}
+              style={{ backgroundColor: "white" }}
               value={values.IDcard}
+              maxLength={17} 
             />
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
@@ -303,7 +306,7 @@ function EditAgent() {
               id="fullname"
               type="text"
               onChange={handleInput}
-              // value={values.fullname}
+              style={{ backgroundColor: "white" }}
               value={values.fullname}
             />
 
@@ -315,9 +318,10 @@ function EditAgent() {
               type="text"
               onChange={handleInput}
               value={values.email}
+              style={{ backgroundColor: "white" }}
             />
 
-            <h6 className="txt">พนักงานที่เพิ่มตัวแทน</h6>
+            {/* <h6 className="txt">พนักงานที่เพิ่มตัวแทน</h6>
             <input
               name=""
               className="Input2"
@@ -325,13 +329,13 @@ function EditAgent() {
               type="text"
               disabled
               value={values.Sales_Fullname}
-            />
+            /> */}
           </Col>
 
           <Col md={4}>
-            <Row>
+            <Row style={{ marginBottom: "20px" }}>
               <Col>
-                <h6 className="txt mb-2">จังหวัด</h6>
+                <h6 className="txt">จังหวัด</h6>
                 {/* <h6 className="txt">*จังหวัด</h6> */}
                 <InputGroup className="mb-3">
                   {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
@@ -351,7 +355,7 @@ function EditAgent() {
                   </Form.Select>
                 </InputGroup>
 
-                <h6 className="txt mb-2">ตำบล</h6>
+                <h6 className="txt">ตำบล</h6>
                 {/* <h6 className="txt">*ตำบล</h6> */}
                 <InputGroup className="">
                   {/* <InputGroup.Text>ตำบล</InputGroup.Text> */}
@@ -375,8 +379,8 @@ function EditAgent() {
                 )} */}
               </Col>
               <Col>
-                <h6 className="txt mb-2">อำเภอ</h6>
-                <InputGroup className="" style={{ width: "225px" }}>
+                <h6 className="txt">อำเภอ</h6>
+                <InputGroup className="" style={{ width: "230px" }}>
                   <Form.Select
                     aria-label="อำเภอ"
                     type="text"
@@ -393,13 +397,14 @@ function EditAgent() {
                   </Form.Select>
                 </InputGroup>
 
-                <h6 className="txt mb-2">
+                <h6 className="txt" style={{ marginTop: "15px" }}>
                   รหัสไปรษณีย์
                   <h6></h6>
                 </h6>
                 <input
                   name="zip_code"
-                  className="InputZip"
+                  class="form-control"
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                   id="contact"
                   type="text"
                   disabled
@@ -411,7 +416,7 @@ function EditAgent() {
                 )} */}
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginBottom: "15px" }}>
               <Col>
                 {/* <Link
                 style={{ alignItems: "end", marginTop: "26px" }}
@@ -423,7 +428,7 @@ function EditAgent() {
                 <h6 className="txt">เบอร์โทรศัพท์</h6>
                 <input
                   name="Tel"
-                  className="Input3"
+                  class="form-control"
                   id="Tel"
                   type="text"
                   aria-describedby="passwordHelpBlock"
@@ -447,25 +452,29 @@ function EditAgent() {
                 </Form.Select>
               </Col>
             </Row>
-            <h6 className="txt">ช่องทางติดต่อ</h6>
-            <input
-              name="contact"
-              className="Input"
-              id="contact"
-              type="text"
-              onChange={handleInput}
-              value={values.contact}
-            />
-            <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
-            <textarea
-              name="Address"
-              className="textarea"
-              id="Address"
-              type="text"
-              aria-describedby="passwordHelpBlock"
-              onChange={handleInput}
-              value={values.Address}
-            />
+            <div style={{ marginBottom: "15px" }}>
+              <h6 className="txt">ช่องทางติดต่อ</h6>
+              <input
+                name="contact"
+                class="form-control"
+                id="contact"
+                type="text"
+                onChange={handleInput}
+                value={values.contact}
+              />
+            </div>
+            <div>
+              <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
+              <textarea
+                name="Address"
+                className="textareaaddAgent"
+                id="Address"
+                type="text"
+                aria-describedby="passwordHelpBlock"
+                onChange={handleInput}
+                value={values.Address}
+              />
+            </div>
           </Col>
           <Col md={2}>
             {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
@@ -497,19 +506,17 @@ function EditAgent() {
         </Row>
 
         <Row style={{ marginTop: "20px", marginBottom: "40px" }}>
-          <Col className="cancel" md={5}></Col>
+          <Col className="cancel" md={5}>
+            <Link to="/TableAgent" className="back btn btn-danger">
+              {" "}
+              กลับ{" "}
+            </Link>
+          </Col>
           <Col className="button2" md={6}>
-            <Row style={{ marginRight: "25px" }}>
-              <Col>
-                <Link to="/TableAgent" className="back btn btn-danger">
-                  {" "}
-                  กลับ{" "}
-                </Link>
-              </Col>
-              <Col>
-                <button type="submit">แก้ไข</button>
-              </Col>
-            </Row>
+            <button className="bgedit btn" type="submit">
+              ยืนยัน
+            </button>
+            {/* <button className="bgedit btn" type="submit">แก้ไข</button> */}
           </Col>
         </Row>
       </form>

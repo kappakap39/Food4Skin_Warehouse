@@ -87,19 +87,22 @@ function ProductLOT() {
   }, []);
 
   //!next page
+  // กำหนด state และฟังก์ชันสำหรับเปลี่ยนหน้า
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 9;
+  // คำนวณดัชนีแรกและดัชนีสุดท้ายของรายการที่ต้องแสดง
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
+  // คัดลอกรายการที่ต้องแสดงสำหรับหน้าปัจจุบัน
   const records = showtable.slice(firstIndex, lastIndex);
+  // คำนวณจำนวนหน้าทั้งหมด
   const npage = Math.ceil(showtable.length / recordsPerPage);
+  // สร้างรายการของหมายเลขหน้า
   const number = [...Array(npage + 1).keys()].slice(1);
 
   function prePage() {
-    if (currentPage < firstIndex) {
+    if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-    } else if (currentPage === firstIndex) {
-      setCurrentPage(changeCPage + 0);
     }
   }
 
@@ -108,7 +111,7 @@ function ProductLOT() {
   }
 
   function nextPage() {
-    if (currentPage !== npage) {
+    if (currentPage < npage) {
       setCurrentPage(currentPage + 1);
     }
   }
@@ -135,7 +138,7 @@ function ProductLOT() {
                 onChange={(e) => setSaveoption(e.target.value)}
                 style={{ marginLeft: "15px" }}
               >
-                <option value="">เลือกสินค้า</option>
+                <option value="">สินค้าทั้งหมด</option>
                 {nameproduct.map((item, index) => (
                   <option key={index} value={item.Name_product}>
                     {item.Name_product}
@@ -157,7 +160,10 @@ function ProductLOT() {
               <button className="addProduct" onClick={() => navigate("")}>
                 เบิกสินค้า
               </button>
-              <button className="addProduct" onClick={() => navigate("/ImportProduct")}>
+              <button
+                className="addProduct"
+                onClick={() => navigate("/ImportProduct")}
+              >
                 รับเข้าสินค้า
               </button>
               {/* <button className="add mb-3" onClick={() => navigate("")}>
@@ -167,7 +173,6 @@ function ProductLOT() {
           </Col>
         </Row>
         {/* <hr /> */}
-
         <div className="table-container">
           <table className=" table table-striped table-dark ">
             <thead className="table-secondary">
@@ -180,7 +185,7 @@ function ProductLOT() {
                 <th>วันที่ทำรายการ</th>
                 <th>วันที่หมดอายุ</th>
                 <th>พนักงานที่เพิ่มสินค้า</th>
-                <th>หมายเหตุ</th>
+                {/* <th>หมายเหตุ</th> */}
 
                 <th className="readtext">ข้อมูล</th>
               </tr>
@@ -188,7 +193,7 @@ function ProductLOT() {
 
             <tbody>
               {saveoption === "" // เช็คว่ายังไม่ได้เลือกตัวเลือก
-                ? initialData.map((data, index) => (
+                ? records.map((data, index) => (
                     <tr key={index}>
                       <td scope="row">{data.ID_lot}</td>
                       <td>{data.Name_product}</td>
@@ -198,41 +203,39 @@ function ProductLOT() {
                       <td>{formatDate(data.date_list)}</td>
                       <td>{formatDate(data.date_list_EXP)}</td>
                       <td>{data.fullname}</td>
-                      <td>{data.remark}</td>
+                      {/* <td>{data.remark}</td> */}
 
                       <td className="centericon">
-                        <div className="read2" 
-                        onClick={() =>
-                          navigate(`/ReadLOT/${data.ID_lot}`)
-                        }
+                        <div
+                          className="read2"
+                          onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
                         >
                           <BiSearchAlt />
                         </div>
                       </td>
                     </tr>
                   ))
-                : showtable.map((data, index) => (
-                  <tr key={index}>
-                  <td scope="row">{data.ID_lot}</td>
-                  <td>{data.Name_product}</td>
-                  <td>{data.Production_point}</td>
-                  <td>{data.Quantity}</td>
-                  <td>{data.Inventories_lot}</td>
-                  <td>{formatDate(data.date_list)}</td>
-                  <td>{formatDate(data.date_list_EXP)}</td>
-                  <td>{data.fullname}</td>
-                  <td>{data.remark}</td>
+                : records.map((data, index) => (
+                    <tr key={index}>
+                      <td scope="row">{data.ID_lot}</td>
+                      <td>{data.Name_product}</td>
+                      <td>{data.Production_point}</td>
+                      <td>{data.Quantity}</td>
+                      <td>{data.Inventories_lot}</td>
+                      <td>{formatDate(data.date_list)}</td>
+                      <td>{formatDate(data.date_list_EXP)}</td>
+                      <td>{data.fullname}</td>
+                      {/* <td>{data.remark}</td> */}
 
-                  <td className="centericon">
-                    <div className="read2" 
-                    onClick={() =>
-                      navigate(`/ReadLOT/${records.ID_lot}`)
-                    }
-                    >
-                      <BiSearchAlt />
-                    </div>
-                  </td>
-                </tr>
+                      <td className="centericon">
+                        <div
+                          className="read2"
+                          onClick={() => navigate(`/ReadLOT/${records.ID_lot}`)}
+                        >
+                          <BiSearchAlt />
+                        </div>
+                      </td>
+                    </tr>
                   ))}
             </tbody>
           </table>
