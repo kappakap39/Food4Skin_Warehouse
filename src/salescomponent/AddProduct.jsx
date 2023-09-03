@@ -34,7 +34,7 @@ function AddProduct() {
     Level_1_price: "",
     Level_2_price: "",
     Level_3_price: "",
-    ID_sales: `${userLoginData[0].ID_sales}`,
+    ID_sales: `${userLoginData[0].ID_sales}`, 
   });
   console.log(values);
   const handleSubmit = (event) => {

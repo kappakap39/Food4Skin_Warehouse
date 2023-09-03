@@ -29,31 +29,20 @@ function ProductLOT() {
     return date.toLocaleDateString(undefined, options);
   }
 
-  //!
+  //! ค้นหา
   // http://localhost:2001/NameProduct
   const [nameproduct, setNameproduct] = useState([]);
   const [saveoption, setSaveoption] = useState(""); // กำหนดค่าเริ่มต้นเป็นสตริงว่าง
   const [showtable, setShowtable] = useState([]);
 
-  // useEffect(() => {
-  //   if (saveoption !== "") { // ตรวจสอบว่า saveoption ไม่ใช่สตริงว่าง
-  //     axios
-  //       .get("http://localhost:2001/ShowProduct/" + saveoption)
-  //       .then((res) => setShowtable(res.data))
-  //       .catch((err) => console.log(err));
-  //   } else {
-  //     setShowtable([]);
-  //   }
-  // }, [saveoption]);
-
   const [initialData, setInitialData] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:2001/selectlot")
-      .then((res) => setInitialData(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:2001/selectlot")
+  //     .then((res) => setInitialData(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   useEffect(() => {
     if (saveoption === "") {
@@ -79,12 +68,28 @@ function ProductLOT() {
   //แสดงข้อมูลทั้งหมด
   const [data, setData] = useState([]);
 
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:2001/selectlot")
+  //     .then((res) => setData(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
+
+  const [startDate, setStartDate] = useState(""); // เก็บวันเริ่มต้น
+  const [endDate, setEndDate] = useState(""); // เก็บวันสิ้นสุด
+
   useEffect(() => {
+    let apiUrl = "http://localhost:2001/selectlot";
+
+    if (startDate && endDate) {
+      apiUrl += `?startDate=${startDate}&endDate=${endDate}`;
+    }
+
     axios
-      .get("http://localhost:2001/selectlot")
-      .then((res) => setData(res.data))
+      .get(apiUrl)
+      .then((res) => setInitialData(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [startDate, endDate]);
 
   //!next page
   // กำหนด state และฟังก์ชันสำหรับเปลี่ยนหน้า
@@ -116,7 +121,7 @@ function ProductLOT() {
     }
   }
 
-  console.log("records", records);
+  console.log("start-endDate", startDate, endDate);
 
   return (
     <div>
@@ -145,6 +150,29 @@ function ProductLOT() {
                   </option>
                 ))}
               </select>
+            </div>
+          </Col>
+          <Col>
+            <div className="selectSale">
+              <Row>
+                <Col style={{paddingTop:" 5px", color:"white"}}>
+                  <span className="text-end">ช่วงวันที่หมดอายุ</span>
+                </Col>
+                <Col>
+                  <Form.Control
+                    type="date"
+                    onChange={(e) => setStartDate(e.target.value)}
+                    value={startDate}
+                  />
+                </Col>
+                <Col>
+                  <Form.Control
+                    type="date"
+                    onChange={(e) => setEndDate(e.target.value)}
+                    value={endDate}
+                  />
+                </Col>
+              </Row>
             </div>
           </Col>
 
@@ -192,51 +220,65 @@ function ProductLOT() {
             </thead>
 
             <tbody>
-              {saveoption === "" // เช็คว่ายังไม่ได้เลือกตัวเลือก
-                ? records.map((data, index) => (
-                    <tr key={index}>
-                      <td scope="row">{data.ID_lot}</td>
-                      <td>{data.Name_product}</td>
-                      <td>{data.Production_point}</td>
-                      <td>{data.Quantity}</td>
-                      <td>{data.Inventories_lot}</td>
-                      <td>{formatDate(data.date_list)}</td>
-                      <td>{formatDate(data.date_list_EXP)}</td>
-                      <td>{data.fullname}</td>
-                      {/* <td>{data.remark}</td> */}
-
-                      <td className="centericon">
-                        <div
-                          className="read2"
-                          onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
-                        >
-                          <BiSearchAlt />
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                : records.map((data, index) => (
-                    <tr key={index}>
-                      <td scope="row">{data.ID_lot}</td>
-                      <td>{data.Name_product}</td>
-                      <td>{data.Production_point}</td>
-                      <td>{data.Quantity}</td>
-                      <td>{data.Inventories_lot}</td>
-                      <td>{formatDate(data.date_list)}</td>
-                      <td>{formatDate(data.date_list_EXP)}</td>
-                      <td>{data.fullname}</td>
-                      {/* <td>{data.remark}</td> */}
-
-                      <td className="centericon">
-                        <div
-                          className="read2"
-                          onClick={() => navigate(`/ReadLOT/${records.ID_lot}`)}
-                        >
-                          <BiSearchAlt />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+              {saveoption === ""
+                ? records
+                    .filter((data) => {
+                      const expDate = new Date(data.date_list_EXP);
+                      return (
+                        (!startDate || expDate >= new Date(startDate)) &&
+                        (!endDate || expDate <= new Date(endDate))
+                      );
+                    })
+                    .map((data, index) => (
+                      <tr key={index}>
+                        <td scope="row">{data.ID_lot}</td>
+                        <td>{data.Name_product}</td>
+                        <td>{data.Production_point}</td>
+                        <td>{data.Quantity}</td>
+                        <td>{data.Inventories_lot}</td>
+                        <td>{formatDate(data.date_list)}</td>
+                        <td>{formatDate(data.date_list_EXP)}</td>
+                        <td>{data.fullname}</td>
+                        {/* <td>{data.remark}</td> */}
+                        <td className="centericon">
+                          <div
+                            className="read2"
+                            onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                          >
+                            <BiSearchAlt />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                : records
+                    .filter((data) => {
+                      const expDate = new Date(data.date_list_EXP);
+                      return (
+                        (!startDate || expDate >= new Date(startDate)) &&
+                        (!endDate || expDate <= new Date(endDate))
+                      );
+                    })
+                    .map((data, index) => (
+                      <tr key={index}>
+                        <td scope="row">{data.ID_lot}</td>
+                        <td>{data.Name_product}</td>
+                        <td>{data.Production_point}</td>
+                        <td>{data.Quantity}</td>
+                        <td>{data.Inventories_lot}</td>
+                        <td>{formatDate(data.date_list)}</td>
+                        <td>{formatDate(data.date_list_EXP)}</td>
+                        <td>{data.fullname}</td>
+                        {/* <td>{data.remark}</td> */}
+                        <td className="centericon">
+                          <div
+                            className="read2"
+                            onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                          >
+                            <BiSearchAlt />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
             </tbody>
           </table>
         </div>

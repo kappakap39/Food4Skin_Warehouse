@@ -26,6 +26,15 @@ function ImportProduct() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
 
+  //!date
+  useEffect(() => {
+    // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    // กำหนดค่าเริ่มต้นให้กับ date_list เป็นวันที่ปัจจุบัน
+    setValues((prev) => ({ ...prev, date_list: currentDate }));
+  }, []);
+
   //! select
   const [nameproduct, setNameproduct] = useState([]);
   useEffect(() => {
@@ -85,18 +94,9 @@ function ImportProduct() {
     }
   };
 
-  // const handleInput = (event) => {
-  //   const { name, value } = event.target;
 
-  //   // ตรวจสอบว่าค่าที่ป้อนเป็นติดลบหรือไม่
-  //   if (name === "Quantity" && Number(value) < 1) {
-  //     // ถ้าเป็นค่าติดลบให้กำหนดค่าให้เป็น 1
-  //     setValues((prev) => ({ ...prev, [name]: 1 }));
-  //   } else {
-  //     setValues((prev) => ({ ...prev, [name]: value }));
-  //   }
-  // };
 
+  console.log("Values",values)
   return (
     <div>
       <header className="headernav ">
@@ -159,7 +159,7 @@ function ImportProduct() {
 
           <div className="spanProduct">
             <Row>
-              <Col>
+              {/* <Col>
                 <span className="txt">
                   <h6>*</h6>วันที่ทำรายการ
                 </span>
@@ -169,7 +169,7 @@ function ImportProduct() {
                   type="date"
                   onChange={handleInput}
                 />
-              </Col>
+              </Col> */}
               <Col>
                 <span className="txt">
                   <h6>*</h6>วันที่หมดอายุ

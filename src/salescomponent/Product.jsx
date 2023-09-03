@@ -167,7 +167,7 @@ console.log(data)
           <h3 className="h3">ตารางแสดงข้อมูลสินค้า</h3>
           <Row>
             <Col md={4}>
-              {/* <div className="search">
+              <div className="search">
               <InputGroup className="mb-4">
                 <Form.Control
                   className="inputsearch"
@@ -178,7 +178,7 @@ console.log(data)
                   onInput={(e) => handleFilter(e)}
                 />
               </InputGroup>
-            </div> */}
+            </div>
             </Col>
 
             <Col className="add2">
