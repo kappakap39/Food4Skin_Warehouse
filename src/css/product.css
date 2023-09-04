@@ -38,3 +38,15 @@ color: white;
 .spanProduct{
     margin-top: 15px;
 }
+
+.FcSynchronize {
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปมือชี้ */
+    transition: transform 0.2s; /* เพิ่มการเปลี่ยนแปลงที่เรียบของรูปร่าง */
+  }
+  
+  .FcSynchronize:hover {
+    transform: scale(1.2); /* เพิ่มขนาดของปุ่มเมื่อชี้ */
+    filter: drop-shadow(0 5 10em #ffa200);
+
+  }
+  

@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MenuNavSales from "./MenuNavSales";
+import { BsPrinterFill } from "react-icons/bs";
+import { FcSynchronize } from "react-icons/fc";
 
 //!PDF
 // npm install jspdf html2canvas
@@ -268,7 +270,18 @@ function ProductLOT() {
             <div className="selectSale">
               <Row>
                 <Col style={{ paddingTop: " 5px", color: "white" }}>
-                  <span className="text-end">ช่วงวันที่หมดอายุ</span>
+                  <div  className="text-end">
+                    <span>
+                      ช่วงวันที่หมดอายุ{" "}
+                      <FcSynchronize
+                      className="FcSynchronize"
+                        onClick={() => {
+                          setStartDate(""); // เคลียร์ค่า startDate เมื่อคลิกปุ่มรีเฟรช
+                          setEndDate(""); // เคลียร์ค่า endDate เมื่อคลิกปุ่มรีเฟรช
+                        }}
+                      />
+                    </span>
+                  </div>
                 </Col>
                 <Col>
                   <Form.Control
@@ -317,7 +330,7 @@ function ProductLOT() {
                 className="addProduct"
                 onClick={generatePDF}
               >
-                PDF
+                <BsPrinterFill />
               </button>
 
               <button className="addProduct" onClick={() => navigate("")}>
