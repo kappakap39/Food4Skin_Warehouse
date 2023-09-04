@@ -133,6 +133,9 @@ function ProductLOT() {
     return total + item.Inventories_lot;
   }, 0);
 
+  console.log("totalInventories", totalInventories);
+  console.log("Inventories_lot", data.Inventories_lot);
+
   //!PDF
   // function generatePDF() {
   //   const pdf = new jsPDF("l", "mm", "a4"); // สร้างอ็อบเจ็กต์ PDF แนวนอน (landscape)
@@ -195,9 +198,14 @@ function ProductLOT() {
       const imgWidth = pdfWidth - 2 * margin; // ขนาดกว้างของรูปภาพเท่ากับความกว้างของเอกสารลบขอบมารอบ
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
+      // ปรับค่าของ imgX, imgY, และ downloadDateX ดังนี้
+      const imgX = (pdfWidth - imgWidth) / 2; // ภาพอยู่ตรงกลางแนวนอน
+      const imgY = (pdfHeight - imgHeight) / 2; // ภาพอยู่ตรงกลางแนวตั้ง
+      // const downloadDateX = pdfWidth - margin - downloadDateWidth; // คำอธิบายอยู่ทางขวาขอบกระดาษ
+
       // คำนวณตำแหน่งแนวนอนของภาพและคำอธิบาย
-      const imgX = margin; // ภาพอยู่ทางซ้าย
-      const imgY = margin + 20; // ภาพอยู่ห่างจากด้านบน 20 พิกเซล
+      // const imgX = margin; // ภาพอยู่ทางซ้าย
+      // const imgY = margin + 20; // ภาพอยู่ห่างจากด้านบน 20 พิกเซล
       const downloadDateX =
         pdfWidth -
         margin -
@@ -284,8 +292,8 @@ function ProductLOT() {
               <input
                 style={{
                   width: "155px",
-                  backgroundColor: "rgb(134, 134, 134)",
-                  color: "white",
+                  backgroundColor: "rgb(211, 211, 211)",
+                  color: "black",
                 }}
                 className="form-control"
                 type="text"
@@ -304,7 +312,11 @@ function ProductLOT() {
                 marginTop: "10px",
               }}
             >
-              <button style={{backgroundColor: "white"}} className="addProduct" onClick={generatePDF}>
+              <button
+                style={{ backgroundColor: "white" }}
+                className="addProduct"
+                onClick={generatePDF}
+              >
                 PDF
               </button>
 
@@ -333,7 +345,7 @@ function ProductLOT() {
                 <th>จุดต่ำกว่าจุดสั่งผลิต (ชิ้น)</th>
                 <th>สินค้าทั้งหมด (ชิ้น)</th>
                 <th>สินค้าคงเหลือ (ชิ้น)</th>
-                <th>วันที่ทำรายการ</th>
+                <th>วันที่ผลิต</th>
                 <th>วันที่หมดอายุ</th>
                 <th>พนักงานที่เพิ่มสินค้า</th>
                 {/* <th>หมายเหตุ</th> */}

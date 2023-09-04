@@ -27,13 +27,13 @@ function ImportProduct() {
   const navigate = useNavigate();
 
   //!date
-  useEffect(() => {
-    // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
-    const currentDate = new Date().toISOString().split("T")[0];
+  // useEffect(() => {
+  //   // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
+  //   const currentDate = new Date().toISOString().split("T")[0];
 
-    // กำหนดค่าเริ่มต้นให้กับ date_list เป็นวันที่ปัจจุบัน
-    setValues((prev) => ({ ...prev, date_list: currentDate }));
-  }, []);
+  //   // กำหนดค่าเริ่มต้นให้กับ date_list เป็นวันที่ปัจจุบัน
+  //   setValues((prev) => ({ ...prev, date_list: currentDate }));
+  // }, []);
 
   //! select
   const [nameproduct, setNameproduct] = useState([]);
@@ -159,9 +159,9 @@ function ImportProduct() {
 
           <div className="spanProduct">
             <Row>
-              {/* <Col>
+              <Col>
                 <span className="txt">
-                  <h6>*</h6>วันที่ทำรายการ
+                  <h6>*</h6>วันที่ผลิต
                 </span>
                 <input
                   class="form-control"
@@ -169,7 +169,7 @@ function ImportProduct() {
                   type="date"
                   onChange={handleInput}
                 />
-              </Col> */}
+              </Col>
               <Col>
                 <span className="txt">
                   <h6>*</h6>วันที่หมดอายุ
