@@ -1252,7 +1252,7 @@ function Login() {
       </div>
 
       <div className="login">
-        <div className="formlogin">
+        <div className="formlogin" style={{overflow:"hidden"}}>
           <form action="" onSubmit={handleSubmit}>
             <h2 className="lo">เข้าสู่ระบบ</h2>
 

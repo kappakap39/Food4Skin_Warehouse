@@ -3,10 +3,13 @@
     font-family: 'Noto Serif Thai', sans-serif;
   } */
   
+  /* @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@300&display=swap'); */
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai&display=swap');
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* font-family: 'Noto Serif Thai', serif; */
 }
 /* .bodyLogin{
     display: flex;
@@ -475,3 +478,4 @@ button:hover{
     background: #0f0;
     cursor: alias;
 }
+  
