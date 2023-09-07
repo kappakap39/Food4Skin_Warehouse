@@ -1,0 +1,61 @@
+
+  /* StablePage */
+@import url("https://fonts.googleapis.com/css2?family=Kanit&family=Prompt&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@700&display=swap");
+
+
+.main-stable{
+    margin-top: 50px;
+  }
+
+.tabsgrubs ul {
+  list-style-type: none;
+  display: flex;
+  height: 60px;
+  flex-direction: row;
+  align-items: flex-end;
+  box-shadow: inset 1px 2px 15px 5px rgb(0 0 0 / 16%);
+}
+
+.tabsgrubs button {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 15px 15px 0px 0px;
+  width: 200px;
+  height: 40px;
+  font-size: 1.2rem;
+}
+
+/* CSS สำหรับแท็บที่เลือก */
+.tabsgrubs button.active {
+  background-color: #13c52e;
+  color: #ffffff;
+  border: none;
+}
+.hrReport {
+    margin-top: 0;
+    border: 2px solid #00ff40; /* ความหนา 10px และสีดำ */
+    filter: drop-shadow(0 0 10em #00ff40);
+
+  }
+  
+
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0rem;
+}
+
+.containerTAB {
+    
+    border-radius: 20px;
+    height: 555px;
+    /* border-radius: 20px; */
+    margin-left: 20px;
+    margin-right: 20px;
+
+    
+  }

@@ -19,6 +19,7 @@ body {
   /* overflow: hidden; */
   
 }
+
 .container1:hover {
   /* filter: drop-shadow(0 0 0.2em #11ff00); */
   /* color: #11ff00; */
@@ -141,7 +142,7 @@ button {
   margin-top: 0px;
   overflow: hidden;
   /* overflow: auto; */
-  height: 442px;
+  height: 438px;
 }
 
 tbody {
@@ -176,3 +177,8 @@ tbody {
   margin-top: 15px;
   position: absolute;
 }
+
+/* .red-text {
+  color: red;
+  font-size: 18px;
+} */

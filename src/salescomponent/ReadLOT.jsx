@@ -41,6 +41,7 @@ function ReadLOT() {
     ID_sales: "",
     ID_lot: "",
     fullname: "",
+    date_import: "",
   });
 
   //!Read
@@ -63,6 +64,7 @@ function ReadLOT() {
           ID_product: res.data[0].ID_product,
           ID_lot: res.data[0].ID_lot,
           fullname: res.data[0].fullname,
+          date_import: res.data[0].date_import,
         });
       })
       .catch((err) => console.log(err));
@@ -146,7 +148,7 @@ function ReadLOT() {
           <div className="spanProduct">
             <Row>
               <Col>
-                <span>วันที่ทำรายการ</span>
+                <span>วันที่ผลิต</span>
                 <input
                   style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                   class="form-control"
@@ -163,6 +165,16 @@ function ReadLOT() {
                   name="date_list_EXP"
                   type="text"
                   value={formatDate(values.date_list_EXP)}
+                />
+              </Col>
+              <Col>
+                <span>วันที่นำเข้า</span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="date_import"
+                  type="text"
+                  value={formatDate(values.date_import)}
                 />
               </Col>
             </Row>

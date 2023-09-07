@@ -25,6 +25,7 @@ import { AiOutlineSave } from "react-icons/ai";
 import Validation from "../function/CreateSalesValidation.jsx";
 import MenuNav from "./MenuNav";
 import FormText from "react-bootstrap/esm/FormText";
+
 // import { subdistricts } from "../../../../Backend/controller/provinces";
 function AddSales() {
   const navigate = useNavigate();
@@ -153,6 +154,51 @@ function AddSales() {
     }
   };
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
+  //   const formattedPhone = values.Tel.replace(/-/g, "");
+
+  //   const err = Validation({ ...values, Tel: formattedPhone });
+  //   setErrors(err);
+
+  //   if (
+  //     err.fullname === "" &&
+  //     err.email === "" &&
+  //     err.password === "" &&
+  //     err.password2 === "" &&
+  //     err.sex === "" &&
+  //     err.IDcard === "" &&
+  //     err.AddressSale === "" &&
+  //     err.Tel === "" &&
+  //     err.Persistent_status === "" &&
+  //     err.picture === "" &&
+  //     err.zip_code === "" &&
+  //     err.contact === ""
+  //   ) {
+  //     // ตรวจสอบ IDcard ที่เพิ่มขึ้นมา
+  //     const isDuplicate = await checkDuplicateIDcard(values.IDcard);
+
+  //     if (isDuplicate) {
+  //       // ถ้า IDcard ซ้ำกัน แสดงข้อความแจ้งเตือน
+  //       alert("IDcard นี้มีอยู่ในระบบแล้ว");
+  //     } else {
+  //       // ถ้าไม่มี IDcard ซ้ำกัน ส่งข้อมูลไปยังเซิร์ฟเวอร์
+  //       axios
+  //         .post("http://localhost:2001/addsale", {
+  //           ...values,
+  //           Tel: formattedPhone,
+  //         })
+  //         .then((res) => {
+  //           console.log(res);
+  //           navigate("/Salesperson");
+  //         })
+  //         .catch((err) => console.log(err));
+  //     }
+  //   }
+  // };
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cradID, setCradID] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -257,7 +303,7 @@ function AddSales() {
                       id="IDcard"
                       value={cradID}
                       onChange={handleInput}
-                      maxLength={17} 
+                      maxLength={17}
                     />
                   </InputGroup>
                   {errors.IDcard && (
@@ -434,30 +480,27 @@ function AddSales() {
               <h6 className="txt">
                 <h6>*</h6>สถานะ
               </h6>
-              
-                <Col className="mb-3">
-                  <Form.Select
-                    aria-label="Default select example"
-                    type="text"
-                    name="Persistent_status"
-                    id="Persistent_status"
-                    onChange={handleInput}
-                  >
-                    <option>สถานะการทำงาน</option>
-                    <option value="กำลังดำเนินงานอยู่">
-                      กำลังดำเนินงานอยู่
-                    </option>
-                    <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
-                  </Form.Select>
+
+              <Col className="mb-3">
+                <Form.Select
+                  aria-label="Default select example"
+                  type="text"
+                  name="Persistent_status"
+                  id="Persistent_status"
+                  onChange={handleInput}
+                >
+                  <option>สถานะการทำงาน</option>
+                  <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
+                  <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
+                </Form.Select>
+              </Col>
+              {errors.Persistent_status && (
+                <Col md={4}>
+                  <span className="text-danger">
+                    {errors.Persistent_status}
+                  </span>
                 </Col>
-                {errors.Persistent_status && (
-                  <Col md={4}>
-                    <span className="text-danger">
-                      {errors.Persistent_status}
-                    </span>
-                  </Col>
-                )}
-              
+              )}
             </Row>
           </Col>
         </Row>

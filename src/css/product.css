@@ -49,4 +49,10 @@ color: white;
     filter: drop-shadow(0 5 10em #ffa200);
 
   }
+
+  .red-text {
+    color: red;
+    font-size: 17px;
+  }
+  
   

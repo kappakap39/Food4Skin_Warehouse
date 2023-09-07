@@ -64,7 +64,7 @@ function MenuNavSales() {
                 จัดการข้อมูลคลังสินค้า<hr />
               </Nav.Link>
 
-              <Nav.Link href="" className="menunavSales">
+              <Nav.Link href="/MenutabReport" className="menunavSales">
                 รายงาน<hr />
               </Nav.Link>
 

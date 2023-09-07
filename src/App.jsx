@@ -29,6 +29,11 @@ import ShowAgent from "./salescomponent/ShowAgent";
 import EditAgent from "./salescomponent/EditAgent";
 import ImportProduct from "./salescomponent/ImportProduct";
 import ReadLOT from "./salescomponent/ReadLOT";
+import Expire from "./salescomponent/Report/Expire";
+import LotImport from "./salescomponent/Report/LotImport";
+import Exportproduct from "./salescomponent/Report/Exportproduct";
+import Menutab from "./salescomponent/Report/Menutab";
+import Requisition from "./salescomponent/Requisition";
 
 function App() {
   return (
@@ -59,6 +64,11 @@ function App() {
           <Route path="/ShowAgent/:id" element={<ShowAgent/>} ></Route>
           <Route path="/EditAgent/:id" element={<EditAgent/>} ></Route>
           <Route path="/ImportProduct" element={<ImportProduct/>} ></Route>
+          <Route path="/Expire" element={<Expire/>}></Route>
+          <Route path="/LotImport" element={<LotImport/>}></Route>
+          <Route path="/Exportproduct" element={<Exportproduct/>} ></Route>
+          <Route path="/MenutabReport" element={<Menutab/>} ></Route>
+          <Route path="/Requisition" element={<Requisition/>} ></Route>
 
         </Routes>
       </BrowserRouter>

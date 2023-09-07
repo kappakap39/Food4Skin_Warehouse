@@ -1,5 +1,4 @@
-// import React from "react";
-import "../css/Salesperson.css";
+import "../../css/Salesperson.css";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -12,16 +11,11 @@ import { BiSolidUserPlus } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import MenuNavSales from "./MenuNavSales";
 import { BsPrinterFill } from "react-icons/bs";
 import { FcSynchronize } from "react-icons/fc";
-
-//!PDF
-// npm install jspdf html2canvas
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
-function ProductLOT() {
+function Exportproduct() {
   const navigate = useNavigate();
 
   //!date
@@ -56,7 +50,7 @@ function ProductLOT() {
       setShowtable(initialData); // แสดงข้อมูลเริ่มต้นเมื่อยังไม่ได้เลือกสินค้า
     } else {
       axios
-        .get("http://localhost:2001/ShowProduct/" + saveoption)
+        .get("http://localhost:2001/ShowProductTABExport/" + saveoption)
         .then((res) => setShowtable(res.data))
         .catch((err) => console.log(err));
     }
@@ -86,7 +80,7 @@ function ProductLOT() {
   const [endDate, setEndDate] = useState(""); // เก็บวันสิ้นสุด
 
   useEffect(() => {
-    let apiUrl = "http://localhost:2001/selectlot";
+    let apiUrl = "http://localhost:2001/selectlotExport";
 
     if (startDate && endDate) {
       apiUrl += `?startDate=${startDate}&endDate=${endDate}`;
@@ -130,16 +124,15 @@ function ProductLOT() {
 
   console.log("start-endDate", startDate, endDate);
 
-  // นับผลรวมของคอลัมน์ Inventories_lot
-  const totalInventories = showtable.reduce((total, item) => {
-    return total + item.Inventories_lot;
+  // นับผลรวมของคอลัมน์ Amount_products
+  const totalAmount_products = showtable.reduce((total, item) => {
+    return total + item.Amount_products;
   }, 0);
 
-  console.log("totalInventories", totalInventories);
-  console.log("Inventories_lot", data.Inventories_lot);
+  console.log("totalAmount_products", totalAmount_products);
+  console.log("Amount_products", data.Amount_products);
 
   //!PDF
-
   function generatePDF() {
     const pdf = new jsPDF("l", "mm", "a4"); // สร้างอ็อบเจ็กต์ PDF แนวนอน (landscape)
     const pdfWidth = pdf.internal.pageSize.width;
@@ -182,87 +175,25 @@ function ProductLOT() {
       pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
       pdf.setTextColor(0); // สีข้อความดำ (RGB)
       const textWidth =
-        (pdf.getStringUnitWidth("LOT Food4Skin") * pdf.internal.getFontSize()) /
+        (pdf.getStringUnitWidth("Expire Food4Skin") * pdf.internal.getFontSize()) /
         pdf.internal.scaleFactor;
       const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
-      pdf.text("LOT Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "LOT Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
+      pdf.text("Export Product Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
 
       pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight); // เพิ่มรูปภาพลงใน PDF
 
       // เพิ่มข้อความ "วันที่ดาวน์โหลด" ชิดขวา
       const downloadDate = "Download date : " + new Date().toLocaleDateString();
       pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
-      pdf.setTextColor(0); // กำหนดสีข้อความดำ (RGB)
       pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
 
-      pdf.save("Food4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
+      pdf.save("ExpireFood4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
     }); // เพิ่มวงเล็บปิดนี้
   }
 
-  // const [totalInventories1, setTotalInventories1] = useState(totalInventories); // Initialize to 0 or an appropriate initial value
-  // function generatePDF(totalInventories1) {
-  //   const pdf = new jsPDF("l", "mm", "a4");
-  //   const pdfWidth = pdf.internal.pageSize.width;
-  //   const pdfHeight = pdf.internal.pageSize.height;
-  //   const margin = 10;
-  
-  //   pdf.setFillColor(255);
-  //   pdf.rect(0, 0, pdfWidth, pdfHeight, "F");
-  
-  //   const table = document.querySelector(".table");
-  
-  //   pdf.setDrawColor(255);
-  
-  //   html2canvas(table).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const imgWidth = pdfWidth - 2 * margin;
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //     const imgX = (pdfWidth - imgWidth) / 2;
-  //     const imgY = (pdfHeight - imgHeight) / 2;
-  
-  //     const downloadDateX =
-  //       pdfWidth -
-  //       margin -
-  //       (pdf.getStringUnitWidth(
-  //         "Download date : " + new Date().toLocaleDateString()
-  //       ) *
-  //         10) /
-  //         pdf.internal.scaleFactor;
-  
-  //     const totalInventories = `TOTAL : ${totalInventories1}`;
-  
-  //     pdf.setFontSize(16);
-  //     pdf.setTextColor(0);
-  //     const textWidth =
-  //       (pdf.getStringUnitWidth("LOT Food4Skin") * pdf.internal.getFontSize()) /
-  //       pdf.internal.scaleFactor;
-  //     const textX = (pdfWidth - textWidth) / 2;
-  //     pdf.text("LOT Food4Skin", textX, margin + 10);
-  
-  //     pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
-  
-  //     pdf.setFontSize(10);
-  //     pdf.setTextColor(0);
-  //     pdf.text(totalInventories, margin, pdfHeight - margin); // แสดง totalInventories ที่คุณต้องการใน PDF
-  
-  //     const downloadDate = "Download date : " + new Date().toLocaleDateString();
-  //     pdf.setFontSize(10);
-  //     pdf.setTextColor(0);
-  //     pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5);
-  
-  //     pdf.save("Food4Skin.pdf");
-  //   });
-  // }
-  
   return (
     <div>
-      <header className="headernav ">
-        <MenuNavSales />
-      </header>
-      {/* rounded ขอบมีมุม */}
-      <div className="container1 ">
-        <h3 className="h3">ตารางแสดงข้อมูลล็อตรายการสินค้า</h3>
-
+      <div className="containerTAB ">
         <Row>
           <Col md={2}>
             <div className="selectSale">
@@ -287,11 +218,11 @@ function ProductLOT() {
             <div className="selectSale">
               <Row>
                 <Col style={{ paddingTop: " 5px", color: "white" }}>
-                  <div  className="text-end">
+                  <div className="text-end">
                     <span>
-                      ช่วงวันที่หมดอายุ{" "}
+                      ช่วงวันที่ทำรายการ{" "}
                       <FcSynchronize
-                      className="FcSynchronize"
+                        className="FcSynchronize"
                         onClick={() => {
                           setStartDate(""); // เคลียร์ค่า startDate เมื่อคลิกปุ่มรีเฟรช
                           setEndDate(""); // เคลียร์ค่า endDate เมื่อคลิกปุ่มรีเฟรช
@@ -327,7 +258,7 @@ function ProductLOT() {
                 }}
                 className="form-control"
                 type="text"
-                value={`คงเหลือ : ${totalInventories} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
+                value={`รวมทั้งสิ้น : ${totalAmount_products} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
                 disabled
               />
             </div>
@@ -343,25 +274,21 @@ function ProductLOT() {
               }}
             >
               <button
-                style={{ backgroundColor: "white" }}
-                className="addProduct"
+                style={{
+                  backgroundColor: "white",
+                  borderRadius:
+                    "10%" /* กำหนดให้มีรูปร่างวงกลมโดยใช้ border-radius */,
+                  width: "80px" /* กำหนดความกว้างของปุ่ม */,
+                  height: "40px" /* กำหนดความสูงของปุ่ม */,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
+                }}
                 onClick={generatePDF}
               >
                 <BsPrinterFill />
               </button>
-
-              <button className="addProduct" onClick={() => navigate("/Requisition")}>
-                เบิกสินค้า
-              </button>
-              <button
-                className="addProduct"
-                onClick={() => navigate("/ImportProduct")}
-              >
-                รับเข้าสินค้า
-              </button>
-              {/* <button className="add mb-3" onClick={() => navigate("")}>
-                <BiSolidUserPlus /> เพิ่ม
-              </button> */}
             </Col>
           </Col>
         </Row>
@@ -372,15 +299,12 @@ function ProductLOT() {
               <tr>
                 <th>รหัสล็อต</th>
                 <th>ชื่อผลิตภัณฑ์</th>
-                <th>จุดต่ำกว่าจุดสั่งผลิต (ชิ้น)</th>
-                <th>สินค้าทั้งหมด (ชิ้น)</th>
-                <th>สินค้าคงเหลือ (ชิ้น)</th>
-                <th>วันที่ผลิต</th>
-                <th>วันที่หมดอายุ</th>
-                <th>พนักงานที่เพิ่มสินค้า</th>
-                {/* <th>หมายเหตุ</th> */}
-
-                <th className="readtext">ข้อมูล</th>
+                <th>จำนวนสินค้า (ชิ้น)</th>
+                <th>ชื่อผู้รับ</th>
+                <th>วันที่ทำรายการ</th>
+                <th>พนักงานที่ทำรายการ</th>
+                <th>หมายเหตุ</th>
+                
               </tr>
             </thead>
 
@@ -388,7 +312,7 @@ function ProductLOT() {
               {saveoption === ""
                 ? records
                     .filter((data) => {
-                      const expDate = new Date(data.date_list_EXP);
+                      const expDate = new Date(data.Dete_requisition);
                       return (
                         (!startDate || expDate >= new Date(startDate)) &&
                         (!endDate || expDate <= new Date(endDate))
@@ -397,34 +321,25 @@ function ProductLOT() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.Name_product}</td>
-                        <td>{data.Production_point}</td>
-                        <td>{data.Quantity}</td>
-                        {/* <td>{data.Inventories_lot}</td> */}
-                        <td>{data.Inventories_lot <= data.Production_point ? (
-                            <span className="red-text">
-                              {data.Inventories_lot}
-                            </span>
-                          ) : (
-                            `${data.Inventories_lot}`
-                          )}</td>
-                        <td>{formatDate(data.date_list)}</td>
-                        <td>{formatDate(data.date_list_EXP)}</td>
-                        <td>{data.fullname}</td>
-                        {/* <td>{data.remark}</td> */}
-                        <td className="centericon">
+                        <td>{data.product_name}</td>
+                        <td>{data.Amount_products}</td>
+                        <td>{data.agent_fullname}</td>
+                        <td>{formatDate(data.Dete_requisition)}</td>
+                        <td>{data.sales_fullname}</td>
+                        <td>{data.remark}</td>
+                        {/* <td className="centericon">
                           <div
                             className="read2"
                             onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
                           >
                             <BiSearchAlt />
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     ))
                 : records
                     .filter((data) => {
-                      const expDate = new Date(data.date_list_EXP);
+                      const expDate = new Date(data.Dete_requisition);
                       return (
                         (!startDate || expDate >= new Date(startDate)) &&
                         (!endDate || expDate <= new Date(endDate))
@@ -433,29 +348,20 @@ function ProductLOT() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.Name_product}</td>
-                        <td>{data.Production_point}</td>
-                        <td>{data.Quantity}</td>
-                        {/* <td>{data.Inventories_lot}</td> */}
-                        <td>{data.Inventories_lot <= data.Production_point ? (
-                            <span className="red-text">
-                              {data.Inventories_lot}
-                            </span>
-                          ) : (
-                            `${data.Inventories_lot}`
-                          )}</td>
-                        <td>{formatDate(data.date_list)}</td>
-                        <td>{formatDate(data.date_list_EXP)}</td>
-                        <td>{data.fullname}</td>
-                        {/* <td>{data.remark}</td> */}
-                        <td className="centericon">
+                        <td>{data.product_name}</td>
+                        <td>{data.Amount_products}</td>
+                        <td>{data.agent_fullname}</td>
+                        <td>{formatDate(data.Dete_requisition)}</td>
+                        <td>{data.sales_fullname}</td>
+                        <td>{data.remark}</td>
+                        {/* <td className="centericon">
                           <div
                             className="read2"
                             onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
                           >
                             <BiSearchAlt />
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
             </tbody>
@@ -494,4 +400,4 @@ function ProductLOT() {
   );
 }
 
-export default ProductLOT;
+export default Exportproduct;

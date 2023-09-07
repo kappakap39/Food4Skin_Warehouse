@@ -22,7 +22,7 @@ import { BiSolidUserPlus } from "react-icons/bi";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
 
-function ImportProduct() {
+function Requisition() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
 
@@ -95,9 +95,7 @@ function ImportProduct() {
     }
   };
 
-
-
-  console.log("Values",values)
+  console.log("Values", values);
   return (
     <div>
       <header className="headernav ">
@@ -131,9 +129,42 @@ function ImportProduct() {
               </Col>
             </Row>
           </div>
-          <Row>
-            <Col>
-              <div className="spanProduct">
+          <div className="spanProduct">
+            <Row>
+              <Col>
+                <span className="txt">
+                  <h6>*</h6>ล็อตสินค้า
+                </span>
+                <select
+                  name="ID_product"
+                  id="ID_product"
+                  type="text"
+                  className="form-select"
+                  onChange={handleInput}
+                  // style={{ marginLeft: "15px" }}
+                >
+                  <option value="">เลือกสินค้า</option>
+                  {nameproduct.map((item, index) => (
+                    <option key={index} value={item.ID_product}>
+                      {item.Name_product}
+                    </option>
+                  ))}
+                </select>
+              </Col>
+              <Col>
+                <span className="txt">
+                  <h6>*</h6>คงเหลือ
+                </span>
+                <input
+                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  class="form-control"
+                  name="date_list_EXP"
+                  type="text"
+                  disabled
+                  onChange={handleInput}
+                />
+              </Col>
+              <Col>
                 <span className="txt">
                   <h6>*</h6>จำนวนสินค้า
                 </span>
@@ -143,46 +174,29 @@ function ImportProduct() {
                   type="number"
                   onChange={handleInput}
                 />
-              </div>
-            </Col>
-            {/* <Col>
-              <div className="spanProduct">
-                <span>สินค้าคงเหลือ</span>
-                <input
-                  class="form-control"
-                  name="Inventories_lot"
-                  type="number"
-                  onChange={handleInput}
-                />
-              </div>
-            </Col> */}
-          </Row>
-
-          <div className="spanProduct">
-            <Row>
-              <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่ผลิต
-                </span>
-                <input
-                  class="form-control"
-                  name="date_list"
-                  type="date"
-                  onChange={handleInput}
-                />
-              </Col>
-              <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่หมดอายุ
-                </span>
-                <input
-                  class="form-control"
-                  name="date_list_EXP"
-                  type="date"
-                  onChange={handleInput}
-                />
               </Col>
             </Row>
+          </div>
+
+          <div className="spanProduct">
+            <span className="txt">
+              <h6>*</h6>ตัวแทนจำหน่าย
+            </span>
+            <select
+              name="ID_product"
+              id="ID_product"
+              type="text"
+              className="form-select"
+              onChange={handleInput}
+              // style={{ marginLeft: "15px" }}
+            >
+              <option value="">เลือกสินค้า</option>
+              {nameproduct.map((item, index) => (
+                <option key={index} value={item.ID_product}>
+                  {item.Name_product}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="spanProduct">
             <span className="txt">
@@ -218,4 +232,4 @@ function ImportProduct() {
   );
 }
 
-export default ImportProduct;
+export default Requisition;
