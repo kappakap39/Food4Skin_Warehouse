@@ -321,7 +321,7 @@ function Exportproduct() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.product_name}</td>
+                        <td>{data.Name_product}</td>
                         <td>{data.Amount_products}</td>
                         <td>{data.agent_fullname}</td>
                         <td>{formatDate(data.Dete_requisition)}</td>
@@ -348,7 +348,7 @@ function Exportproduct() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.product_name}</td>
+                        <td>{data.Name_product}</td>
                         <td>{data.Amount_products}</td>
                         <td>{data.agent_fullname}</td>
                         <td>{formatDate(data.Dete_requisition)}</td>

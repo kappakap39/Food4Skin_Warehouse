@@ -42,14 +42,14 @@ function Requisition() {
   });
   console.log("ข้อมูลที่กรอก", values);
 
-   //! select agent
-   const [nameagent, setNameagent] = useState([]);
-   useEffect(() => {
-     axios
-       .get("http://localhost:2001/NameAgent")
-       .then((res) => setNameagent(res.data))
-       .catch((err) => console.log(err));
-   }, []);
+  //! select agent
+  const [nameagent, setNameagent] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:2001/NameAgent")
+      .then((res) => setNameagent(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   //! LOT
   //! select product
@@ -104,18 +104,32 @@ function Requisition() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
+    const updatedInventoriesLot =
+      values.Inventories_lot - values.Amount_products;
+
+    // ส่งคำขอ PUT เพื่ออัปเดต Inventories_lot ในตารางที่เกี่ยวข้อง
     axios
-      .post("http://localhost:2001/addRequisition", {
-        ...values,
+      .put("http://localhost:2001/lotUpdate/" + ID_lot, {
+        Inventories_lot: updatedInventoriesLot,
       })
       .then((res) => {
         console.log(res);
-        navigate("/ProductLOT");
+
+        // เพิ่มข้อมูลใหม่ลงในตารางที่ต้องการ
+        axios
+          .post("http://localhost:2001/addRequisition", {
+            ...values,
+          })
+          .then((res) => {
+            console.log(res);
+            navigate("/ProductLOT");
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
 
+  //!ตรวจสอบค้าที่กรอก
   const handleInput = (event) => {
     const { name, value } = event.target;
 
@@ -124,14 +138,31 @@ function Requisition() {
       // ถ้าเป็นค่าติดลบให้กำหนดค่าให้เป็น 1
       const Amount_productsValue = Number(value);
       if (Amount_productsValue < 1) {
-        setValues((prev) => ({ ...prev, Amount_products: "1" }));
-      } else {
-        // ถ้าไม่ใช่ค่าติดลบ ให้อัปเดตค่า "สินค้าคงเหลือ" ด้วยค่า "จำนวนสินค้า"
-        setValues((prev) => ({ ...prev, [name]: value }));
+        setValues((prev) => ({
+          ...prev,
+          [name]: "1",
+        }));
+        alert("กรุณากรอกสินค้าที่มากกว่า 1 ชิ้น");
+        return; // ไม่อัปเดตค่าใน state
       }
-    } else {
-      setValues((prev) => ({ ...prev, [name]: value }));
     }
+
+    // ตรวจสอบว่าค่าที่ป้อนไม่เกินคงเหลือของล็อตสินค้า
+    if (name === "Amount_products" && values.Inventories_lot) {
+      const amountValue = Number(value);
+      const remainingInventory = Number(values.Inventories_lot);
+
+      if (amountValue > remainingInventory) {
+        setValues((prev) => ({
+          ...prev,
+          [name]: remainingInventory.toString(),
+        }));
+        alert("จำนวนสินค้าไม่สามารถเกินคงเหลือของล็อตสินค้าได้");
+        return; // ไม่อัปเดตค่าใน state
+      }
+    }
+
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
   console.log("Values", values);

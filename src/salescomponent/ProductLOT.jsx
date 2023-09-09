@@ -264,18 +264,22 @@ function ProductLOT() {
   const filteredProducts = showtable.filter((data) => {
     const expDate = new Date(data.date_list_EXP);
     const currentDate = new Date();
-  
+
     if (daysRemaining !== "") {
       const daysRemainingNumber = parseInt(daysRemaining);
       const futureDate = new Date();
       futureDate.setDate(currentDate.getDate() + daysRemainingNumber);
-  
+
       return expDate <= futureDate;
     }
-  
+
     return true;
   });
-  
+
+  //! เช็ควันหมดอายุในตารางเป็นสีเหลือง
+  const currentDate = new Date();
+  const thirtyDaysFromNow = new Date();
+  thirtyDaysFromNow.setDate(currentDate.getDate() + 30);
 
   return (
     <div>
@@ -379,7 +383,7 @@ function ProductLOT() {
               }}
             >
               <button
-                style={{ backgroundColor: "white",}}
+                style={{ backgroundColor: "white" }}
                 className="addProduct"
                 onClick={generatePDF}
               >
@@ -441,8 +445,10 @@ function ProductLOT() {
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
                         <td>
-                          {data.Inventories_lot <= data.Production_point ? (
-                            <span className="red-text">
+                          {data.Inventories_lot === 0 ? (
+                            <span className="red-text">สินค้าหมด</span>
+                          ) : data.Inventories_lot <= data.Production_point ? (
+                            <span style={{ color: "#dfc500" }}>
                               {data.Inventories_lot}
                             </span>
                           ) : (
@@ -450,7 +456,23 @@ function ProductLOT() {
                           )}
                         </td>
                         <td>{formatDate(data.date_list)}</td>
-                        <td>{formatDate(data.date_list_EXP)}</td>
+                        <td>
+                          {data.date_list_EXP >=
+                          thirtyDaysFromNow.toISOString() ? (
+                            <span style={{ color: "white" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          ) : data.date_list_EXP < currentDate.toISOString() ? (
+                            <span className="red-text">
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          ) : (
+                            <span style={{ color: "#dfc500" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          )}
+                        </td>
+
                         <td>{data.fullname}</td>
                         {/* <td>{data.remark}</td> */}
                         <td className="centericon">
@@ -463,7 +485,7 @@ function ProductLOT() {
                         </td>
                       </tr>
                     ))
-                    : filteredProducts
+                : filteredProducts
                     .filter((data) => {
                       const expDate = new Date(data.date_list_EXP);
                       return (
@@ -479,8 +501,10 @@ function ProductLOT() {
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
                         <td>
-                          {data.Inventories_lot <= data.Production_point ? (
-                            <span className="red-text">
+                          {data.Inventories_lot === 0 ? (
+                            <span className="red-text">สินค้าหมด</span>
+                          ) : data.Inventories_lot <= data.Production_point ? (
+                            <span style={{ color: "yellow" }}>
                               {data.Inventories_lot}
                             </span>
                           ) : (
@@ -488,7 +512,23 @@ function ProductLOT() {
                           )}
                         </td>
                         <td>{formatDate(data.date_list)}</td>
-                        <td>{formatDate(data.date_list_EXP)}</td>
+                        <td>
+                          {data.date_list_EXP >=
+                          thirtyDaysFromNow.toISOString() ? (
+                            <span style={{ color: "white" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          ) : data.date_list_EXP < currentDate.toISOString() ? (
+                            <span className="red-text">
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          ) : (
+                            <span style={{ color: "#dfc500" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          )}
+                        </td>
+
                         <td>{data.fullname}</td>
                         {/* <td>{data.remark}</td> */}
                         <td className="centericon">

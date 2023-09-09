@@ -192,6 +192,11 @@ function LotImport() {
     }); // เพิ่มวงเล็บปิดนี้
   }
 
+  //! เซ็คหมดอายุ
+  const currentDate = new Date();
+  const thirtyDaysFromNow = new Date();
+  thirtyDaysFromNow.setDate(currentDate.getDate() + 30);
+
   return (
     <div>
       <div className="containerTAB ">
@@ -325,7 +330,7 @@ function LotImport() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.Nameproduct}</td>
+                        <td>{data.Name_product}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
@@ -342,12 +347,19 @@ function LotImport() {
                           )}
                         </td> */}
                         <td>
-                          {data.date_list_EXP <= new Date().toISOString() ? (
+                          {data.date_list_EXP >=
+                          thirtyDaysFromNow.toISOString() ? (
+                            <span style={{ color: "white" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          ) : data.date_list_EXP < currentDate.toISOString() ? (
                             <span className="red-text">
                               {formatDate(data.date_list_EXP)}
                             </span>
                           ) : (
-                            `${formatDate(data.date_list_EXP)}`
+                            <span style={{ color: "#dfc500" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
                           )}
                         </td>
 
@@ -374,19 +386,26 @@ function LotImport() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.Nameproduct}</td>
+                        <td>{data.Name_product}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
                         <td>{formatDate(data.date_import)}</td>
                         <td>{formatDate(data.date_list)}</td>
                         <td>
-                          {data.date_list_EXP <= new Date().toISOString() ? (
+                          {data.date_list_EXP >=
+                          thirtyDaysFromNow.toISOString() ? (
+                            <span style={{ color: "white" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
+                          ) : data.date_list_EXP < currentDate.toISOString() ? (
                             <span className="red-text">
                               {formatDate(data.date_list_EXP)}
                             </span>
                           ) : (
-                            `${formatDate(data.date_list_EXP)}`
+                            <span style={{ color: "#dfc500" }}>
+                              {formatDate(data.date_list_EXP)}
+                            </span>
                           )}
                         </td>
                         <td>{data.fullname}</td>
