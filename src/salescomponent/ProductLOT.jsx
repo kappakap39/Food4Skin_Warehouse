@@ -205,21 +205,21 @@ function ProductLOT() {
   //   const pdfWidth = pdf.internal.pageSize.width;
   //   const pdfHeight = pdf.internal.pageSize.height;
   //   const margin = 10;
-  
+
   //   pdf.setFillColor(255);
   //   pdf.rect(0, 0, pdfWidth, pdfHeight, "F");
-  
+
   //   const table = document.querySelector(".table");
-  
+
   //   pdf.setDrawColor(255);
-  
+
   //   html2canvas(table).then((canvas) => {
   //     const imgData = canvas.toDataURL("image/png");
   //     const imgWidth = pdfWidth - 2 * margin;
   //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
   //     const imgX = (pdfWidth - imgWidth) / 2;
   //     const imgY = (pdfHeight - imgHeight) / 2;
-  
+
   //     const downloadDateX =
   //       pdfWidth -
   //       margin -
@@ -228,9 +228,9 @@ function ProductLOT() {
   //       ) *
   //         10) /
   //         pdf.internal.scaleFactor;
-  
+
   //     const totalInventories = `TOTAL : ${totalInventories1}`;
-  
+
   //     pdf.setFontSize(16);
   //     pdf.setTextColor(0);
   //     const textWidth =
@@ -238,22 +238,45 @@ function ProductLOT() {
   //       pdf.internal.scaleFactor;
   //     const textX = (pdfWidth - textWidth) / 2;
   //     pdf.text("LOT Food4Skin", textX, margin + 10);
-  
+
   //     pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight);
-  
+
   //     pdf.setFontSize(10);
   //     pdf.setTextColor(0);
   //     pdf.text(totalInventories, margin, pdfHeight - margin); // แสดง totalInventories ที่คุณต้องการใน PDF
-  
+
   //     const downloadDate = "Download date : " + new Date().toLocaleDateString();
   //     pdf.setFontSize(10);
   //     pdf.setTextColor(0);
   //     pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5);
-  
+
   //     pdf.save("Food4Skin.pdf");
   //   });
   // }
+
+  //! จำนวนวัน
+  const [daysRemaining, setDaysRemaining] = useState(""); // จำนวนวันที่ผู้ใช้กรอก
+
+  function handleDaysRemainingChange(event) {
+    const newDaysRemaining = event.target.value;
+    setDaysRemaining(newDaysRemaining);
+  }
+  const filteredProducts = showtable.filter((data) => {
+    const expDate = new Date(data.date_list_EXP);
+    const currentDate = new Date();
   
+    if (daysRemaining !== "") {
+      const daysRemainingNumber = parseInt(daysRemaining);
+      const futureDate = new Date();
+      futureDate.setDate(currentDate.getDate() + daysRemainingNumber);
+  
+      return expDate <= futureDate;
+    }
+  
+    return true;
+  });
+  
+
   return (
     <div>
       <header className="headernav ">
@@ -287,11 +310,11 @@ function ProductLOT() {
             <div className="selectSale">
               <Row>
                 <Col style={{ paddingTop: " 5px", color: "white" }}>
-                  <div  className="text-end">
+                  <div className="text-end">
                     <span>
                       ช่วงวันที่หมดอายุ{" "}
                       <FcSynchronize
-                      className="FcSynchronize"
+                        className="FcSynchronize"
                         onClick={() => {
                           setStartDate(""); // เคลียร์ค่า startDate เมื่อคลิกปุ่มรีเฟรช
                           setEndDate(""); // เคลียร์ค่า endDate เมื่อคลิกปุ่มรีเฟรช
@@ -319,17 +342,30 @@ function ProductLOT() {
           </Col>
           <Col>
             <div className="selectSale">
-              <input
-                style={{
-                  width: "155px",
-                  backgroundColor: "rgb(211, 211, 211)",
-                  color: "black",
-                }}
-                className="form-control"
-                type="text"
-                value={`คงเหลือ : ${totalInventories} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
-                disabled
-              />
+              <Row>
+                <Col>
+                  <input
+                    type="number"
+                    placeholder="อีกกี่วันหมดอายุ"
+                    value={daysRemaining}
+                    onChange={handleDaysRemainingChange}
+                    className="form-control"
+                  />
+                </Col>
+                <Col>
+                  <input
+                    style={{
+                      width: "155px",
+                      backgroundColor: "rgb(211, 211, 211)",
+                      color: "black",
+                    }}
+                    className="form-control"
+                    type="text"
+                    value={`คงเหลือ : ${totalInventories} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
+                    disabled
+                  />
+                </Col>
+              </Row>
             </div>
           </Col>
 
@@ -343,14 +379,17 @@ function ProductLOT() {
               }}
             >
               <button
-                style={{ backgroundColor: "white" }}
+                style={{ backgroundColor: "white",}}
                 className="addProduct"
                 onClick={generatePDF}
               >
                 <BsPrinterFill />
               </button>
 
-              <button className="addProduct" onClick={() => navigate("/Requisition")}>
+              <button
+                className="addProduct"
+                onClick={() => navigate("/Requisition")}
+              >
                 เบิกสินค้า
               </button>
               <button
@@ -386,7 +425,7 @@ function ProductLOT() {
 
             <tbody>
               {saveoption === ""
-                ? records
+                ? filteredProducts
                     .filter((data) => {
                       const expDate = new Date(data.date_list_EXP);
                       return (
@@ -401,13 +440,15 @@ function ProductLOT() {
                         <td>{data.Production_point}</td>
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
-                        <td>{data.Inventories_lot <= data.Production_point ? (
+                        <td>
+                          {data.Inventories_lot <= data.Production_point ? (
                             <span className="red-text">
                               {data.Inventories_lot}
                             </span>
                           ) : (
                             `${data.Inventories_lot}`
-                          )}</td>
+                          )}
+                        </td>
                         <td>{formatDate(data.date_list)}</td>
                         <td>{formatDate(data.date_list_EXP)}</td>
                         <td>{data.fullname}</td>
@@ -422,7 +463,7 @@ function ProductLOT() {
                         </td>
                       </tr>
                     ))
-                : records
+                    : filteredProducts
                     .filter((data) => {
                       const expDate = new Date(data.date_list_EXP);
                       return (
@@ -437,13 +478,15 @@ function ProductLOT() {
                         <td>{data.Production_point}</td>
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
-                        <td>{data.Inventories_lot <= data.Production_point ? (
+                        <td>
+                          {data.Inventories_lot <= data.Production_point ? (
                             <span className="red-text">
                               {data.Inventories_lot}
                             </span>
                           ) : (
                             `${data.Inventories_lot}`
-                          )}</td>
+                          )}
+                        </td>
                         <td>{formatDate(data.date_list)}</td>
                         <td>{formatDate(data.date_list_EXP)}</td>
                         <td>{data.fullname}</td>

@@ -215,7 +215,8 @@ function Expire() {
       pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
       pdf.setTextColor(0); // สีข้อความดำ (RGB)
       const textWidth =
-        (pdf.getStringUnitWidth("Expire Food4Skin") * pdf.internal.getFontSize()) /
+        (pdf.getStringUnitWidth("Expire Food4Skin") *
+          pdf.internal.getFontSize()) /
         pdf.internal.scaleFactor;
       const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
       pdf.text("Expire Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
@@ -257,7 +258,7 @@ function Expire() {
           <Col md={4}>
             <div className="selectSale">
               <Row>
-                <Col style={{ paddingTop: " 5px", color: "white" }}>
+                {/* <Col style={{ paddingTop: " 5px", color: "white" }}>
                   <div className="text-end">
                     <span>
                       ช่วงวันที่หมดอายุ{" "}
@@ -284,12 +285,23 @@ function Expire() {
                     onChange={(e) => setEndDate(e.target.value)}
                     value={endDate}
                   />
-                </Col>
+                </Col> */}
+                <input
+                  style={{
+                    width: "155px",
+                    backgroundColor: "rgb(211, 211, 211)",
+                    color: "black",
+                  }}
+                  className="form-control"
+                  type="text"
+                  value={`หมดอายุ : ${totalInventories} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
+                  disabled
+                />
               </Row>
             </div>
           </Col>
           <Col>
-            <div className="selectSale">
+            {/* <div className="selectSale">
               <input
                 style={{
                   width: "155px",
@@ -301,7 +313,7 @@ function Expire() {
                 value={`หมดอายุ : ${totalInventories} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
                 disabled
               />
-            </div>
+            </div> */}
           </Col>
 
           <Col className="add2">
@@ -323,7 +335,7 @@ function Expire() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
+                  //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
                 }}
                 onClick={generatePDF}
               >

@@ -3,33 +3,33 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-
 import "../css/MenuNav.css";
 import { Link } from "react-router-dom";
-
 import { FcMenu } from "react-icons/fc";
 import logo from "../assets/logo1.png";
-
 import { useLocation } from "react-router-dom";
 
 function MenuNav() {
-
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
 
-  console.log("NAV", userLoginData);
+  const handleLogout = () => {
+    // ล้างข้อมูลใน sessionStorage เมื่อคลิก "ออกจากระบบ"
+    sessionStorage.clear();
+    // ส่งผู้ใช้กลับไปยังหน้าหลักหรือหน้าเข้าสู่ระบบ
+    // ในกรณีนี้คือการใช้ Link ไปยังหน้าหลัก "/"
+    // คุณอาจต้องเปลี่ยนเส้นทาง URL ตามความต้องการของคุณ
+  };
+
   return (
     <form action="" className="">
       <Navbar expand="xg" className="nav">
         <Container>
           <Navbar.Brand href="/Salesperson" className="menunav">
-            {/* <img src={logo} alt="" style={{height: "50px"}} /> */}
             Food4Skin
           </Navbar.Brand>
 
-          {/* <Navbar.Toggle aria-controls="basic-navbar-nav" className="menunav" /> */}
           <div>
             {userLoginData && userLoginData.length > 0 ? (
               <Navbar.Brand className="navname">
@@ -60,10 +60,6 @@ function MenuNav() {
                 Menu
               </h5>
 
-              {/* <img src="../assets/logo1.png" class="img" alt=""></img> */}
-              {/* <h2>Menu</h2> */}
-              {/* <hr/> */}
-
               <Nav.Link href="/AboutMe" className="menunav">
                 ข้อมูลส่วนตัว
                 <hr />
@@ -74,7 +70,7 @@ function MenuNav() {
                 <hr />
               </Nav.Link>
 
-              <Nav.Link href="/" className="menunav">
+              <Nav.Link href="/" className="menunav" onClick={handleLogout}>
                 ออกจากระบบ
                 <hr />
               </Nav.Link>

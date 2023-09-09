@@ -325,7 +325,7 @@ function LotImport() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.Name_product}</td>
+                        <td>{data.Nameproduct}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}
@@ -374,7 +374,7 @@ function LotImport() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{data.ID_lot}</td>
-                        <td>{data.Name_product}</td>
+                        <td>{data.Nameproduct}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
                         {/* <td>{data.Inventories_lot}</td> */}

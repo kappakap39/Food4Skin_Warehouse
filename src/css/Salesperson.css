@@ -55,9 +55,11 @@ body {
   color: #000000;
 }
 .addProduct {
-  margin: 5px;
+  margin-right: 10px;
   background-color: aqua;
   color: #000000;
+  height: 40px;
+  padding-bottom: 30px;
 }
 
 .add2 {
@@ -140,7 +142,7 @@ button {
   margin-right: 10px;
   margin-bottom: 0px;
   margin-top: 0px;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* overflow: auto; */
   height: 438px;
 }

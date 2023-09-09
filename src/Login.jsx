@@ -109,7 +109,7 @@ function Login() {
           if (salesResponse.data[0].Success === "Success") {
             const userLoginData = sessionStorage.getItem("userlogin");
             const parsedUserLoginData = JSON.parse(userLoginData);
-  
+
             console.log(parsedUserLoginData);
             MySwal.fire({
               title: <strong>เข้าสู่ระบบสำเร็จ</strong>,
@@ -1252,18 +1252,19 @@ function Login() {
       </div>
 
       <div className="login">
-        <div className="formlogin" style={{overflow:"hidden"}}>
+        <div className="formlogin" style={{ overflow: "hidden" }}>
           <form action="" onSubmit={handleSubmit}>
             <h2 className="lo">เข้าสู่ระบบ</h2>
 
             <div className="user">
               <input
                 type="email"
-                placeholder=" อีเมล"
+                // placeholder=" อีเมล"
                 aria-label="email"
                 name="email"
                 onChange={handleInput}
               />
+              <label for="">อีเมล</label>
               {/* <label for="floatingInput" >Username</label> */}
               {errors.email && (
                 <span className="text-danger">{errors.email}</span>
@@ -1286,12 +1287,13 @@ function Login() {
                 <div className="password-container">
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder=" รหัสผ่าน"
+                    // placeholder=" รหัสผ่าน"
                     aria-label="Password"
                     name="password"
                     value={values.password}
                     onChange={handleInput}
                   />
+                  <label for="">รหัสผ่าน</label>
                   <div
                     onClick={togglePasswordVisibility}
                     className="IconPassword"
@@ -1316,7 +1318,12 @@ function Login() {
               </div>
 
               <div>
-                <button className="loginme" name="submit" type="submit" id="submit">
+                <button
+                  className="loginme"
+                  name="submit"
+                  type="submit"
+                  id="submit"
+                >
                   <span></span>
                   <span></span>
                   <span></span>

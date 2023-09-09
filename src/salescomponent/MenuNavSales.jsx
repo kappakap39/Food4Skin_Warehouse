@@ -16,6 +16,13 @@ function MenuNavSales() {
   // const navigate = useNavigate();
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   console.log("NAV", userLoginData);
+  const handleLogout = () => {
+    // ล้างข้อมูลใน sessionStorage เมื่อคลิก "ออกจากระบบ"
+    sessionStorage.clear();
+    // ส่งผู้ใช้กลับไปยังหน้าหลักหรือหน้าเข้าสู่ระบบ
+    // ในกรณีนี้คือการใช้ Link ไปยังหน้าหลัก "/"
+    // คุณอาจต้องเปลี่ยนเส้นทาง URL ตามความต้องการของคุณ
+  };
   return (
     <form action="" className="">
 
@@ -80,7 +87,7 @@ function MenuNavSales() {
                 รายงานรายการรับเข้า<hr />
               </Nav.Link> */}
               
-              <Nav.Link href="/" className="menunavSales">
+              <Nav.Link href="/" className="menunavSales" onClick={handleLogout} >
                 ออกจากระบบ<hr />
               </Nav.Link>
               

@@ -26,17 +26,35 @@ function Requisition() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
 
-  //!date
-  useEffect(() => {
-    // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
-    const currentDate = new Date().toISOString().split("T")[0];
+  const [ID_lot, setInventories_lot] = useState("");
 
-    // กำหนดค่าเริ่มต้นให้กับ date_import เป็นวันที่ปัจจุบัน
-    setValues((prev) => ({ ...prev, date_import: currentDate }));
-  }, []);
+  //!add
+  const [values, setValues] = useState({
+    // ID_requisition: "",
+    Dete_requisition: "",
+    Amount_products: "",
+    remark: "",
+    ID_agent: "",
+    ID_lot: "",
+    // ID_product: "",
+    Nameproduct: "",
+    ID_sales: `${userLoginData[0].ID_sales}`,
+  });
+  console.log("ข้อมูลที่กรอก", values);
 
-  //! select
+   //! select agent
+   const [nameagent, setNameagent] = useState([]);
+   useEffect(() => {
+     axios
+       .get("http://localhost:2001/NameAgent")
+       .then((res) => setNameagent(res.data))
+       .catch((err) => console.log(err));
+   }, []);
+
+  //! LOT
+  //! select product
   const [nameproduct, setNameproduct] = useState([]);
+  const [nameLot, setNameLot] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:2001/NameProduct")
@@ -44,24 +62,51 @@ function Requisition() {
       .catch((err) => console.log(err));
   }, []);
 
-  //!add
-  const [values, setValues] = useState({
-    ID_product: "",
-    date_import: "",
-    date_list: "",
-    date_list_EXP: "",
-    Quantity: "",
-    Inventories_lot: "",
-    remark: "",
-    ID_sales: `${userLoginData[0].ID_sales}`,
-  });
-  console.log("ข้อมูลที่กรอก", values);
+  const onChangeProduct = (e) => {
+    let index = e.nativeEvent.target.selectedIndex;
+    let label = e.nativeEvent.target[index].text;
+    setValues({ ...values, [e.target.name]: label });
+
+    const id = e.target.value;
+    axios
+      .get(`http://localhost:2001/Lotforproduct/${id}`)
+      .then((res) => {
+        setNameLot(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const onChangeInventories_lot = (e) => {
+    const filterDistrict = nameLot.filter((item) => {
+      return e.target.value == item.ID_lot;
+    });
+    console.log("ID_lot", filterDistrict[0].ID_lot);
+    console.log("Inventories_lot", filterDistrict[0].Inventories_lot);
+
+    setValues({
+      ...values,
+      [e.target.name]: filterDistrict[0].ID_lot,
+      Inventories_lot: filterDistrict[0].Inventories_lot,
+    });
+    console.log(e.target.value);
+  };
+
+  //!date
+  useEffect(() => {
+    // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    // กำหนดค่าเริ่มต้นให้กับ date_import เป็นวันที่ปัจจุบัน
+    setValues((prev) => ({ ...prev, Dete_requisition: currentDate }));
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
     axios
-      .post("http://localhost:2001/addproductLOT", {
+      .post("http://localhost:2001/addRequisition", {
         ...values,
       })
       .then((res) => {
@@ -71,21 +116,15 @@ function Requisition() {
       .catch((err) => console.log(err));
   };
 
-  // ใช้ useEffect เพื่อติดตามการเปลี่ยนแปลงใน Quantity
-  useEffect(() => {
-    // อัปเดตค่า Inventories_lot ให้เท่ากับ Quantity เมื่อ Quantity มีการเปลี่ยนแปลง
-    setValues((prev) => ({ ...prev, Inventories_lot: prev.Quantity }));
-  }, [values.Quantity]); // เซ็ต dependencies เป็น values.Quantity เพื่อให้ useEffect ทำงานเมื่อ Quantity เปลี่ยนแปลง
-
   const handleInput = (event) => {
     const { name, value } = event.target;
 
     // ตรวจสอบว่าค่าที่ป้อนเป็นติดลบหรือไม่
-    if (name === "Quantity") {
+    if (name === "Amount_products") {
       // ถ้าเป็นค่าติดลบให้กำหนดค่าให้เป็น 1
-      const quantityValue = Number(value);
-      if (quantityValue < 1) {
-        setValues((prev) => ({ ...prev, Quantity: "1" }));
+      const Amount_productsValue = Number(value);
+      if (Amount_productsValue < 1) {
+        setValues((prev) => ({ ...prev, Amount_products: "1" }));
       } else {
         // ถ้าไม่ใช่ค่าติดลบ ให้อัปเดตค่า "สินค้าคงเหลือ" ด้วยค่า "จำนวนสินค้า"
         setValues((prev) => ({ ...prev, [name]: value }));
@@ -112,11 +151,11 @@ function Requisition() {
                   <h6>*</h6>ชื่อสินค้า
                 </span>
                 <select
-                  name="ID_product"
-                  id="ID_product"
+                  name="Nameproduct"
+                  id="Nameproduct"
                   type="text"
                   className="form-select"
-                  onChange={handleInput}
+                  onChange={(e) => onChangeProduct(e)}
                   // style={{ marginLeft: "15px" }}
                 >
                   <option value="">เลือกสินค้า</option>
@@ -136,17 +175,19 @@ function Requisition() {
                   <h6>*</h6>ล็อตสินค้า
                 </span>
                 <select
-                  name="ID_product"
-                  id="ID_product"
+                  name="ID_lot"
+                  id="ID_lot"
                   type="text"
                   className="form-select"
-                  onChange={handleInput}
-                  // style={{ marginLeft: "15px" }}
+                  onChange={(e) => {
+                    setInventories_lot(e.target.value); // เมื่อมีการเลือกล็อตใหม่ กำหนดค่าให้กับ state ID_lot
+                    onChangeInventories_lot(e);
+                  }}
                 >
-                  <option value="">เลือกสินค้า</option>
-                  {nameproduct.map((item, index) => (
-                    <option key={index} value={item.ID_product}>
-                      {item.Name_product}
+                  <option value="">เลือกล็อต</option>
+                  {nameLot.map((item, index) => (
+                    <option key={index} value={item.ID_lot}>
+                      {item.ID_lot}
                     </option>
                   ))}
                 </select>
@@ -156,10 +197,11 @@ function Requisition() {
                   <h6>*</h6>คงเหลือ
                 </span>
                 <input
-                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                  class="form-control"
-                  name="date_list_EXP"
+                  style={{ backgroundColor: "rgba(240, 248, 255, 0.814)" }}
+                  className="form-control"
+                  name="Inventories_lot"
                   type="text"
+                  value={values.Inventories_lot}
                   disabled
                   onChange={handleInput}
                 />
@@ -170,7 +212,7 @@ function Requisition() {
                 </span>
                 <input
                   class="form-control"
-                  name="Quantity"
+                  name="Amount_products"
                   type="number"
                   onChange={handleInput}
                 />
@@ -183,17 +225,18 @@ function Requisition() {
               <h6>*</h6>ตัวแทนจำหน่าย
             </span>
             <select
-              name="ID_product"
-              id="ID_product"
+              name="ID_agent"
+              id="ID_agent"
               type="text"
               className="form-select"
               onChange={handleInput}
               // style={{ marginLeft: "15px" }}
             >
-              <option value="">เลือกสินค้า</option>
-              {nameproduct.map((item, index) => (
-                <option key={index} value={item.ID_product}>
-                  {item.Name_product}
+              <option value="">ลูกค้า</option>
+              <option value="ลูกค้าปลีก">ลูกค้าปลีก</option>
+              {nameagent.map((item, index) => (
+                <option key={index} value={item.ID_agent}>
+                  {item.fullname}
                 </option>
               ))}
             </select>
