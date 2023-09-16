@@ -20,6 +20,7 @@ import { FcSynchronize } from "react-icons/fc";
 // npm install jspdf html2canvas
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+// import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 
 function ProductLOT() {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ function ProductLOT() {
   //!next page
   // กำหนด state และฟังก์ชันสำหรับเปลี่ยนหน้า
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 9;
+  const recordsPerPage = 8;
   // คำนวณดัชนีแรกและดัชนีสุดท้ายของรายการที่ต้องแสดง
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
@@ -261,7 +262,7 @@ function ProductLOT() {
     const newDaysRemaining = event.target.value;
     setDaysRemaining(newDaysRemaining);
   }
-  const filteredProducts = showtable.filter((data) => {
+  const filteredProducts = records.filter((data) => {
     const expDate = new Date(data.date_list_EXP);
     const currentDate = new Date();
 
@@ -391,13 +392,13 @@ function ProductLOT() {
               </button>
 
               <button
-                className="addProduct"
+                className="addProductLOT"
                 onClick={() => navigate("/Requisition")}
               >
                 เบิกสินค้า
               </button>
               <button
-                className="addProduct"
+                className="addProductLOT"
                 onClick={() => navigate("/ImportProduct")}
               >
                 รับเข้าสินค้า
@@ -426,6 +427,52 @@ function ProductLOT() {
                 <th className="readtext">ข้อมูล</th>
               </tr>
             </thead>
+            {/* <tbody>
+              {records.map((data, index) => (
+                <tr key={index}>
+                  <td scope="row">{data.ID_lot}</td>
+                  <td>{data.Name_product}</td>
+                  <td>{data.Production_point}</td>
+                  <td>{data.Quantity}</td>
+                  <td>
+                    {data.Inventories_lot === 0 ? (
+                      <span className="red-text">สินค้าหมด</span>
+                    ) : data.Inventories_lot <= data.Production_point ? (
+                      <span style={{ color: "#dfc500" }}>
+                        {data.Inventories_lot}
+                      </span>
+                    ) : (
+                      `${data.Inventories_lot}`
+                    )}
+                  </td>
+                  <td>{formatDate(data.date_list)}</td>
+                  <td>
+                    {data.date_list_EXP >= thirtyDaysFromNow.toISOString() ? (
+                      <span style={{ color: "white" }}>
+                        {formatDate(data.date_list_EXP)}
+                      </span>
+                    ) : data.date_list_EXP < currentDate.toISOString() ? (
+                      <span className="red-text">
+                        {formatDate(data.date_list_EXP)}
+                      </span>
+                    ) : (
+                      <span style={{ color: "#dfc500" }}>
+                        {formatDate(data.date_list_EXP)}
+                      </span>
+                    )}
+                  </td>
+                  <td>{data.fullname}</td>
+                  <td className="centericon">
+                    <div
+                      className="read2"
+                      onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                    >
+                      <BiSearchAlt />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody> */}
 
             <tbody>
               {saveoption === ""
@@ -543,6 +590,13 @@ function ProductLOT() {
                     ))}
             </tbody>
           </table>
+          <div style={{ display: "flex" }}>
+            <h6>*สินค้าหมด หรือ ถ้าเป็นวันที่คือหมดอายุ</h6>
+            <h6 style={{ color: "yellow" }}>
+              *สินค้าใกล้หมด หรือ ถ้าเป็นวันที่คือใกล้หมดอายุ
+            </h6>
+            <h6 style={{ color: "white" }}>*สินค้าปกติ</h6>
+          </div>
         </div>
         <nav className="Nextpage">
           <ul className="pagination">

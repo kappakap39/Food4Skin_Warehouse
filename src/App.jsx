@@ -34,6 +34,7 @@ import LotImport from "./salescomponent/Report/LotImport";
 import Exportproduct from "./salescomponent/Report/Exportproduct";
 import Menutab from "./salescomponent/Report/Menutab";
 import Requisition from "./salescomponent/Requisition";
+import ReadExport from "./salescomponent/Report/ReadExport";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/UpdateProduct/:id" element={<UpdateProduct />}></Route>
           <Route path="/ReadProduct/:id" element={<ReadProduct />}></Route>
           <Route path="/ReadLOT/:id" element={<ReadLOT />}></Route>
+          <Route path="/ReadExport/:id" element={<ReadExport />}></Route>
           <Route path="/ProductLOT" element={<ProductLOT />}></Route>
           <Route path="/EditMe/:id" element={<EditMe />}></Route>
           <Route path="/Product" element={<Product/>}></Route>

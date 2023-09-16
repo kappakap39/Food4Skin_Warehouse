@@ -313,7 +313,7 @@ function LotImport() {
                 <th>พนักงานที่ทำรายการ</th>
                 <th>หมายเหตุ</th>
 
-                {/* <th className="readtext">ข้อมูล</th> */}
+                <th className="readtext">ข้อมูล</th>
               </tr>
             </thead>
 
@@ -365,14 +365,14 @@ function LotImport() {
 
                         <td>{data.fullname}</td>
                         <td>{data.remark}</td>
-                        {/* <td className="centericon">
+                        <td className="centericon">
                           <div
                             className="read2"
-                            onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                            onClick={() => navigate(`/ReadExport/${data.ID_lot}`)}
                           >
                             <BiSearchAlt />
                           </div>
-                        </td> */}
+                        </td>
                       </tr>
                     ))
                 : records
@@ -410,18 +410,25 @@ function LotImport() {
                         </td>
                         <td>{data.fullname}</td>
                         <td>{data.remark}</td>
-                        {/* <td className="centericon">
+                        <td className="centericon">
                           <div
                             className="read2"
-                            onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                            onClick={() => navigate(`/ReadExport/${data.ID_lot}`)}
                           >
                             <BiSearchAlt />
                           </div>
-                        </td> */}
+                        </td>
                       </tr>
                     ))}
             </tbody>
           </table>
+          <div style={{ display: "flex" }}>
+            <h6>*วันที่หมดอายุ</h6>
+            <h6 style={{ color: "yellow" }}>
+              *วันที่ใกล้หมดอายุ
+            </h6>
+            <h6 style={{ color: "white" }}>*สินค้าปกติ</h6>
+          </div>
         </div>
         <nav className="Nextpage">
           <ul className="pagination">

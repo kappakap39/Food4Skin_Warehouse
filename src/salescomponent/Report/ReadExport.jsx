@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../css/Addsales.css";
+import "../../css/Addsales.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -19,9 +19,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AiOutlineSave } from "react-icons/ai";
 import { BiSolidUserPlus } from "react-icons/bi";
-import Validation from "../function/CreateSalesValidation.jsx";
 import FormText from "react-bootstrap/esm/FormText";
-import MenuNavSales from "./MenuNavSales";
+import MenuNavSales from "../MenuNavSales";
 import { useParams } from "react-router-dom";
 
 import { BsPrinterFill } from "react-icons/bs";
@@ -29,7 +28,7 @@ import { FcSynchronize } from "react-icons/fc";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-function ReadLOT() {
+function ReadExport() {
   const { id } = useParams();
   const navigate = useNavigate();
   console.log("ID_Lot", id);
@@ -389,7 +388,7 @@ function ReadLOT() {
           <div style={{ marginTop: "20px" }} className="spanProduct">
             <Row>
               <Col>
-                <Link to="/ProductLOT" className="backProduct btn btn-danger">
+                <Link to="/MenutabReport" className="backProduct btn btn-danger">
                   {" "}
                   กลับ{" "}
                 </Link>
@@ -413,4 +412,4 @@ function ReadLOT() {
   );
 }
 
-export default ReadLOT;
+export default ReadExport;

@@ -15,6 +15,15 @@ display: grid;
 width: 1000px;
 color: white;
 }
+.bodyImportLOT{
+  padding: 30px;
+  height: 560px;
+  /* margin: 30px; */
+  display: grid;
+  width: 1500px;
+  color: white;
+  }
+  
 
 .save {
     background-color: rgb(0, 255, 72);

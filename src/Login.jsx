@@ -1255,6 +1255,7 @@ function Login() {
         <div className="formlogin" style={{ overflow: "hidden" }}>
           <form action="" onSubmit={handleSubmit}>
             <h2 className="lo">เข้าสู่ระบบ</h2>
+            {/* <div className="lender">เข้าสู่ระบบ</div> */}
 
             <div className="user">
               <input
@@ -1328,7 +1329,7 @@ function Login() {
                   <span></span>
                   <span></span>
                   <span></span>
-                  เข้าสู่ระบบ
+                  <h6 className="LoSUB">เข้าสู่ระบบ</h6>
                 </button>
               </div>
             </div>

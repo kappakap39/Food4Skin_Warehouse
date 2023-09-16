@@ -35,6 +35,7 @@ function Salesperson() {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log("DATA :", data)
   //ค้นหา
   // const [filterVal, setfilterVal] = useState("");
   // const [searchData, setSearchData] = useState([]);
