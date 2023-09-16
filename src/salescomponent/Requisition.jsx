@@ -321,6 +321,24 @@ function Requisition() {
     setAllImportedProducts(updatedImportedProducts);
   };
 
+  //!fullname table
+  const [agentFullnameMap, setAgentFullnameMap] = useState({}); // สร้าง state สำหรับเก็บ fullname ของตัวแทนจำหน่าย
+  useEffect(() => {
+    // ดึงข้อมูล fullname ของตัวแทนจำหน่าย
+    axios
+      .get("http://localhost:2001/NameAgent")
+      .then((res) => {
+        // สร้าง Map ที่เก็บ fullname ตาม ID_agent
+        const fullnameMap = {};
+        res.data.forEach((agent) => {
+          fullnameMap[agent.ID_agent] = agent.fullname;
+        });
+        // อัปเดต state ด้วยข้อมูล fullname
+        setAgentFullnameMap(fullnameMap);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  
   return (
     <div>
       <header className="headernav ">
@@ -422,7 +440,6 @@ function Requisition() {
                   // style={{ marginLeft: "15px" }}
                 >
                   <option value="">ลูกค้า</option>
-                  <option value="ลูกค้าปลีก">ลูกค้าปลีก</option>
                   {nameagent.map((item, index) => (
                     <option key={index} value={item.ID_agent}>
                       {item.fullname}
@@ -471,7 +488,8 @@ function Requisition() {
                         <td>{product.Nameproduct}</td>
                         <td>{product.ID_lot}</td>
                         <td>{product.Amount_products}</td>
-                        <td>{product.ID_agent}</td>
+                        {/* <td>{product.ID_agent}</td> */}
+                        <td>{agentFullnameMap[product.ID_agent]}</td> {/* แสดง fullname แทน ID_agent */}
                         <td>{product.remark}</td>
                         <td>
                           <h3
