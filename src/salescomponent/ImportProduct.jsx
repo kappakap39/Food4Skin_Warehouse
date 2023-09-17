@@ -26,6 +26,58 @@ function ImportProduct() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
 
+  //!เพิ่มข้อมูลหลายชุด
+  const [importedProducts, setImportedProducts] = useState([]);
+  const [allImportedProducts, setAllImportedProducts] = useState([]); // เก็บข้อมูลทั้งหมดที่คุณต้องการบันทึกลงในฐานข้อมูล
+
+  const handleAddProduct = () => {
+    // ตรวจสอบว่าข้อมูลสินค้าถูกกรอกครบหรือไม่
+    if (
+      values.ID_product &&
+      values.date_import &&
+      values.date_list &&
+      values.date_list_EXP &&
+      values.Quantity &&
+      values.Inventories_lot &&
+      values.remark &&
+      values.ID_sales
+    ) {
+      // สร้างอ็อบเจ็กต์ใหม่เพื่อเก็บข้อมูลสินค้าที่เพิ่ม
+      const newProduct = {
+        ID_product: values.ID_product,
+        date_import: values.date_import, // ให้ค่า date_import เป็นค่าปัจจุบันทุกครั้ง
+        date_list: values.date_list,
+        date_list_EXP: values.date_list_EXP,
+        Quantity: values.Quantity,
+        Inventories_lot: values.Inventories_lot,
+        remark: values.remark,
+        ID_sales: values.ID_sales,
+      };
+
+      // เพิ่มข้อมูลสินค้าใหม่ลงใน State importedProducts
+      setImportedProducts([...importedProducts, newProduct]);
+
+      // เพิ่มข้อมูลสินค้าใหม่ลงใน State allImportedProducts
+      setAllImportedProducts([...allImportedProducts, newProduct]);
+
+      // ล้างค่าใน State ที่ใช้ในการกรอกข้อมูล
+      setValues((prevValues) => ({
+        ...prevValues,
+        // ID_product: "",
+        // date_import: "", // ไม่ต้องล้างค่า date_import ที่นี่
+        // date_list: "",
+        // date_list_EXP: "",
+        // Quantity: "",
+        // Inventories_lot: "",
+        // remark: "",
+      }));
+    } else {
+      // แจ้งเตือนให้กรอกข้อมูลให้ครบถ้วน
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+    }
+  };
+
+  console.log("importedProducts", importedProducts);
   //!date
   useEffect(() => {
     // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
@@ -56,19 +108,82 @@ function ImportProduct() {
     ID_sales: `${userLoginData[0].ID_sales}`,
   });
   console.log("ข้อมูลที่กรอก", values);
-  const handleSubmit = (event) => {
+
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+
+  //   if (importedProducts.length === 0) {
+  //     alert("ยังไม่มีข้อมูลสินค้าที่เพิ่ม");
+  //     return;
+  //   }
+
+  //   // ส่งข้อมูล importedProducts ไปยังเซิร์ฟเวอร์
+  //   axios
+  //     .post("http://localhost:2001/addproductLOT", {
+  //       importedProducts,
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //       navigate("/ProductLOT");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
-    axios
-      .post("http://localhost:2001/addproductLOT", {
-        ...values,
-      })
-      .then((res) => {
-        console.log(res);
+    if (allImportedProducts.length === 0) {
+      alert("ยังไม่มีข้อมูลสินค้าที่เพิ่ม");
+      return;
+    }
+
+    try {
+      // Create an array to store promises for adding products
+      const addProductPromises = allImportedProducts.map(async (product) => {
+        // Extract the product data from the object and send it to the server
+        const productData = {
+          ID_product: product.ID_product,
+          date_import: product.date_import,
+          date_list: product.date_list,
+          date_list_EXP: product.date_list_EXP,
+          Quantity: product.Quantity,
+          Inventories_lot: product.Inventories_lot,
+          remark: product.remark,
+          ID_sales: product.ID_sales,
+        };
+
+        // Send productData to the server
+        const response = await axios.post(
+          "http://localhost:2001/addproductLOT",
+          productData
+        );
+
+        return response;
+      });
+
+      // Use Promise.allSettled to wait for all promises to complete
+      const responses = await Promise.allSettled(addProductPromises);
+
+      // Check for any failed promises
+      const failedResponses = responses.filter(
+        (response) => response.status === "rejected"
+      );
+
+      if (failedResponses.length === 0) {
+        console.log("เพิ่มสินค้าเรียบร้อย");
         navigate("/ProductLOT");
-      })
-      .catch((err) => console.log(err));
+      } else {
+        // Handle the case where some promises failed
+        console.log("มีข้อผิดพลาดในการเพิ่มสินค้า:");
+        failedResponses.forEach((response) => {
+          console.error(response.reason);
+        });
+        alert("เกิดข้อผิดพลาดในการเพิ่มข้อมูลสินค้า");
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดำเนินการ:", error);
+      alert("เกิดข้อผิดพลาดในการดำเนินการ");
+    }
   };
 
   // ใช้ useEffect เพื่อติดตามการเปลี่ยนแปลงใน Quantity
@@ -95,9 +210,34 @@ function ImportProduct() {
     }
   };
 
+  console.log("Values", values);
 
+  //!fullnameProduct table
+  const [fullnameProduct, setFullnameProduct] = useState({}); // สร้าง state สำหรับเก็บ fullname ของตัวแทนจำหน่าย
+  useEffect(() => {
+    // ดึงข้อมูล fullname ของตัวแทนจำหน่าย
+    axios
+      .get("http://localhost:2001/NameProduct")
+      .then((res) => {
+        // สร้าง Map ที่เก็บ fullname ตาม ID_agent
+        const fullnameMap = {};
+        res.data.forEach((product) => {
+          fullnameMap[product.ID_product] = product.Name_product;
+        });
+        // อัปเดต state ด้วยข้อมูล fullname
+        setFullnameProduct(fullnameMap);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
-  console.log("Values",values)
+  //!Delete
+  const handleDeleteProduct = (index) => {
+    const updatedImportedProducts = allImportedProducts.filter(
+      (_, i) => i !== index
+    );
+    setAllImportedProducts(updatedImportedProducts);
+  };
+
   return (
     <div>
       <header className="headernav ">
@@ -105,47 +245,49 @@ function ImportProduct() {
       </header>
       <form className="containerPRODUCT" action="" onSubmit={handleSubmit}>
         <h3 className="h3">นำสินค้าเข้าคลังสินค้า</h3>
-        <div className="bodyImport">
-          {/* <input name="Name_product" type="text" className="" onChange={handleInput}/> */}
-          <div className="spanProduct">
-            <Row>
-              <Col>
-                <span className="txt">
-                  <h6>*</h6>ชื่อสินค้า
-                </span>
-                <select
-                  name="ID_product"
-                  id="ID_product"
-                  type="text"
-                  className="form-select"
-                  onChange={handleInput}
-                  // style={{ marginLeft: "15px" }}
-                >
-                  <option value="">เลือกสินค้า</option>
-                  {nameproduct.map((item, index) => (
-                    <option key={index} value={item.ID_product}>
-                      {item.Name_product}
-                    </option>
-                  ))}
-                </select>
-              </Col>
-            </Row>
-          </div>
+        <div className="bodyImportLOT">
           <Row>
-            <Col>
+            <Col md={4}>
+              {/* <input name="Name_product" type="text" className="" onChange={handleInput}/> */}
               <div className="spanProduct">
-                <span className="txt">
-                  <h6>*</h6>จำนวนสินค้า
-                </span>
-                <input
-                  class="form-control"
-                  name="Quantity"
-                  type="number"
-                  onChange={handleInput}
-                />
+                <Row>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>ชื่อสินค้า
+                    </span>
+                    <select
+                      name="ID_product"
+                      id="ID_product"
+                      type="text"
+                      className="form-select"
+                      onChange={handleInput}
+                      // style={{ marginLeft: "15px" }}
+                    >
+                      <option value="">เลือกสินค้า</option>
+                      {nameproduct.map((item, index) => (
+                        <option key={index} value={item.ID_product}>
+                          {item.Name_product}
+                        </option>
+                      ))}
+                    </select>
+                  </Col>
+                </Row>
               </div>
-            </Col>
-            {/* <Col>
+              <Row>
+                <Col>
+                  <div className="spanProduct">
+                    <span className="txt">
+                      <h6>*</h6>จำนวนสินค้า
+                    </span>
+                    <input
+                      class="form-control"
+                      name="Quantity"
+                      type="number"
+                      onChange={handleInput}
+                    />
+                  </div>
+                </Col>
+                {/* <Col>
               <div className="spanProduct">
                 <span>สินค้าคงเหลือ</span>
                 <input
@@ -156,46 +298,108 @@ function ImportProduct() {
                 />
               </div>
             </Col> */}
+              </Row>
+
+              <div className="spanProduct">
+                <Row>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>วันที่ผลิต
+                    </span>
+                    <input
+                      class="form-control"
+                      name="date_list"
+                      type="date"
+                      onChange={handleInput}
+                    />
+                  </Col>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>วันที่หมดอายุ
+                    </span>
+                    <input
+                      class="form-control"
+                      name="date_list_EXP"
+                      type="date"
+                      onChange={handleInput}
+                    />
+                  </Col>
+                  <div className="spanProduct">
+                    <span className="txt">
+                      <h6>*</h6>หมายเหตุ
+                    </span>
+                    <textarea
+                      class="form-control"
+                      name="remark"
+                      type="text"
+                      placeholder="หมายเหตุ"
+                      onChange={handleInput}
+                    />
+                  </div>
+                </Row>
+                <div className="spanProduct">
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={handleAddProduct}
+                  >
+                    เพิ่มสินค้า
+                  </button>
+                </div>
+              </div>
+            </Col>
+            <Col md={8}>
+              <div className="table-containerLOT">
+                <table className=" table table-striped table-dark ">
+                  <thead className="table-secondary">
+                    <tr>
+                      <th>สินค้า</th>
+                      <th>จำนวน(ชิ้น)</th>
+                      <th>วันที่ผลิต</th>
+                      <th>วันที่หมดอายุ</th>
+                      <th>หมายเหตุ</th>
+                      <th>ลบ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allImportedProducts.map((product, index) => (
+                      <tr key={index}>
+                        <td>{fullnameProduct[product.ID_product]}</td>
+                        <td>{product.Quantity}</td>
+                        <td>{product.date_list}</td>
+                        <td>{product.date_list_EXP}</td>
+                        <td>{product.remark}</td>
+                        <td>
+                          <h3
+                            className="btn btn-danger"
+                            onClick={() => handleDeleteProduct(index)} // เรียกใช้ฟังก์ชัน handleDeleteProduct ด้วย index
+                          >
+                            ลบ
+                          </h3>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+
+                  {/* <tbody>
+                    {records.map((records, index) => {
+                      return (
+                        <tr key={index}>
+                          <td scope="row">{records.ID_requisition}</td>
+                          <td>{records.Amount_products}</td>
+                          <td>{records.agent_fullname}</td>
+                          <td>{formatDate(records.Dete_requisition)}</td>
+                          <td>{records.sales_fullname}</td>
+                          <td>{records.remark}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody> */}
+                </table>
+              </div>
+            </Col>
           </Row>
 
-          <div className="spanProduct">
-            <Row>
-              <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่ผลิต
-                </span>
-                <input
-                  class="form-control"
-                  name="date_list"
-                  type="date"
-                  onChange={handleInput}
-                />
-              </Col>
-              <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่หมดอายุ
-                </span>
-                <input
-                  class="form-control"
-                  name="date_list_EXP"
-                  type="date"
-                  onChange={handleInput}
-                />
-              </Col>
-            </Row>
-          </div>
-          <div className="spanProduct">
-            <span className="txt">
-              <h6>*</h6>หมายเหตุ
-            </span>
-            <textarea
-              class="form-control"
-              name="remark"
-              type="text"
-              placeholder="หมายเหตุ"
-              onChange={handleInput}
-            />
-          </div>
           <div style={{ marginTop: "20px" }} className="spanProduct">
             <Row>
               <Col>
@@ -207,7 +411,12 @@ function ImportProduct() {
 
               <Col>
                 <div style={{ display: "flex", justifyContent: "end" }}>
-                  <button className="save btn btn-success">บันทึก</button>
+                  <button
+                    className="save btn btn-success"
+                    onClick={handleSubmit}
+                  >
+                    บันทึก
+                  </button>
                 </div>
               </Col>
             </Row>

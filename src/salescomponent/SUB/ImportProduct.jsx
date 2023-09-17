@@ -53,11 +53,13 @@ function ImportProduct() {
         remark: values.remark,
         ID_sales: values.ID_sales,
       };
-  
-      // เพิ่มข้อมูลสินค้าใหม่ลงใน State
+
+      // เพิ่มข้อมูลสินค้าใหม่ลงใน State importedProducts
       setImportedProducts([...importedProducts, newProduct]);
+
+      // เพิ่มข้อมูลสินค้าใหม่ลงใน State allImportedProducts
       setAllImportedProducts([...allImportedProducts, newProduct]);
-  
+
       // ล้างค่าใน State ที่ใช้ในการกรอกข้อมูล
       setValues((prevValues) => ({
         ...prevValues,
@@ -73,9 +75,9 @@ function ImportProduct() {
       // แจ้งเตือนให้กรอกข้อมูลให้ครบถ้วน
       alert("กรุณากรอกข้อมูลให้ครบถ้วน");
     }
-  };  
+  };
 
-  console.log("importedProducts",importedProducts)
+  console.log("importedProducts", importedProducts);
   //!date
   useEffect(() => {
     // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
@@ -106,13 +108,19 @@ function ImportProduct() {
     ID_sales: `${userLoginData[0].ID_sales}`,
   });
   console.log("ข้อมูลที่กรอก", values);
+
   // const handleSubmit = (event) => {
   //   event.preventDefault();
 
-  //   // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
+  //   if (importedProducts.length === 0) {
+  //     alert("ยังไม่มีข้อมูลสินค้าที่เพิ่ม");
+  //     return;
+  //   }
+
+  //   // ส่งข้อมูล importedProducts ไปยังเซิร์ฟเวอร์
   //   axios
   //     .post("http://localhost:2001/addproductLOT", {
-  //       ...values,
+  //       importedProducts,
   //     })
   //     .then((res) => {
   //       console.log(res);
@@ -120,26 +128,63 @@ function ImportProduct() {
   //     })
   //     .catch((err) => console.log(err));
   // };
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    if (importedProducts.length === 0) {
+
+    if (allImportedProducts.length === 0) {
       alert("ยังไม่มีข้อมูลสินค้าที่เพิ่ม");
       return;
     }
-  
-    // ส่งข้อมูล importedProducts ไปยังเซิร์ฟเวอร์
-    axios
-      .post("http://localhost:2001/addproductLOT", {
-        importedProducts,
-      })
-      .then((res) => {
-        console.log(res);
+
+    try {
+      // Create an array to store promises for adding products
+      const addProductPromises = allImportedProducts.map(async (product) => {
+        // Extract the product data from the object and send it to the server
+        const productData = {
+          ID_product: product.ID_product,
+          date_import: product.date_import,
+          date_list: product.date_list,
+          date_list_EXP: product.date_list_EXP,
+          Quantity: product.Quantity,
+          Inventories_lot: product.Inventories_lot,
+          remark: product.remark,
+          ID_sales: product.ID_sales,
+        };
+
+        // Send productData to the server
+        const response = await axios.post(
+          "http://localhost:2001/addproductLOT",
+          productData
+        );
+
+        return response;
+      });
+
+      // Use Promise.allSettled to wait for all promises to complete
+      const responses = await Promise.allSettled(addProductPromises);
+
+      // Check for any failed promises
+      const failedResponses = responses.filter(
+        (response) => response.status === "rejected"
+      );
+
+      if (failedResponses.length === 0) {
+        console.log("เพิ่มสินค้าเรียบร้อย");
         navigate("/ProductLOT");
-      })
-      .catch((err) => console.log(err));
+      } else {
+        // Handle the case where some promises failed
+        console.log("มีข้อผิดพลาดในการเพิ่มสินค้า:");
+        failedResponses.forEach((response) => {
+          console.error(response.reason);
+        });
+        alert("เกิดข้อผิดพลาดในการเพิ่มข้อมูลสินค้า");
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดำเนินการ:", error);
+      alert("เกิดข้อผิดพลาดในการดำเนินการ");
+    }
   };
-  
 
   // ใช้ useEffect เพื่อติดตามการเปลี่ยนแปลงใน Quantity
   useEffect(() => {
@@ -166,6 +211,33 @@ function ImportProduct() {
   };
 
   console.log("Values", values);
+
+  //!fullnameProduct table
+  const [fullnameProduct, setFullnameProduct] = useState({}); // สร้าง state สำหรับเก็บ fullname ของตัวแทนจำหน่าย
+  useEffect(() => {
+    // ดึงข้อมูล fullname ของตัวแทนจำหน่าย
+    axios
+      .get("http://localhost:2001/NameProduct")
+      .then((res) => {
+        // สร้าง Map ที่เก็บ fullname ตาม ID_agent
+        const fullnameMap = {};
+        res.data.forEach((product) => {
+          fullnameMap[product.ID_product] = product.Name_product;
+        });
+        // อัปเดต state ด้วยข้อมูล fullname
+        setFullnameProduct(fullnameMap);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  //!Delete
+  const handleDeleteProduct = (index) => {
+    const updatedImportedProducts = allImportedProducts.filter(
+      (_, i) => i !== index
+    );
+    setAllImportedProducts(updatedImportedProducts);
+  };
+
   return (
     <div>
       <header className="headernav ">
@@ -281,21 +353,30 @@ function ImportProduct() {
                 <table className=" table table-striped table-dark ">
                   <thead className="table-secondary">
                     <tr>
-                      <th>รหัสสินค้า</th>
+                      <th>สินค้า</th>
                       <th>จำนวน(ชิ้น)</th>
                       <th>วันที่ผลิต</th>
                       <th>วันที่หมดอายุ</th>
                       <th>หมายเหตุ</th>
+                      <th>ลบ</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {importedProducts.map((product, index) => (
+                    {allImportedProducts.map((product, index) => (
                       <tr key={index}>
-                        <td>{product.ID_product}</td>
+                        <td>{fullnameProduct[product.ID_product]}</td>
                         <td>{product.Quantity}</td>
                         <td>{product.date_list}</td>
                         <td>{product.date_list_EXP}</td>
                         <td>{product.remark}</td>
+                        <td>
+                          <h3
+                            className="btn btn-danger"
+                            onClick={() => handleDeleteProduct(index)} // เรียกใช้ฟังก์ชัน handleDeleteProduct ด้วย index
+                          >
+                            ลบ
+                          </h3>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -330,7 +411,12 @@ function ImportProduct() {
 
               <Col>
                 <div style={{ display: "flex", justifyContent: "end" }}>
-                  <button className="save btn btn-success" onClick={handleSubmit} >บันทึก</button>
+                  <button
+                    className="save btn btn-success"
+                    onClick={handleSubmit}
+                  >
+                    บันทึก
+                  </button>
                 </div>
               </Col>
             </Row>

@@ -338,7 +338,26 @@ function Requisition() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  //! แสดงคงเหลือล่าสุด
+  const calculateTotalAmount = () => {
+    const totalAmount = allImportedProducts
+      .filter((product) => product.ID_lot === values.ID_lot)
+      .reduce((total, product) => total + Number(product.Amount_products), 0);
   
+    // หา Inventories_lot ของ ID_lot ที่เลือก
+    const selectedLot = nameLot.find((lot) => lot.ID_lot === values.ID_lot);
+  
+    if (selectedLot) {
+      // ลบผลรวมของ Amount_products ออกจาก Inventories_lot
+      const remainingInventory = selectedLot.Inventories_lot - totalAmount;
+      return remainingInventory;
+    }
+  
+    return 0; // หากไม่พบ Inventories_lot
+  };
+  
+
   return (
     <div>
       <header className="headernav ">
@@ -372,6 +391,21 @@ function Requisition() {
                       ))}
                     </select>
                   </Col>
+                  <Col>
+                    <span className="txt">
+                      คงเหลือล่าสุด
+                    </span>
+                    <input
+                      style={{ backgroundColor: "rgba(240, 248, 255, 0.814)" }}
+                      className="form-control"
+                      name="Total"
+                      id="Total"
+                      type="text"
+                      value={calculateTotalAmount()} // ใช้ฟังก์ชั่น calculateTotalAmount ในการคำนวณค่า
+                      disabled
+                      onChange={handleInput}
+                    />
+                  </Col>
                 </Row>
               </div>
               <div className="spanProduct">
@@ -400,7 +434,7 @@ function Requisition() {
                   </Col>
                   <Col>
                     <span className="txt">
-                      <h6>*</h6>คงเหลือ
+                      คงเหลือ
                     </span>
                     <input
                       style={{ backgroundColor: "rgba(240, 248, 255, 0.814)" }}
@@ -489,7 +523,8 @@ function Requisition() {
                         <td>{product.ID_lot}</td>
                         <td>{product.Amount_products}</td>
                         {/* <td>{product.ID_agent}</td> */}
-                        <td>{agentFullnameMap[product.ID_agent]}</td> {/* แสดง fullname แทน ID_agent */}
+                        <td>{agentFullnameMap[product.ID_agent]}</td>{" "}
+                        {/* แสดง fullname แทน ID_agent */}
                         <td>{product.remark}</td>
                         <td>
                           <h3
