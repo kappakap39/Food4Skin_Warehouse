@@ -209,6 +209,7 @@ console.log(data)
                   <th>ราคาส่ง ระดับ3</th>
                   <th>ชื่อพนักงานที่เพิ่ม</th>
 
+                  <th className="readtext">เบิกสินค้า</th>
                   <th className="readtext">ข้อมูล/แก้ไข</th>
                 </tr>
               </thead>
@@ -226,6 +227,17 @@ console.log(data)
                       <td>{records.Level_3_price}</td>
                       <td>{records.fullname}</td>
 
+                      <td className="centericon">
+                        <div
+                          onClick={() =>
+                            navigate(`/WithdrawList/${records.ID_product}`)
+                          }
+                        >
+                          <>เบิกสินค้า</>
+                        </div>
+
+                        {/* <button onClick={() => handleDelete(records.ID_sales) }>Delete</button> */}
+                      </td>
                       <td className="centericon">
                         <div
                           className="read2"
