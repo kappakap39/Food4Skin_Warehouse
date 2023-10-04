@@ -4,8 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { BiSearchAlt } from "react-icons/bi";
 import { BiSolidUserPlus } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +13,8 @@ import { BsPrinterFill } from "react-icons/bs";
 import { FcSynchronize } from "react-icons/fc";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { Row, Col } from "react-bootstrap";
+
 function Expire() {
   const navigate = useNavigate();
 
@@ -27,7 +27,23 @@ function Expire() {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     const date = new Date(dateString);
 
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    // const yearBC = date.getFullYear() - 543;
+    // date.setFullYear(yearBC);
+
     return date.toLocaleDateString(undefined, options);
+  }
+  function formatDateY(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+  
+    const date = new Date(dateString);
+  
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    const yearBC = date.getFullYear();
+  
+    return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
   //! ค้นหา
@@ -232,6 +248,32 @@ function Expire() {
     }); // เพิ่มวงเล็บปิดนี้
   }
 
+  //! จำนวนวัน
+  const [daysRemaining, setDaysRemaining] = useState(""); // จำนวนวันที่ผู้ใช้กรอก
+
+  function handleDaysRemainingChange(event) {
+    const newDaysRemaining = event.target.value;
+    setDaysRemaining(newDaysRemaining);
+  }
+  
+  // Filter products based on daysRemaining
+  const filteredProducts = records.filter((data) => {
+    const expDate = new Date(data.date_list_EXP);
+    const currentDate = new Date();
+    
+    if (daysRemaining !== "") {
+      const daysRemainingNumber = parseInt(daysRemaining);
+      const pastDate = new Date();
+      pastDate.setDate(currentDate.getDate() - daysRemainingNumber); // นับย้อนหลังจาก currentDate
+  
+      return expDate >= pastDate && expDate <= currentDate; // กรองตามเงื่อนไขว่าอยู่ในช่วงวันที่ที่คุณต้องการหรือไม่
+    }
+    
+    return true;
+  });
+  
+  console.log("filteredProducts",filteredProducts)
+
   return (
     <div>
       <div className="containerTAB ">
@@ -258,6 +300,16 @@ function Expire() {
           <Col md={4}>
             <div className="selectSale">
               <Row>
+                <Col>
+                  <input
+                    type="number"
+                    placeholder="เช็คย้อนหลัง"
+                    value={daysRemaining}
+                    onChange={handleDaysRemainingChange}
+                    className="form-control"
+                  />
+                </Col>
+
                 {/* <Col style={{ paddingTop: " 5px", color: "white" }}>
                   <div className="text-end">
                     <span>
@@ -365,7 +417,7 @@ function Expire() {
 
             <tbody>
               {saveoption === ""
-                ? records
+                ? filteredProducts
                     .filter((data) => {
                       const expDate = new Date(data.date_list_EXP);
                       return (
@@ -375,7 +427,10 @@ function Expire() {
                     })
                     .map((data, index) => (
                       <tr key={index}>
-                        <td scope="row">{data.ID_lot}</td>
+                        {/* <td scope="row">{data.ID_lot}</td> */}
+                        <td scope="row">{`${formatDateY(data.date_import)}-${
+                          data.Lot_ID
+                        }`}</td>
                         <td>{data.Name_product}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
@@ -394,7 +449,7 @@ function Expire() {
                         </td> */}
                       </tr>
                     ))
-                : records
+                : filteredProducts
                     .filter((data) => {
                       const expDate = new Date(data.date_list_EXP);
                       return (
@@ -404,7 +459,10 @@ function Expire() {
                     })
                     .map((data, index) => (
                       <tr key={index}>
-                        <td scope="row">{data.ID_lot}</td>
+                        {/* <td scope="row">{data.ID_lot}</td> */}
+                        <td scope="row">{`${formatDateY(data.date_import)}-${
+                          data.Lot_ID
+                        }`}</td>
                         <td>{data.Name_product}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>

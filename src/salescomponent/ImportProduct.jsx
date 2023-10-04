@@ -35,6 +35,31 @@ function ImportProduct() {
     setValues((prev) => ({ ...prev, date_import: currentDate }));
   }, []);
 
+  //! สร้าง state สำหรับเก็บค่า latestIDLot ดึงไอดี่าสุด+1
+  const [latestIDLot, setLatestIDLot] = useState("");
+  const [currentIDProduct, setCurrentIDProduct] = useState("");
+  if (name === "ID_product") {
+    setCurrentIDProduct(value);
+  }
+  // ใช้ useEffect เพื่อโหลดค่า Lot_ID ล่าสุดของ ID_product ที่ถูกเลือก
+  useEffect(() => {
+    if (currentIDProduct) {
+      // โหลดค่า Lot_ID ล่าสุดสำหรับ ID_product ที่ถูกเลือก
+      axios
+        .get(`http://localhost:2001/PR_LOTID/${currentIDProduct}`)
+        .then((res) => {
+          // ในกรณีที่ API คืนค่า Lot_ID ล่าสุดเป็นตัวเลข
+          // คุณสามารถเซ็ตค่า latestLotID และ Lot_ID ดังนี้
+          const latestLotID = res.data.length > 0 ? res.data[res.data.length - 1].Lot_ID + 1 : 1;
+          setLatestIDLot(latestLotID);
+          setValues((prev) => ({ ...prev, Lot_ID: latestLotID })); // เซ็ต Lot_ID
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [currentIDProduct]); // เรียกใช้ useEffect เมื่อ currentIDProduct เปลี่ยนแปลง
+  
+  console.log("currentIDProduct :", currentIDProduct);
+
   //! select
   const [nameproduct, setNameproduct] = useState([]);
   useEffect(() => {
@@ -46,7 +71,8 @@ function ImportProduct() {
 
   //!add
   const [values, setValues] = useState({
-    ID_product: "",
+    Lot_ID: "", // เพิ่ม Lot_ID เข้ามา
+    ID_product: "", // เพิ่ม ID_product เข้ามา
     date_import: "",
     date_list: "",
     date_list_EXP: "",
@@ -54,8 +80,8 @@ function ImportProduct() {
     Inventories_lot: "",
     remark: "",
     ID_sales: `${userLoginData[0].ID_sales}`,
-    // ID_sales:"",
   });
+
   console.log("ข้อมูลที่กรอก", values);
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -97,6 +123,20 @@ function ImportProduct() {
   };
 
   console.log("Values", values);
+
+  function formatDateY(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+
+    const date = new Date(dateString);
+
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    const yearBC = date.getFullYear();
+
+    return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
+  }
+
   return (
     <div>
       <header className="headernav ">
@@ -109,17 +149,35 @@ function ImportProduct() {
           <div className="spanProduct">
             <Row>
               <Col>
-                <span className="txt">
-                  <h6>*</h6>คนทำรายการ
-                </span>
-                <input
-                style={{backgroundColor:"#ffffffd7"}}
-                  class="form-control"
-                  name=""
-                  type="text"
-                  value={userLoginData[0].fullname}
-                  onChange={handleInput}
-                />
+                <Row>
+                  <Col md={4}>
+                    <span className="txt">
+                      <h6></h6>รหัสล็อตนี้
+                    </span>
+                    <input
+                      style={{ backgroundColor: "#ffffffd7" }}
+                      class="form-control"
+                      name=""
+                      type="text"
+                      value={`${formatDateY(
+                        values.date_import
+                      )}-${latestIDLot}`}
+                    />
+                  </Col>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>คนทำรายการ
+                    </span>
+                    <input
+                      style={{ backgroundColor: "#ffffffd7" }}
+                      class="form-control"
+                      name=""
+                      type="text"
+                      value={userLoginData[0].fullname}
+                      onChange={handleInput}
+                    />
+                  </Col>
+                </Row>
               </Col>
               <Col>
                 <span className="txt">
@@ -145,8 +203,10 @@ function ImportProduct() {
                   id="ID_product"
                   type="text"
                   className="form-select"
-                  onChange={handleInput}
-                  // style={{ marginLeft: "15px" }}
+                  onChange={(event) => {
+                    handleInput(event);
+                    setCurrentIDProduct(event.target.value); // เมื่อเลือก ID_product ให้เซ็ตค่า currentIDProduct
+                  }}
                 >
                   <option value="">เลือกสินค้า</option>
                   {nameproduct.map((item, index) => (
@@ -155,6 +215,20 @@ function ImportProduct() {
                     </option>
                   ))}
                 </select>
+                {/* <select
+                  name="ID_product"
+                  id="ID_product"
+                  type="text"
+                  className="form-select"
+                  onChange={handleInput}
+                >
+                  <option value="">เลือกสินค้า</option>
+                  {nameproduct.map((item, index) => (
+                    <option key={index} value={item.ID_product}>
+                      {item.Name_product}
+                    </option>
+                  ))}
+                </select> */}
               </div>
             </Col>
             <Col>

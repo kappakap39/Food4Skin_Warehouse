@@ -94,7 +94,23 @@ function ReadExport() {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     const date = new Date(dateString);
 
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    // const yearBC = date.getFullYear() - 543;
+    // date.setFullYear(yearBC);
+
     return date.toLocaleDateString(undefined, options);
+  }
+  function formatDateY(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+  
+    const date = new Date(dateString);
+  
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    const yearBC = date.getFullYear();
+  
+    return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
   //!next page

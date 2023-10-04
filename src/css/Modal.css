@@ -84,3 +84,12 @@
     pointer-events: auto;
   }
 }
+
+.modal-Lot{
+  height: 90%;
+  width: 80%;
+  background-color: #495057;
+  padding: 2%;
+  border-radius: 10px;
+}
+

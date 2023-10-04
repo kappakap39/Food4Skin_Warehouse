@@ -15,9 +15,9 @@ import { BsPrinterFill } from "react-icons/bs";
 import { FcSynchronize } from "react-icons/fc";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-function LotImport() {
-  const navigate = useNavigate();
 
+function LotProduct() {
+  const navigate = useNavigate();
   //!date
   function formatDate(dateString) {
     if (!dateString) {
@@ -37,12 +37,12 @@ function LotImport() {
     if (!dateString) {
       return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
     }
-  
+
     const date = new Date(dateString);
-  
+
     // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
     const yearBC = date.getFullYear();
-  
+
     return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
@@ -66,7 +66,7 @@ function LotImport() {
       setShowtable(initialData); // แสดงข้อมูลเริ่มต้นเมื่อยังไม่ได้เลือกสินค้า
     } else {
       axios
-        .get("http://localhost:2001/ShowProductImport/" + saveoption)
+        .get("http://localhost:2001/ShowProduct/" + saveoption)
         .then((res) => setShowtable(res.data))
         .catch((err) => console.log(err));
     }
@@ -96,7 +96,7 @@ function LotImport() {
   const [endDate, setEndDate] = useState(""); // เก็บวันสิ้นสุด
 
   useEffect(() => {
-    let apiUrl = "http://localhost:2001/selectTABImport";
+    let apiUrl = "http://localhost:2001/selectlot";
 
     if (startDate && endDate) {
       apiUrl += `?startDate=${startDate}&endDate=${endDate}`;
@@ -142,11 +142,11 @@ function LotImport() {
 
   // นับผลรวมของคอลัมน์ Inventories_lot
   const totalQuantity = showtable.reduce((total, item) => {
-    return total + item.Quantity;
+    return total + item.Inventories_lot;
   }, 0);
 
   console.log("totalQuantity", totalQuantity);
-  console.log("Quantity", data.Quantity);
+  console.log("Inventories_lot", data.Inventories_lot);
 
   //!PDF
   function generatePDF() {
@@ -213,6 +213,27 @@ function LotImport() {
   const thirtyDaysFromNow = new Date();
   thirtyDaysFromNow.setDate(currentDate.getDate() + 30);
 
+  //! จำนวนวัน
+  const [daysRemaining, setDaysRemaining] = useState(""); // จำนวนวันที่ผู้ใช้กรอก
+
+  function handleDaysRemainingChange(event) {
+    const newDaysRemaining = event.target.value;
+    setDaysRemaining(newDaysRemaining);
+  }
+  const filteredProducts = records.filter((data) => {
+    const expDate = new Date(data.date_list_EXP);
+    const currentDate = new Date();
+
+    if (daysRemaining !== "") {
+      const daysRemainingNumber = parseInt(daysRemaining);
+      const futureDate = new Date();
+      futureDate.setDate(currentDate.getDate() + daysRemainingNumber);
+
+      return expDate <= futureDate;
+    }
+
+    return true;
+  });
   return (
     <div>
       <div className="containerTAB ">
@@ -241,8 +262,8 @@ function LotImport() {
               <Row>
                 <Col style={{ paddingTop: " 5px", color: "white" }}>
                   <div className="text-end">
-                    <span>
-                      ช่วงวันที่นำเข้า{" "}
+                  <span>
+                      ช่วงวันที่หมดอายุ{" "}
                       <FcSynchronize
                         className="FcSynchronize"
                         onClick={() => {
@@ -273,6 +294,17 @@ function LotImport() {
           <Col>
             <div className="selectSale">
               <input
+                type="number"
+                placeholder="อีกกี่วันหมดอายุ"
+                value={daysRemaining}
+                onChange={handleDaysRemainingChange}
+                className="form-control"
+              />
+            </div>
+          </Col>
+          <Col>
+            <div className="selectSale">
+              <input
                 style={{
                   width: "85%",
                   backgroundColor: "rgb(211, 211, 211)",
@@ -280,7 +312,7 @@ function LotImport() {
                 }}
                 className="form-control"
                 type="text"
-                value={`นำเข้ารวม : ${totalQuantity} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
+                value={`คงเหลือรวม : ${totalQuantity} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
                 disabled
               />
             </div>
@@ -323,9 +355,10 @@ function LotImport() {
                 <th>ชื่อผลิตภัณฑ์</th>
                 {/* <th>จุดต่ำกว่าจุดสั่งผลิต (ชิ้น)</th> */}
                 <th>สินค้าทั้งหมด (ชิ้น)</th>
+                <th>จุดสั่งผลิด (ชิ้น)</th>
                 <th>สินค้าคงเหลือ (ชิ้น)</th>
-                <th>วันที่นำเข้า</th>
-                <th>วันที่ผลิต</th>
+                {/* <th>วันที่นำเข้า</th> */}
+                {/* <th>วันที่ผลิต</th> */}
                 <th>วันที่หมดอายุ</th>
                 <th>พนักงานที่ทำรายการ</th>
                 <th>หมายเหตุ</th>
@@ -336,9 +369,9 @@ function LotImport() {
 
             <tbody>
               {saveoption === ""
-                ? records
+                ? filteredProducts
                     .filter((data) => {
-                      const expDate = new Date(data.date_import);
+                      const expDate = new Date(data.date_list_EXP);
                       return (
                         (!startDate || expDate >= new Date(startDate)) &&
                         (!endDate || expDate <= new Date(endDate))
@@ -353,9 +386,20 @@ function LotImport() {
                         <td>{data.Name_product}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
-                        <td>{data.Inventories_lot}</td>
-                        <td>{formatDate(data.date_import)}</td>
-                        <td>{formatDate(data.date_list)}</td>
+                        <td>{data.Production_point}</td>
+                        <td>
+                          {data.Inventories_lot === 0 ? (
+                            <span className="red-text">สินค้าหมด</span>
+                          ) : data.Inventories_lot <= data.Production_point ? (
+                            <span style={{ color: "yellow" }}>
+                              {data.Inventories_lot}
+                            </span>
+                          ) : (
+                            `${data.Inventories_lot}`
+                          )}
+                        </td>
+                        {/* <td>{formatDate(data.date_import)}</td> */}
+                        {/* <td>{formatDate(data.date_list)}</td> */}
                         {/* <td>{formatDate(data.date_list_EXP)}</td> */}
                         {/* <td>
                           {data.date_list_EXP <= new Date().toISOString() ? (
@@ -395,9 +439,9 @@ function LotImport() {
                         </td> */}
                       </tr>
                     ))
-                : records
+                : filteredProducts
                     .filter((data) => {
-                      const expDate = new Date(data.date_import);
+                      const expDate = new Date(data.date_list_EXP);
                       return (
                         (!startDate || expDate >= new Date(startDate)) &&
                         (!endDate || expDate <= new Date(endDate))
@@ -412,9 +456,20 @@ function LotImport() {
                         <td>{data.Name_product}</td>
                         {/* <td>{data.Production_point}</td> */}
                         <td>{data.Quantity}</td>
-                        <td>{data.Inventories_lot}</td>
-                        <td>{formatDate(data.date_import)}</td>
-                        <td>{formatDate(data.date_list)}</td>
+                        <td>{data.Production_point}</td>
+                        <td>
+                          {data.Inventories_lot === 0 ? (
+                            <span className="red-text">สินค้าหมด</span>
+                          ) : data.Inventories_lot <= data.Production_point ? (
+                            <span style={{ color: "yellow" }}>
+                              {data.Inventories_lot}
+                            </span>
+                          ) : (
+                            `${data.Inventories_lot}`
+                          )}
+                        </td>
+                        {/* <td>{formatDate(data.date_import)}</td> */}
+                        {/* <td>{formatDate(data.date_list)}</td> */}
                         <td>
                           {data.date_list_EXP >=
                           thirtyDaysFromNow.toISOString() ? (
@@ -446,9 +501,9 @@ function LotImport() {
             </tbody>
           </table>
           <div style={{ display: "flex" }}>
-            <h6>*วันที่หมดอายุ</h6>
+            {/* <h6>*สินค้าหมด</h6> */}
             <h6 style={{ color: "yellow" }}>
-              *วันที่ใกล้หมดอายุ
+              *สินค้าใกล้หมด หรือ ถ้าเป็นวันที่คือใกล้หมดอายุ
             </h6>
             <h6 style={{ color: "white" }}>*สินค้าปกติ</h6>
           </div>
@@ -486,4 +541,4 @@ function LotImport() {
   );
 }
 
-export default LotImport;
+export default LotProduct;

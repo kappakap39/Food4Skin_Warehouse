@@ -27,7 +27,23 @@ function Exportproduct() {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     const date = new Date(dateString);
 
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    // const yearBC = date.getFullYear() - 543;
+    // date.setFullYear(yearBC);
+
     return date.toLocaleDateString(undefined, options);
+  }
+  function formatDateY(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+  
+    const date = new Date(dateString);
+  
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    const yearBC = date.getFullYear();
+  
+    return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
   //! ค้นหา
@@ -320,7 +336,10 @@ function Exportproduct() {
                     })
                     .map((data, index) => (
                       <tr key={index}>
-                        <td scope="row">{data.ID_lot}</td>
+                        {/* <td scope="row">{data.ID_lot}</td> */}
+                        <td scope="row">{`${formatDateY(data.date_import)}-${
+                          data.Lot_ID
+                        }`}</td>
                         <td>{data.Name_product}</td>
                         <td>{data.Amount_products}</td>
                         <td>{data.agent_fullname}</td>
@@ -347,7 +366,10 @@ function Exportproduct() {
                     })
                     .map((data, index) => (
                       <tr key={index}>
-                        <td scope="row">{data.ID_lot}</td>
+                        {/* <td scope="row">{data.ID_lot}</td> */}
+                        <td scope="row">{`${formatDateY(data.date_import)}-${
+                          data.Lot_ID
+                        }`}</td>
                         <td>{data.Name_product}</td>
                         <td>{data.Amount_products}</td>
                         <td>{data.agent_fullname}</td>

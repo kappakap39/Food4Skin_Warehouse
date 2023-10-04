@@ -34,9 +34,28 @@ function ProductLOT() {
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     const date = new Date(dateString);
 
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    // const yearBC = date.getFullYear() - 543;
+    // date.setFullYear(yearBC);
+
     return date.toLocaleDateString(undefined, options);
   }
-
+  
+  function formatDateY(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+  
+    const date = new Date(dateString);
+  
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    const yearBC = date.getFullYear();
+  
+    return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
+  }
+  
+  
+  
   //! ค้นหา
   // http://localhost:2001/NameProduct
   const [nameproduct, setNameproduct] = useState([]);
@@ -276,7 +295,7 @@ function ProductLOT() {
 
     return true;
   });
-
+  console.log("filteredProducts", filteredProducts);
   //! เช็ควันหมดอายุในตารางเป็นสีเหลือง
   const currentDate = new Date();
   const thirtyDaysFromNow = new Date();
@@ -348,7 +367,7 @@ function ProductLOT() {
           <Col>
             <div className="selectSale">
               <Row>
-                <Col>
+                {/* <Col>
                   <input
                     type="number"
                     placeholder="อีกกี่วันหมดอายุ"
@@ -356,7 +375,7 @@ function ProductLOT() {
                     onChange={handleDaysRemainingChange}
                     className="form-control"
                   />
-                </Col>
+                </Col> */}
                 <Col>
                   <input
                     style={{
@@ -427,52 +446,6 @@ function ProductLOT() {
                 <th className="readtext">ข้อมูล</th>
               </tr>
             </thead>
-            {/* <tbody>
-              {records.map((data, index) => (
-                <tr key={index}>
-                  <td scope="row">{data.ID_lot}</td>
-                  <td>{data.Name_product}</td>
-                  <td>{data.Production_point}</td>
-                  <td>{data.Quantity}</td>
-                  <td>
-                    {data.Inventories_lot === 0 ? (
-                      <span className="red-text">สินค้าหมด</span>
-                    ) : data.Inventories_lot <= data.Production_point ? (
-                      <span style={{ color: "#dfc500" }}>
-                        {data.Inventories_lot}
-                      </span>
-                    ) : (
-                      `${data.Inventories_lot}`
-                    )}
-                  </td>
-                  <td>{formatDate(data.date_list)}</td>
-                  <td>
-                    {data.date_list_EXP >= thirtyDaysFromNow.toISOString() ? (
-                      <span style={{ color: "white" }}>
-                        {formatDate(data.date_list_EXP)}
-                      </span>
-                    ) : data.date_list_EXP < currentDate.toISOString() ? (
-                      <span className="red-text">
-                        {formatDate(data.date_list_EXP)}
-                      </span>
-                    ) : (
-                      <span style={{ color: "#dfc500" }}>
-                        {formatDate(data.date_list_EXP)}
-                      </span>
-                    )}
-                  </td>
-                  <td>{data.fullname}</td>
-                  <td className="centericon">
-                    <div
-                      className="read2"
-                      onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
-                    >
-                      <BiSearchAlt />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody> */}
 
             <tbody>
               {saveoption === ""
@@ -486,7 +459,10 @@ function ProductLOT() {
                     })
                     .map((data, index) => (
                       <tr key={index}>
-                        <td scope="row">{data.ID_lot}</td>
+                        <td scope="row">{`${formatDateY(data.date_import)}-${
+                          data.Lot_ID
+                        }`}</td>
+                        {/* <td scope="row">{data.ID_lot}</td> */}
                         <td>{data.Name_product}</td>
                         <td>{data.Production_point}</td>
                         <td>{data.Quantity}</td>
@@ -540,9 +516,17 @@ function ProductLOT() {
                         (!endDate || expDate <= new Date(endDate))
                       );
                     })
+                    .sort((a, b) => {
+                      const dateA = new Date(a.date_list_EXP);
+                      const dateB = new Date(b.date_list_EXP);
+                      return dateA - dateB; // เรียงลำดับ date_list_EXP จากน้อยไปหามาก
+                    })
                     .map((data, index) => (
                       <tr key={index}>
-                        <td scope="row">{data.ID_lot}</td>
+                        <td scope="row">{`${formatDateY(data.date_import)}-${
+                          data.ID_lot
+                        }`}</td>
+                        {/* <td scope="row">{data.ID_lot}</td> */}
                         <td>{data.Name_product}</td>
                         <td>{data.Production_point}</td>
                         <td>{data.Quantity}</td>
@@ -591,7 +575,7 @@ function ProductLOT() {
             </tbody>
           </table>
           <div style={{ display: "flex" }}>
-            <h6>*สินค้าหมด หรือ ถ้าเป็นวันที่คือหมดอายุ</h6>
+            {/* <h6>*สินค้าหมด</h6> */}
             <h6 style={{ color: "yellow" }}>
               *สินค้าใกล้หมด หรือ ถ้าเป็นวันที่คือใกล้หมดอายุ
             </h6>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Expire from "./Expire";
 import Exportproduct from "./Exportproduct";
 import LotImport from "./LotImport";
+import LotProduct from "./LotProduct";
+import ProductTotal from "./ProductTotal";
 import MenuNavSales from "../MenuNavSales";
 import "../../css/Report.css";
 
@@ -45,6 +47,22 @@ function Menutab() {
                 รายงานรายการเบิก
               </button>
             </li>
+            <li>
+              <button
+                onClick={() => handleTabChange(4)}
+                className={activeTab === 4 ? "active" : ""}
+              >
+                รายงานล็อตคงเหลือ
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => handleTabChange(5)}
+                className={activeTab === 5 ? "active" : ""}
+              >
+                รายงานสินค้าคงเหลือ
+              </button>
+            </li>
           </ul>
           <hr className="hrReport" />
 
@@ -53,8 +71,13 @@ function Menutab() {
             <Expire />
           ) : activeTab === 2 ? (
             <LotImport />
-          ) : (
+          ) : activeTab === 3 ? (
             <Exportproduct />
+          ) : activeTab === 4 ? (
+            <LotProduct />
+          ) : (
+            
+            <ProductTotal />
           )}
         </div>
       </main>
