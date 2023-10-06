@@ -320,12 +320,26 @@ function Requisition() {
   console.log("Values", values);
 
   //! Function to delete a product by index
-  const handleDeleteProduct = (index) => {
-    const updatedImportedProducts = allImportedProducts.filter(
-      (_, i) => i !== index
+  const handleDeleteLot = (productIDToDelete) => {
+    // กรองรายการที่ต้องการลบออกจาก AllExport
+    const updatedAllExport = AllExport.filter(
+      (product) => product.ID_product !== productIDToDelete
     );
-    setAllImportedProducts(updatedImportedProducts);
+
+    // อัพเดทข้อมูลใน state
+    setAllExport(updatedAllExport);
   };
+
+  const handleDeleteProduct = (productIDToDelete) => {
+    // กรองรายการที่ต้องการลบออกจาก allImportedProducts
+    const updatedAllImportedProducts = allImportedProducts.filter(
+      (product) => product.ID_product !== productIDToDelete
+    );
+
+    // อัพเดทข้อมูลใน state
+    setAllImportedProducts(updatedAllImportedProducts);
+  };
+
   // ฟังก์ชันสำหรับลบสินค้าใน AllExport ตามดัชนี
   const handleDeleteProductLot = (index) => {
     const updatedAllExport = [...AllExport];
@@ -347,6 +361,20 @@ function Requisition() {
     // ลบรายการที่เลือกออกจาก AllExport
     setAllExport((prev) =>
       prev.filter((item) => item.ID_lot !== IDLotToDelete)
+    );
+
+    // หัก price_lot ของรายการที่ลบออกจาก totalPrice
+    setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
+  };
+  const handleDeleteItemPR = (indexToDelete) => {
+    // ดึงข้อมูลรายการที่เลือกที่จะลบ
+    const itemToDelete = AllExport[indexToDelete];
+    // หาค่า ID_lot ของรายการที่จะลบ
+    const IDproductToDelete = itemToDelete.ID_product;
+
+    // ลบรายการที่เลือกออกจาก AllExport
+    setAllExport((prev) =>
+      prev.filter((item) => item.ID_product !== IDproductToDelete)
     );
 
     // หัก price_lot ของรายการที่ลบออกจาก totalPrice
@@ -425,7 +453,7 @@ function Requisition() {
   const [selectedNProduct, setSelectedNProduct] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productPrice, setProductPrice] = useState({});
-  const handleOpenModal = (selectedIDProduct,selectedAmount) => {
+  const handleOpenModal = (selectedIDProduct, selectedAmount) => {
     setSelectedIDProduct(selectedIDProduct);
     setSelectedAmount(selectedAmount);
     setIsModalOpen(true);
@@ -539,6 +567,11 @@ function Requisition() {
 
   //!จำนวนต้องการเบิก
   const [selectedAmount, setSelectedAmount] = useState(0);
+  //แสดงข้อมูลที่เพิ่ม
+  const filteredExport = AllExport.filter(
+    (product) => product.ID_product === Number(selectedIDProduct)
+  );
+  console.log("filteredExport", filteredExport);
 
   return (
     <div>
@@ -721,7 +754,42 @@ function Requisition() {
               </Row>
             </Col>
             <Col md={8}>
-              <div className="table-containerLOT">
+              <Row style={{ marginBottom: "0px" }}>
+                <Col md={8}></Col>
+                <Col md={2}>
+                  <span className="txt">สินค้ารวมทั้งสิ้น</span>
+                  <input
+                    style={{
+                      backgroundColor: "rgba(240, 248, 255, 0.814)",
+                      width: "90%",
+                    }}
+                    className="form-control"
+                    name="Total"
+                    id="Total"
+                    type="text"
+                    value={calculateTotalAmountSUM()}
+                    disabled
+                    onChange={handleInput}
+                  />
+                </Col>
+                <Col md={2}>
+                  <span className="txt">ราคารวมทั้งสิ้น</span>
+                  <input
+                    style={{
+                      backgroundColor: "rgba(240, 248, 255, 0.814)",
+                      width: "90%",
+                    }}
+                    className="form-control"
+                    name="TotalPR"
+                    id="TotalPR"
+                    type="text"
+                    value={calculateTotalPrice()}
+                    disabled
+                    onChange={handleInput}
+                  />
+                </Col>
+              </Row>
+              <div className="table-containerLOT" style={{ marginTop: "10px" }}>
                 <table className=" table table-striped table-dark ">
                   <thead className="table-secondary">
                     <tr>
@@ -763,7 +831,10 @@ function Requisition() {
                           <td>
                             <h3
                               className="btn btn-danger"
-                              onClick={() => handleDeleteProduct(index)}
+                              onClick={() => {
+                                handleDeleteProduct(product.ID_product);
+                                handleDeleteLot(product.ID_product);
+                              }}
                             >
                               ลบ
                             </h3>
@@ -811,7 +882,7 @@ function Requisition() {
                           name="Total"
                           id="Total"
                           type="text"
-                          value={calculateTotalAmountSUM()} // ใช้ค่าที่ถูกคำนวณจาก calculateTotalAmount
+                          value={""} // ใช้ค่าที่ถูกคำนวณจาก calculateTotalAmount
                           disabled
                           onChange={handleInput}
                         />
@@ -827,7 +898,7 @@ function Requisition() {
                           name="TotalPR"
                           id="TotalPR"
                           type="text"
-                          value={calculateTotalPrice()} // แสดงผลรวม totalPrice
+                          value={""} // แสดงผลรวม totalPrice
                           // value={totalPrice} // แสดงผลรวม totalPrice
                           disabled
                           onChange={handleInput}
@@ -907,7 +978,7 @@ function Requisition() {
                             </tr>
                           </thead>
                           <tbody>
-                            {AllExport.map((product, index) => (
+                            {filteredExport.map((product, index) => (
                               <tr key={index}>
                                 <td>{`${formatDateY(product.date_import)}-${
                                   product.Lot_ID
