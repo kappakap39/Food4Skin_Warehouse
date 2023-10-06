@@ -320,24 +320,22 @@ function Requisition() {
   console.log("Values", values);
 
   //! Function to delete a product by index
-  const handleDeleteLot = (productIDToDelete) => {
-    // กรองรายการที่ต้องการลบออกจาก AllExport
-    const updatedAllExport = AllExport.filter(
-      (product) => product.ID_product !== productIDToDelete
-    );
+  // const handleDeleteLot = (productIDToDelete) => {
+  //   // กรองรายการที่ต้องการลบออกจาก AllExport
+  //   const updatedAllExport = AllExport.filter(
+  //     (product) => product.ID_product !== productIDToDelete
+  //   );
 
-    // อัพเดทข้อมูลใน state
-    setAllExport(updatedAllExport);
-  };
+  //   // อัพเดทข้อมูลใน state
+  //   setAllExport(updatedAllExport);
+  // };
 
-  const handleDeleteProduct = (productIDToDelete) => {
+  const handleDeleteProduct = (index) => {
     // กรองรายการที่ต้องการลบออกจาก allImportedProducts
-    const updatedAllImportedProducts = allImportedProducts.filter(
-      (product) => product.ID_product !== productIDToDelete
-    );
-
-    // อัพเดทข้อมูลใน state
+    const updatedAllImportedProducts = [...allImportedProducts];
+    updatedAllImportedProducts.splice(index, 1);
     setAllImportedProducts(updatedAllImportedProducts);
+    
   };
 
   // ฟังก์ชันสำหรับลบสินค้าใน AllExport ตามดัชนี
@@ -370,11 +368,11 @@ function Requisition() {
     // ดึงข้อมูลรายการที่เลือกที่จะลบ
     const itemToDelete = AllExport[indexToDelete];
     // หาค่า ID_lot ของรายการที่จะลบ
-    const IDproductToDelete = itemToDelete.ID_product;
+    const IDPRToDelete = itemToDelete.ID_product;
 
     // ลบรายการที่เลือกออกจาก AllExport
     setAllExport((prev) =>
-      prev.filter((item) => item.ID_product !== IDproductToDelete)
+      prev.filter((item) => item.ID_product !== IDPRToDelete)
     );
 
     // หัก price_lot ของรายการที่ลบออกจาก totalPrice
@@ -832,8 +830,8 @@ function Requisition() {
                             <h3
                               className="btn btn-danger"
                               onClick={() => {
-                                handleDeleteProduct(product.ID_product);
-                                handleDeleteLot(product.ID_product);
+                                handleDeleteProduct(index); // เรียกใช้ handleDeleteProduct
+                                handleDeleteItemPR(index); // เรียกใช้ handleDeleteItem
                               }}
                             >
                               ลบ
