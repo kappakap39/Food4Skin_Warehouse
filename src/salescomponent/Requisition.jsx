@@ -320,22 +320,12 @@ function Requisition() {
   console.log("Values", values);
 
   //! Function to delete a product by index
-  // const handleDeleteLot = (productIDToDelete) => {
-  //   // กรองรายการที่ต้องการลบออกจาก AllExport
-  //   const updatedAllExport = AllExport.filter(
-  //     (product) => product.ID_product !== productIDToDelete
-  //   );
-
-  //   // อัพเดทข้อมูลใน state
-  //   setAllExport(updatedAllExport);
-  // };
 
   const handleDeleteProduct = (index) => {
     // กรองรายการที่ต้องการลบออกจาก allImportedProducts
     const updatedAllImportedProducts = [...allImportedProducts];
     updatedAllImportedProducts.splice(index, 1);
     setAllImportedProducts(updatedAllImportedProducts);
-    
   };
 
   // ฟังก์ชันสำหรับลบสินค้าใน AllExport ตามดัชนี
@@ -407,10 +397,28 @@ function Requisition() {
 
     return total;
   };
+  const calculateTotalAmountSUMONE = () => {
+    let total = 0;
+
+    for (const product of filteredExport) {
+      total += Number(product.Amount_products);
+    }
+
+    return total;
+  };
   const calculateTotalPrice = () => {
     let totalPR = 0;
 
     for (const product of AllExport) {
+      totalPR += Number(product.price_lot * product.Amount_products);
+    }
+
+    return totalPR;
+  };
+  const calculateTotalPriceONE = () => {
+    let totalPR = 0;
+
+    for (const product of filteredExport) {
       totalPR += Number(product.price_lot * product.Amount_products);
     }
 
@@ -880,7 +888,7 @@ function Requisition() {
                           name="Total"
                           id="Total"
                           type="text"
-                          value={""} // ใช้ค่าที่ถูกคำนวณจาก calculateTotalAmount
+                          value={calculateTotalAmountSUMONE()} // ใช้ค่าที่ถูกคำนวณจาก calculateTotalAmount
                           disabled
                           onChange={handleInput}
                         />
@@ -896,8 +904,7 @@ function Requisition() {
                           name="TotalPR"
                           id="TotalPR"
                           type="text"
-                          value={""} // แสดงผลรวม totalPrice
-                          // value={totalPrice} // แสดงผลรวม totalPrice
+                          value={calculateTotalPriceONE()}
                           disabled
                           onChange={handleInput}
                         />
