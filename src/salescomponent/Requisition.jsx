@@ -708,7 +708,7 @@ function Requisition() {
                 </Row>
               </div>
               <Row>
-                <Col>
+                <Col md={6}>
                   <div className="spanProduct">
                     <span className="txt">
                       <h6>*</h6>ชื่อสินค้า
