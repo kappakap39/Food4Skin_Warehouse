@@ -37,10 +37,6 @@
 
 }
 
-.AppModal {
-  width: 350px;
-}
-
 .bgedit2 {
   display: flex;
   justify-content: flex-end;
@@ -86,8 +82,8 @@
 }
 
 .modal-Lot{
-  height: 90%;
-  width: 80%;
+  height: 95%;
+  width: 95%;
   background-color: #495057;
   padding: 2%;
   border-radius: 10px;

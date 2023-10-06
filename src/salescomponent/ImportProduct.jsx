@@ -21,10 +21,16 @@ import { AiOutlineSave } from "react-icons/ai";
 import { BiSolidUserPlus } from "react-icons/bi";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
+//!alert EF
+// npm install --save sweetalert2 sweetalert2-react-content
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function ImportProduct() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
+
 
   //!date
   useEffect(() => {
@@ -93,6 +99,11 @@ function ImportProduct() {
       })
       .then((res) => {
         console.log(res);
+        MySwal.fire({
+          title: <strong>ทำรายการนำเข้าเสร็จสิ้น</strong>,
+          // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+          icon: "success",
+        })
         navigate("/ProductLOT");
       })
       .catch((err) => console.log(err));

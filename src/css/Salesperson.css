@@ -95,6 +95,12 @@ body {
   color: #6de60f;
   filter: drop-shadow(0 0 2px #23a256);
 }
+.h3LOT {
+  text-align: center;
+  margin-bottom: 2%;
+  color: #6de60f;
+  filter: drop-shadow(0 0 2px #23a256);
+}
 .h3Editsale {
   text-align: center;
   margin-bottom: 40px;

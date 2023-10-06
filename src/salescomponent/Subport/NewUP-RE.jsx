@@ -29,7 +29,6 @@ function Requisition() {
   const [importedProducts, setImportedProducts] = useState([]); // เก็บข้อมูลสินค้าที่เพิ่มแต่ละชุด
   const [allImportedProducts, setAllImportedProducts] = useState([]); // เก็บข้อมูลทั้งหมดที่คุณต้องการบันทึกลงในฐานข้อมูล
   const handleAddProduct = () => {
-    // ตรวจสอบว่าข้อมูลสินค้าถูกกรอกครบหรือไม่
     if (
       values.Dete_requisition &&
       values.ID_sales &&
@@ -38,7 +37,6 @@ function Requisition() {
       values.ID_product &&
       values.ID_agent
     ) {
-      // สร้างอ็อบเจ็กต์ใหม่เพื่อเก็บข้อมูลสินค้าที่เพิ่ม
       const newProduct = {
         ID_sales: values.ID_sales,
         Bill: values.Bill,
@@ -66,6 +64,11 @@ function Requisition() {
     ID_sales: `${userLoginData[0].ID_sales}`,
     Nameproduct: "",
     ID_product: "",
+    remark: "",
+    Amount_products: "",
+    ID_lot: "",
+    Lot_ID: "",
+    Inventories_lot: "",
   });
   console.log("ข้อมูลที่กรอก", values);
   //! select agent
@@ -96,7 +99,6 @@ function Requisition() {
         console.log(err);
       });
   };
-
   console.log("adress", adress);
   console.log("nameagent", nameagent);
   //! LOT
@@ -111,6 +113,7 @@ function Requisition() {
   }, []);
   console.log("nameproduct", nameproduct);
   console.log("nameLot", nameLot);
+
   //! แสดงคงเหลือตาม Id
   const [lotBalances, setLotBalances] = useState({});
   const onChangeProduct = (e) => {
@@ -126,8 +129,6 @@ function Requisition() {
     axios
       .get(`http://localhost:2001/Lotforproduct/${ID_product}`)
       .then((res) => {
-
-        // สร้างอ็อบเจ็กต์ใหม่ที่จะใช้ในการเก็บข้อมูลคงเหลือของแต่ล็อต
         const balances = {};
         res.data.forEach((lot) => {
           balances[lot.ID_lot] = calculateTotalAmount(lot.ID_lot);
@@ -139,6 +140,7 @@ function Requisition() {
       });
   };
   console.log("lotBalances", lotBalances);
+
   //!date
   useEffect(() => {
     const currentDate = new Date().toISOString().split("T")[0];
@@ -147,6 +149,7 @@ function Requisition() {
   //! save
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (allImportedProducts.length === 0) {
       alert("ยังไม่มีข้อมูลสินค้าที่เพิ่ม");
       return;
@@ -249,11 +252,23 @@ function Requisition() {
     setValues((prev) => ({ ...prev, [name]: value }));
   };
   console.log("Values", values);
+  //! Function to delete a product by index
   const handleDeleteProduct = (index) => {
     const updatedImportedProducts = allImportedProducts.filter(
       (_, i) => i !== index
     );
     setAllImportedProducts(updatedImportedProducts);
+  };
+  // ฟังก์ชันสำหรับลบสินค้าใน AllExport ตามดัชนี
+  const handleDeleteProductLot = (index) => {
+    const updatedAllExport = [...AllExport];
+    updatedAllExport.splice(index, 1);
+    setAllExport(updatedAllExport);
+  };
+
+  // ฟังก์ชันสำหรับลบทั้งหมดใน AllExport
+  const handleDeleteProductLotALL = () => {
+    setAllExport([]);
   };
   //! แสดงคงเหลือล่าสุด
   const [calculatedAmount, setCalculatedAmount] = useState({});
@@ -291,50 +306,60 @@ function Requisition() {
   const handleOpenModal = (selectedIDProduct) => {
     setSelectedIDProduct(selectedIDProduct);
     setIsModalOpen(true);
-    const level = adress[0].level; // ตรวจสอบค่าของ adress[0].level
-    let priceData = nameLot[0].Production_point;
-    if (level === "ระดับขั้น 1") {
-      priceData = nameLot[0].Level_1_price;
-    } else if (level === "ระดับขั้น 2") {
-      priceData = nameLot[0].Level_2_price;
-    } else if (level === "ระดับขั้น 3") {
-      priceData = nameLot[0].Level_3_price;
-    }
-    setProductPrice(priceData);
     axios
       .get(`http://localhost:2001/Lotforproduct/${selectedIDProduct}`)
       .then((res) => {
-        setNameLot(res.data);
+        const lotData = res.data; // นำข้อมูลที่ได้จากการ get มาเก็บไว้ในตัวแปร lotData
+        const level = adress[0].level;
+        setNameLot(lotData);
+        let priceData = res.data[0].Retail_price;
+        if (level === "ระดับขั้น 1") {
+          priceData = lotData[0].Level_1_price;
+        } else if (level === "ระดับขั้น 2") {
+          priceData = lotData[0].Level_2_price;
+        } else if (level === "ระดับขั้น 3") {
+          priceData = lotData[0].Level_3_price;
+        }
+        setProductPrice(priceData);
+        console.log("lotData", lotData);
+        console.log("priceData", priceData);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log("selectedIDProduct",selectedIDProduct)
+  console.log("selectedIDProduct", selectedIDProduct);
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
   const handleSaveData = () => {
+    // ทำบันทึกข้อมูลที่ต้องการที่นี่
+    // เมื่อเสร็จสิ้นการบันทึก ปิด Modal
+    // setSelectedRowData([]); // Clear selectedRowData after saving
     handleCloseModal();
   };
   console.log("productPrice", productPrice);
   //! เพิ่มข้อมูลก่อนบันทึก
-  const [allImportedProductsSave, setAllImportedProductsSave] = useState([]); // เก็บข้อมูลทั้งหมดที่คุณต้องการบันทึกลงในฐานข้อมูล
+  const [selectedRowData, setSelectedRowData] = useState([]);
+  const [AllExport, setAllExport] = useState([]);
   const handleAddItem = (index) => {
     const selectedItem = nameLot[index];
     const newProductSave = {
-      ID_sales: values.ID_sales,
-      Bill: values.Bill,
-      Nameproduct: values.Nameproduct,
+      ID_product: selectedItem.ID_product,
+      Bill: latestBill,
+      Name_product: selectedItem.Name_product,
       Amount_products: values.Amount_products,
       ID_lot: selectedItem.ID_lot,
+      Lot_ID: selectedItem.Lot_ID,
       remark: values.remark,
-      Dete_requisition: values.Dete_requisition,
       Inventories_lot: selectedItem.Inventories_lot,
+      date_import: selectedItem.date_import,
     };
-    setAllImportedProductsSave([...allImportedProductsSave, newProductSave]);
+    setSelectedRowData([...selectedRowData, newProductSave]);
+    setAllExport((prev) => [...prev, newProductSave]);
   };
-  console.log("ก่อนบันทึก", allImportedProductsSave);
+
+  console.log("ก่อนบันทึก", selectedRowData);
   return (
     <div>
       <header className="headernav ">
@@ -388,7 +413,12 @@ function Requisition() {
                         type="text"
                         className="form-select"
                         onChange={(e) => onChangeAgentSelection(e)}
+                        onClick={() => {
+                          // handleCloseModal();
+                          handleDeleteProductLotALL();
+                        }}
                       >
+                        <option value="">ลูกค้า</option>
                         {nameagent.map((item, index) => (
                           <option
                             key={index}
@@ -427,6 +457,7 @@ function Requisition() {
                       type="text"
                       className="form-select"
                       onChange={(e) => onChangeProduct(e)}
+                      // style={{ marginLeft: "15px" }}
                     >
                       <option value="">เลือกสินค้า</option>
                       {nameproduct.map((item, index) => (
@@ -492,10 +523,10 @@ function Requisition() {
                   </tbody>
                 </table>
               </div>
-              <div className="AppModal">
+              <div>
                 <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                   <h3>ข้อมูลล็อต</h3>
-                  <div style={{ margin: "2% 0% 2% 0%" }}>
+                  <div style={{ margin: "1% 1% 1% 1%" }}>
                     <Row>
                       <Col md={2}>
                         <span className="txt">สินค้ารวมทั้งสิ้น</span>
@@ -529,72 +560,133 @@ function Requisition() {
                           onChange={handleInput}
                         />
                       </Col>
-                      <Col></Col>
+                      <Col md={2}>
+                        <th>จำนวน (ชิ้น)</th>
+                        <input
+                          className="form-control"
+                          name="Amount_products"
+                          id="Amount_products"
+                          type="number"
+                          onChange={handleInput}
+                        />
+                      </Col>
+                      <Col>
+                        <th>หมายเหตุ</th>
+                        <input
+                          className="form-control"
+                          name="remark"
+                          id="remark"
+                          type="text"
+                          style={{ width: "450px", height: "40px" }}
+                          onChange={handleInput}
+                        />
+                      </Col>
                     </Row>
                   </div>
-                  <div className="lot-table">
-                    <table className="table table-striped table-dark">
-                      <thead className="table-secondary">
-                        <tr>
-                          <th>รหัสล็อต</th>
-                          <th>คงเหลือ (ชิ้น)</th>
-                          <th>ราคา</th>
-                          <th>จำนวน (ชิ้น)</th>
-                          <th>หมายเหตุ</th>
-                          <th>เพิ่มรายการ</th> {/* เพิ่มปุ่มนี้ */}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {nameLot.map((item, index) => (
-                          <tr key={index}>
-                            <td>{`${formatDateY(item.date_import)}-${
-                              item.Lot_ID
-                            }`}</td>
-                            <td>{item.Inventories_lot}</td>
-                            <td>{productPrice ? productPrice : "-"}</td>
-                            <td style={{ width: "150px" }}>
-                              <input
-                                className="form-control"
-                                name="Amount_products"
-                                id=""
-                                type="number"
-                                onChange={handleInput}
-                              />
-                            </td>
-                            <td style={{ width: "470px" }}>
-                              <textarea
-                                type="text"
-                                style={{ width: "450px", height: "40px" }}
-                              />
-                            </td>
-                            <td>
-                              <div
-                                style={{
-                                  display: "grid",
-                                  placeItems: "center",
-                                }}
-                              >
-                                <button
-                                  className="btn btn-primary"
-                                  type="button"
-                                  onClick={handleAddItem}
-                                >
-                                  เพิ่มล็อต
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <Row>
+                    <Col>
+                      <div className="lot-table">
+                        <table className="table table-striped table-dark">
+                          <thead className="table-secondary">
+                            <tr>
+                              <th>รหัสล็อต</th>
+                              <th>คงเหลือ (ชิ้น)</th>
+                              <th>ราคา</th>
+                              <th>เพิ่มรายการ</th> {/* เพิ่มปุ่มนี้ */}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {nameLot.map((item, index) => (
+                              <tr key={index}>
+                                <td>{`${formatDateY(item.date_import)}-${
+                                  item.Lot_ID
+                                }`}</td>
+                                <td>{item.Inventories_lot}</td>
+                                <td>{productPrice ? productPrice : "-"}</td>
+                                <td>
+                                  <div
+                                    style={{
+                                      display: "grid",
+                                      placeItems: "center",
+                                    }}
+                                  >
+                                    <button
+                                      className="btn btn-primary"
+                                      type="button"
+                                      onClick={() => handleAddItem(index)} // ส่ง index เข้าไปในฟังก์ชัน
+                                    >
+                                      เบิก
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className="lot-table">
+                        <table className="table table-striped table-dark">
+                          <thead className="table-secondary">
+                            <tr>
+                              <th>รหัสล็อต</th>
+                              <th>ชื่อสินค้า</th>
+                              <th>จำนวน (ชิ้น)</th>
+                              <th>หมายเหตุ</th>
+                              <th>ลบ</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {AllExport.map((product, index) => (
+                              <tr key={index}>
+                                <td>{`${formatDateY(product.date_import)}-${
+                                  product.Lot_ID
+                                }`}</td>
+                                <td>{product.Name_product}</td>
+                                <td>{product.Amount_products}</td>
+                                {/* <td>{product.remark}</td> */}
+                                <td style={{ width: "250px" }}>
+                                  <textarea
+                                    name="remark"
+                                    id="remark"
+                                    type="text"
+                                    style={{ width: "95%", height: "33px", backgroundColor:"#00000000", color:"white", border:"0px" }}
+                                    value={product.remark}
+                                  />
+                                </td>
+                                <td>
+                                  <h3
+                                    className="btn btn-danger"
+                                    onClick={() =>
+                                      handleDeleteProductLot(index)
+                                    }
+                                    style={{margin:"0px"}}
+                                  >
+                                    ลบ
+                                  </h3>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </Col>
+                  </Row>
                   <div
                     className="modal-buttons"
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      margin: "20px",
+                    }}
                   >
                     <button
                       className="btn btn-secondary left-button"
-                      onClick={handleCloseModal}
+                      onClick={() => {
+                        handleCloseModal();
+                        // handleDeleteProductLotALL();
+                      }}
                     >
                       ย้อนกลับ
                     </button>
@@ -617,7 +709,6 @@ function Requisition() {
                   กลับ{" "}
                 </Link>
               </Col>
-
               <Col>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <button
@@ -635,5 +726,4 @@ function Requisition() {
     </div>
   );
 }
-
 export default Requisition;
