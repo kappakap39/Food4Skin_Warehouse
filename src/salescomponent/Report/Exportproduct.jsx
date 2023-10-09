@@ -313,6 +313,7 @@ function Exportproduct() {
           <table className=" table table-striped table-dark ">
             <thead className="table-secondary">
               <tr>
+                <th>รหัสบิล</th>
                 <th>รหัสล็อต</th>
                 <th>ชื่อผลิตภัณฑ์</th>
                 <th>จำนวนสินค้า (ชิ้น)</th>
@@ -337,6 +338,9 @@ function Exportproduct() {
                     .map((data, index) => (
                       <tr key={index}>
                         {/* <td scope="row">{data.ID_lot}</td> */}
+                        <td scope="row">{`${formatDateY(data.Dete_requisition)}-${
+                          data.Bill
+                        }`}</td>
                         <td scope="row">{`${formatDateY(data.date_import)}-${
                           data.Lot_ID
                         }`}</td>

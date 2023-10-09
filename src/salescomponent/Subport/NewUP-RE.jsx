@@ -1,7 +1,36 @@
+import React, { useEffect } from "react";
+import "../css/product.css";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import Button from "react-bootstrap/Button";
+
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Figure from "react-bootstrap/Figure";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { AiOutlineSave } from "react-icons/ai";
+import { BiSolidUserPlus } from "react-icons/bi";
+import FormText from "react-bootstrap/esm/FormText";
+import MenuNavSales from "./MenuNavSales";
+import Modal from "./LotModal";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 function Requisition() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
+
+  //!เพิ่มลงตาราง
   const [importedProducts, setImportedProducts] = useState([]); // เก็บข้อมูลสินค้าที่เพิ่มแต่ละชุด
   const [allImportedProducts, setAllImportedProducts] = useState([]); // เก็บข้อมูลทั้งหมดที่คุณต้องการบันทึกลงในฐานข้อมูล
   const handleAddProduct = () => {
@@ -69,11 +98,14 @@ function Requisition() {
   const onChangeAgentSelection = (e) => {
     const selectedValue = e.target.value; // The combined string, e.g., "John Doe:123"
     const [selectedFullName, selectedIDAgent] = selectedValue.split(":"); // Split the string into fullname and ID_agent
+
     setValues((prevValues) => ({
       ...prevValues,
       fullname: selectedFullName,
       ID_agent: selectedIDAgent,
     }));
+
+    // Use selectedIDAgent in your axios GET request
     axios
       .get(`http://localhost:2001/NameAgentAD/${selectedIDAgent}`)
       .then((res) => {
@@ -83,6 +115,12 @@ function Requisition() {
         console.log(err);
       });
   };
+
+  console.log("adress", adress);
+  console.log("nameagent", nameagent);
+
+  //! LOT
+  //! select product
   const [nameproduct, setNameproduct] = useState([]);
   const [nameLot, setNameLot] = useState([]);
   useEffect(() => {
@@ -91,6 +129,10 @@ function Requisition() {
       .then((res) => setNameproduct(res.data))
       .catch((err) => console.log(err));
   }, []);
+  console.log("nameproduct", nameproduct);
+  console.log("nameLot", nameLot);
+
+  //! แสดงคงเหลือตาม Id
   const [lotBalances, setLotBalances] = useState({});
   const onChangeProduct = (e) => {
     const selectedValue = e.target.value; // The combined string, e.g., "John Doe:123"
@@ -105,6 +147,7 @@ function Requisition() {
     axios
       .get(`http://localhost:2001/Lotforproduct/${ID_product}`)
       .then((res) => {
+        // สร้างอ็อบเจ็กต์ใหม่ที่จะใช้ในการเก็บข้อมูลคงเหลือของแต่ล็อต
         const balances = {};
         res.data.forEach((lot) => {
           balances[lot.ID_lot] = calculateTotalAmountSUM(lot.ID_lot);
@@ -116,40 +159,216 @@ function Requisition() {
       });
   };
   console.log("lotBalances", lotBalances);
+
   //!date
   useEffect(() => {
+    // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
     const currentDate = new Date().toISOString().split("T")[0];
+
+    // กำหนดค่าเริ่มต้นให้กับ date_import เป็นวันที่ปัจจุบัน
     setValues((prev) => ({ ...prev, Dete_requisition: currentDate }));
   }, []);
-  const handleDeleteProduct = (index) => {
-    const productIDToDelete = allImportedProducts[index].ID_product;
-    const updatedAllExport = AllExport.filter(
-      (product) => product.ID_product !== productIDToDelete
-    );
-    const updatedAllImportedProducts = allImportedProducts.filter(
-      (product) => product.ID_product !== productIDToDelete
-    );
-    setAllImportedProducts(updatedAllImportedProducts);
-    setAllExport(updatedAllExport);
+
+  //! save
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (AllExport.length === 0) {
+      alert("ยังไม่มีข้อมูลสินค้าที่เพิ่ม");
+      return;
+    }
+
+    try {
+      // ตามรหัสของคุณที่เปลี่ยนเป็น AllExport
+      // Create an array to store promises for updating Inventories_lot
+      const updatePromises = [];
+
+      // Create a map to store the calculated updated Inventories_lot values for each ID_lot
+      const updatedInventoriesLotMap = new Map();
+
+      // Iterate through AllExport to calculate updated Inventories_lot
+      for (const product of AllExport) {
+        const ID_lot = product.ID_lot;
+        const Amount_products = Number(product.Amount_products);
+
+        // If the ID_lot is not in the map, initialize it with 0
+        if (!updatedInventoriesLotMap.has(ID_lot)) {
+          updatedInventoriesLotMap.set(ID_lot, 0);
+        }
+
+        // Add Amount_products to the corresponding ID_lot in the map
+        updatedInventoriesLotMap.set(
+          ID_lot,
+          updatedInventoriesLotMap.get(ID_lot) + Amount_products
+        );
+      }
+
+      // Now, we have the total Amount_products for each ID_lot in updatedInventoriesLotMap
+      // Iterate through the map and update Inventories_lot for each ID_lot
+      for (const [ID_lot, totalAmount] of updatedInventoriesLotMap) {
+        // Find the current Inventories_lot value for the matching ID_lot
+        const currentInventoriesLot = Number(
+          AllExport.find((product) => product.ID_lot === ID_lot).Inventories_lot
+        );
+
+        // Calculate the updated Inventories_lot
+        const updatedInventoriesLot = currentInventoriesLot - totalAmount;
+
+        // Update the Inventories_lot of the current product
+        AllExport.find((product) => product.ID_lot === ID_lot).Inventories_lot =
+          updatedInventoriesLot;
+
+        // Create a PUT request promise and add it to the updatePromises array
+        const updatePromise = axios.put(
+          `http://localhost:2001/lotUpdate/${ID_lot}`,
+          {
+            Inventories_lot: updatedInventoriesLot,
+          }
+        );
+        updatePromises.push(updatePromise);
+      }
+
+      // Wait for all update promises to complete
+      await Promise.all(updatePromises);
+
+      console.log("อัปเดตข้อมูลเรียบร้อย");
+
+      // Create an array to store promises for adding products
+      const addProductPromises = AllExport.map((product) => {
+        // Extract the product data from the object and send it to the server
+        const productData = {
+          ID_sales: product.ID_sales,
+          ID_product: product.ID_product,
+          Amount_products: product.Amount_products,
+          ID_lot: product.ID_lot,
+          remark: product.remark,
+          ID_agent: product.ID_agent,
+          Dete_requisition: product.Dete_requisition,
+          Bill: product.Bill,
+          ID_product: product.ID_product,
+        };
+
+        return axios.post("http://localhost:2001/addRequisition", productData);
+      });
+
+      // Use Promise.allSettled to wait for all promises to complete
+      const responses = await Promise.allSettled(addProductPromises);
+
+      // Check for any failed promises
+      const failedResponses = responses.filter(
+        (response) => response.status === "rejected"
+      );
+
+      if (failedResponses.length === 0) {
+        console.log("เพิ่มสินค้าเรียบร้อย");
+        MySwal.fire({
+          title: <strong>ทำรายการเบิกเสร็จสิ้น</strong>,
+          // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+          icon: "success",
+        });
+        navigate("/ProductLOT");
+      } else {
+        // Handle the case where some promises failed
+        console.log("มีข้อผิดพลาดในการเพิ่มสินค้า:");
+        failedResponses.forEach((response) => {
+          console.error(response.reason);
+        });
+        alert("เกิดข้อผิดพลาดในการเพิ่มข้อมูลสินค้า");
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการดำเนินการ:", error);
+      alert("เกิดข้อผิดพลาดในการดำเนินการ");
+    }
   };
 
+  //!ตรวจสอบค้าที่กรอก
+  const [totalAmount, setTotalAmount] = useState(0); // Initialize total to 0
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+    if (name === "Amount_products") {
+      const Amount_productsValue = Number(value);
+      if (Amount_productsValue < 1) {
+        setValues((prev) => ({
+          ...prev,
+          [name]: "1",
+        }));
+        alert("กรุณากรอกสินค้าที่มากกว่า 1 ชิ้น");
+        return; // ไม่อัปเดตค่าใน state
+      }
+      setValues((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
 
+      // คำนวณผลรวมของ Amount_products ทันทีที่ผู้ใช้กรอกข้อมูล
+      const updatedTotal = allImportedProducts.reduce((total, product) => {
+        if (product.ID_lot === values.ID_lot) {
+          return total + (Number(product.Amount_products) || 0);
+        }
+        return total;
+      }, 0);
+
+      // อัปเดตค่าผลรวมใน state
+      setCalculatedAmount((prevCalculatedAmount) => ({
+        ...prevCalculatedAmount,
+        [values.ID_lot]: updatedTotal,
+      }));
+    }
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  console.log("Values", values);
+
+  //! Function to delete a product by index
+
+  const handleDeleteProduct = (index) => {
+    // กรองรายการที่ต้องการลบออกจาก allImportedProducts
+    const updatedAllImportedProducts = [...allImportedProducts];
+    updatedAllImportedProducts.splice(index, 1);
+    setAllImportedProducts(updatedAllImportedProducts);
+  };
+
+  // ฟังก์ชันสำหรับลบสินค้าใน AllExport ตามดัชนี
   const handleDeleteProductLot = (index) => {
     const updatedAllExport = [...AllExport];
     updatedAllExport.splice(index, 1);
     setAllExport(updatedAllExport);
   };
+  // ฟังก์ชันสำหรับลบทั้งหมดใน AllExport
   const handleDeleteProductLotALL = () => {
     setAllExport([]);
   };
+
+  //! ฟังก์ชันสำหรับการลบรายการที่เลือก
   const handleDeleteItem = (indexToDelete) => {
+    // ดึงข้อมูลรายการที่เลือกที่จะลบ
     const itemToDelete = AllExport[indexToDelete];
+    // หาค่า ID_lot ของรายการที่จะลบ
     const IDLotToDelete = itemToDelete.ID_lot;
+
+    // ลบรายการที่เลือกออกจาก AllExport
     setAllExport((prev) =>
       prev.filter((item) => item.ID_lot !== IDLotToDelete)
     );
+
+    // หัก price_lot ของรายการที่ลบออกจาก totalPrice
     setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
   };
+  const handleDeleteItemPR = (indexToDelete) => {
+    // ดึงข้อมูลรายการที่เลือกที่จะลบ
+    const itemToDelete = AllExport[indexToDelete];
+    // หาค่า ID_lot ของรายการที่จะลบ
+    const IDPRToDelete = itemToDelete.ID_product;
+
+    // ลบรายการที่เลือกออกจาก AllExport
+    setAllExport((prev) =>
+      prev.filter((item) => item.ID_product !== IDPRToDelete)
+    );
+
+    // หัก price_lot ของรายการที่ลบออกจาก totalPrice
+    setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
+  };
+
   //! แสดงคงเหลือล่าสุด
   const [calculatedAmount, setCalculatedAmount] = useState({});
   const calculateTotalAmount = () => {
@@ -178,10 +397,28 @@ function Requisition() {
 
     return total;
   };
+  const calculateTotalAmountSUMONE = () => {
+    let total = 0;
+
+    for (const product of filteredExport) {
+      total += Number(product.Amount_products);
+    }
+
+    return total;
+  };
   const calculateTotalPrice = () => {
     let totalPR = 0;
 
     for (const product of AllExport) {
+      totalPR += Number(product.price_lot * product.Amount_products);
+    }
+
+    return totalPR;
+  };
+  const calculateTotalPriceONE = () => {
+    let totalPR = 0;
+
+    for (const product of filteredExport) {
       totalPR += Number(product.price_lot * product.Amount_products);
     }
 
@@ -195,6 +432,7 @@ function Requisition() {
     axios
       .get("http://localhost:2001/BillOd")
       .then((res) => {
+        // ดึงข้อมูล Bill จากการตอบกลับและแสดงในคอนโทรลที่คุณต้องการ
         const latestBill =
           res.data.length > 0 ? res.data[res.data.length - 1].Bill + 1 : 1;
         setLatestBill(latestBill);
@@ -207,10 +445,15 @@ function Requisition() {
     if (!dateString) {
       return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
     }
+
     const date = new Date(dateString);
+
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
     const yearBC = date.getFullYear();
+
     return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
+
   //! Modal
   const [selectedIDProduct, setSelectedIDProduct] = useState("");
   const [selectedNProduct, setSelectedNProduct] = useState("");
@@ -225,6 +468,7 @@ function Requisition() {
       .get(`http://localhost:2001/Lotforproduct/${selectedIDProduct}`)
       .then((res) => {
         const lotData = res.data; // นำข้อมูลที่ได้จากการ get มาเก็บไว้ในตัวแปร lotData
+        // ตรวจสอบค่าของ level
         const level = adress[0].level;
         const name = lotData[0].Name_product;
         setNameLot(lotData);
@@ -241,6 +485,8 @@ function Requisition() {
         }
 
         setProductPrice(priceData);
+
+        // ตอนนี้คุณสามารถใช้ lotData และ priceData ในการดำเนินการต่อได้
         console.log("lotData", lotData);
         console.log("priceData", priceData);
         console.log("selectedIDProduct", selectedIDProduct);
@@ -258,6 +504,9 @@ function Requisition() {
   };
 
   const handleSaveData = () => {
+    // ทำบันทึกข้อมูลที่ต้องการที่นี่
+    // เมื่อเสร็จสิ้นการบันทึก ปิด Modal
+    // setSelectedRowData([]); // Clear selectedRowData after saving
     handleCloseModal();
   };
   console.log("productPrice", productPrice);
@@ -284,10 +533,24 @@ function Requisition() {
       Dete_requisition: values.Dete_requisition,
     };
     setSelectedRowData([...selectedRowData, newProductSave]);
+    // เพิ่มแถวใหม่ลงใน allImportedProducts
     setAllExport((prev) => [...prev, newProductSave]);
+    // เพิ่ม price_lot ของสินค้าลงใน totalPrice
+    // setTotalPrice(totalPrice + newProductSave.price_lot);
+    // คำนวณค่า totalPrice โดยนำ Amount_products มาคูณกับ price_lot
+    // const totalPriceForItem =
+    //   newProductSave.Amount_products * newProductSave.price_lot;
+    // setTotalPrice(totalPrice + totalPriceForItem);
   };
+
+  console.log("ก่อนบันทึก", selectedRowData);
+  console.log("ก่อนบันทึกAllExport", AllExport);
+
   //! ผลรวมสินค้าแต่ละไอดี
+  // กำหนดตัวแปรสำหรับเก็บผลรวม Amount_products
   const totalAmountByProduct = {};
+
+  // คำนวณผลรวม Amount_products สำหรับแต่ละ ID_product
   AllExport.forEach((exportedProduct) => {
     const { ID_product, Amount_products } = exportedProduct;
     if (totalAmountByProduct[ID_product]) {
@@ -297,6 +560,8 @@ function Requisition() {
     }
   });
   const totalPriceByProduct = {};
+
+  // คำนวณผลรวม Amount_products สำหรับแต่ละ ID_product
   AllExport.forEach((exportedProduct) => {
     const { ID_product, price_lot, Amount_products } = exportedProduct;
     if (totalPriceByProduct[ID_product]) {
@@ -308,6 +573,7 @@ function Requisition() {
 
   //!จำนวนต้องการเบิก
   const [selectedAmount, setSelectedAmount] = useState(0);
+  //แสดงข้อมูลที่เพิ่ม
   const filteredExport = AllExport.filter(
     (product) => product.ID_product === Number(selectedIDProduct)
   );
@@ -323,6 +589,7 @@ function Requisition() {
         <div className="bodyImportLOT">
           <Row>
             <Col md={4}>
+              {/* <input name="Name_product" type="text" className="" onChange={handleInput}/> */}
               <div className="spanProduct">
                 <Row>
                   <Col>
@@ -332,6 +599,7 @@ function Requisition() {
                       class="form-control"
                       name="Bill"
                       type="text"
+                      // value={latestBill}
                       value={`${formatDateY(
                         values.Dete_requisition
                       )}-${latestBill}`}
@@ -359,6 +627,21 @@ function Requisition() {
                       <span className="txt">
                         <h6>*</h6>ตัวแทนจำหน่าย
                       </span>
+                      {/* <select
+                        name="ID_agent"
+                        id="ID_agent"
+                        type="text"
+                        className="form-select"
+                        onChange={handleInput}
+                        // style={{ marginLeft: "15px" }}
+                      >
+                        <option value="">ลูกค้า</option>
+                        {nameagent.map((item, index) => (
+                          <option key={index} value={item.ID_agent}>
+                            {item.fullname}
+                          </option>
+                        ))}
+                      </select> */}
                       <select
                         name="agentInfo" // Use a single field to store both fullname and ID_agent
                         id="agentInfo"
@@ -396,8 +679,36 @@ function Requisition() {
                   </Col>
                 </Row>
               </div>
+              <div className="spanProduct">
+                <Row>
+                  <Col>
+                    <span className="txt">ที่อยู่</span>
+                    <textarea
+                      className="adressAD form-control"
+                      name=""
+                      type="text"
+                      disabled
+                      value={`จังหวัด: ${
+                        adress.length > 0 ? adress[0].province : ""
+                      } 
+อำเภอ: ${adress.length > 0 ? adress[0].districts : ""} 
+ตำบล: ${adress.length > 0 ? adress[0].subdistricts : ""} 
+รหัสไปรษณีย์: ${adress.length > 0 ? adress[0].zip_code : ""}
+ที่อยู่: ${adress.length > 0 ? adress[0].Address : ""}
+เบอร์โทร: ${adress.length > 0 ? adress[0].Tel : ""} `}
+                      onChange={(e) => {
+                        // เมื่อมีการเปลี่ยนแปลงใน textarea ให้อัปเดตค่าในตัวแปร adress
+                        const updatedAdress = [
+                          { ...adress[0], [e.target.name]: e.target.value },
+                        ];
+                        setAdress(updatedAdress);
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </div>
               <Row>
-                <Col>
+                <Col md={6}>
                   <div className="spanProduct">
                     <span className="txt">
                       <h6>*</h6>ชื่อสินค้า
@@ -449,6 +760,41 @@ function Requisition() {
               </Row>
             </Col>
             <Col md={8}>
+              <Row style={{ marginBottom: "0px" }}>
+                <Col md={8}></Col>
+                <Col md={2}>
+                  <span className="txt">สินค้ารวมทั้งสิ้น</span>
+                  <input
+                    style={{
+                      backgroundColor: "rgba(240, 248, 255, 0.814)",
+                      width: "90%",
+                    }}
+                    className="form-control"
+                    name="Total"
+                    id="Total"
+                    type="text"
+                    value={calculateTotalAmountSUM()}
+                    disabled
+                    onChange={handleInput}
+                  />
+                </Col>
+                <Col md={2}>
+                  <span className="txt">ราคารวมทั้งสิ้น</span>
+                  <input
+                    style={{
+                      backgroundColor: "rgba(240, 248, 255, 0.814)",
+                      width: "90%",
+                    }}
+                    className="form-control"
+                    name="TotalPR"
+                    id="TotalPR"
+                    type="text"
+                    value={calculateTotalPrice()}
+                    disabled
+                    onChange={handleInput}
+                  />
+                </Col>
+              </Row>
               <div className="table-containerLOT" style={{ marginTop: "10px" }}>
                 <table className=" table table-striped table-dark ">
                   <thead className="table-secondary">
@@ -492,7 +838,8 @@ function Requisition() {
                             <h3
                               className="btn btn-danger"
                               onClick={() => {
-                                handleDeleteProduct(index);
+                                handleDeleteProduct(index); // เรียกใช้ handleDeleteProduct
+                                handleDeleteItemPR(index); // เรียกใช้ handleDeleteItem
                               }}
                             >
                               ลบ
@@ -527,6 +874,38 @@ function Requisition() {
                           id="remark"
                           type="text"
                           style={{ width: "100%", height: "40px" }}
+                          onChange={handleInput}
+                        />
+                      </Col>
+                      <Col md={2}>
+                        <span className="txt">สินค้ารวมทั้งสิ้น</span>
+                        <input
+                          style={{
+                            backgroundColor: "rgba(240, 248, 255, 0.814)",
+                            width: "90%",
+                          }}
+                          className="form-control"
+                          name="Total"
+                          id="Total"
+                          type="text"
+                          value={calculateTotalAmountSUMONE()} // ใช้ค่าที่ถูกคำนวณจาก calculateTotalAmount
+                          disabled
+                          onChange={handleInput}
+                        />
+                      </Col>
+                      <Col md={2}>
+                        <span className="txt">ราคารวมทั้งสิ้น</span>
+                        <input
+                          style={{
+                            backgroundColor: "rgba(240, 248, 255, 0.814)",
+                            width: "90%",
+                          }}
+                          className="form-control"
+                          name="TotalPR"
+                          id="TotalPR"
+                          type="text"
+                          value={calculateTotalPriceONE()}
+                          disabled
                           onChange={handleInput}
                         />
                       </Col>
@@ -611,6 +990,7 @@ function Requisition() {
                                 }`}</td>
                                 <td>{product.Name_product}</td>
                                 <td>{product.Amount_products}</td>
+                                {/* <td>{product.remark}</td> */}
                                 <td style={{ width: "250px" }}>
                                   <textarea
                                     name="remark"
@@ -645,6 +1025,7 @@ function Requisition() {
                       </div>
                     </Col>
                   </Row>
+
                   <div
                     className="modal-buttons"
                     style={{
@@ -673,6 +1054,7 @@ function Requisition() {
               </div>
             </Col>
           </Row>
+
           <div style={{ marginTop: "20px" }} className="spanProduct">
             <Row>
               <Col>
@@ -681,6 +1063,7 @@ function Requisition() {
                   กลับ{" "}
                 </Link>
               </Col>
+
               <Col>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <button
@@ -698,5 +1081,5 @@ function Requisition() {
     </div>
   );
 }
+
 export default Requisition;
-แก้ฟังชั่นลบให้ทีจากปัญหาลบข้อมูลทั้งหมดที่มี ID_product ตรงกันกับ handleDeleteProduct ทั้งหมด

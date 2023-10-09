@@ -24,7 +24,7 @@ import Modal from "./Modal";
 
 import img from "../assets/002.png";
 import MenuNav from "./MenuNav";
-
+import Validation from "../function/EditAdmin";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -150,6 +150,7 @@ function EditMe() {
     districts: "",
     email: "",
     password: "",
+    password2: "",
     sex: "",
     IDcard: "",
     province: "",
@@ -164,29 +165,38 @@ function EditMe() {
     // Card_ID: "",
   });
   //add
+console.log("values",values)
   const [errors, setErrors] = useState({});
+
   const handleUpdate = (event) => {
     event.preventDefault();
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
     const formattedPhone = values.Tel.replace(/-/g, "");
-
     const err = Validation({ ...values, Tel: formattedPhone });
     setErrors(err);
-    axios
-      .put("http://localhost:2001/adminUpdate/" + id, {
-        ...values,
-        Tel: formattedPhone,
-      })
-      .then((res) => {
-        console.log(res);
-        MySwal.fire({
-          title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
-          html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
-          icon: "warning",
-        });
-        navigate("/");
-      })
-      .catch((err) => console.log(err));
+
+    if (
+      
+      err.password === "" &&
+      err.password2 === "" 
+      
+    ) {
+      axios
+        .put("http://localhost:2001/adminUpdate/" + id, {
+          ...values,
+          Tel: formattedPhone,
+        })
+        .then((res) => {
+          console.log(res);
+          MySwal.fire({
+            title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
+            html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
+            icon: "warning",
+          });
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
+    }
   };
   console.log("values :", values);
   //Check
@@ -196,21 +206,22 @@ function EditMe() {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
-  
+
     if (name === "IDcard") {
       const formattedCardID = value.replace(/-/g, "");
-      const formattedText1 = formattedCardID.replace(/\D/g, "")
-        
+      const formattedText1 = formattedCardID
+        .replace(/\D/g, "")
+
         .slice(0, 13)
         .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-  
+
       setCradID(formattedText1);
       setValues((prev) => ({ ...prev, [name]: formattedText1 }));
     }
     if (name === "Tel") {
       const formattedPhoneNumber = value.replace(/-/g, "");
       const formattedText = formattedPhoneNumber.replace(/\D/g, "");
-  
+
       let formattedPhoneNumberFinal;
       if (formattedText.length === 9) {
         formattedPhoneNumberFinal = formattedText.replace(
@@ -218,17 +229,17 @@ function EditMe() {
           "$1-$2-$3"
         );
       } else {
-        formattedPhoneNumberFinal = formattedText 
+        formattedPhoneNumberFinal = formattedText
           .slice(0, 10)
           .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
       }
-  
+
       setPhoneNumber(formattedPhoneNumberFinal);
       setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
     } else {
       setValues((prev) => ({ ...prev, [name]: value }));
     }
-  
+
     if (name === "picture") {
       const selectedFile = event.target.files[0];
       if (selectedFile) {
@@ -236,7 +247,6 @@ function EditMe() {
       }
     }
   };
-  
 
   return (
     <div>
@@ -288,14 +298,13 @@ function EditMe() {
               className="Input20"
               id="IDcard"
               type="text"
-              maxLength={17} 
+              maxLength={17}
               value={values.IDcard}
               // onChange={(e) =>
               //   setValues({ ...values, IDcard: e.target.value })
               // }
               onChange={handleInput}
             />
-            
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
             <input
@@ -335,31 +344,65 @@ function EditMe() {
 
                 <div className="AppModal">
                   <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <h6 className="txt">รหัสผ่าน</h6>
-                    <input
-                      name="password"
-                      className="Input40"
-                      id="password"
-                      type="password"
-                      aria-describedby="passwordHelpBlock"
-                      // value={values.password}
-                      // onChange={(e) =>
-                      //   setValues({ ...values, password: e.target.value })
-                      // }
-                      onChange={handleInput}
-                    />
-                    <h6 className="txt">ยืนยันรหัสผ่าน</h6>
-                    <input
-                      // name="password"
-                      className="Input40"
-                      // id="password"
-                      type="password"
-                      // aria-describedby="passwordHelpBlock"
-                      // value={values.password}
-                    />
-
-                    <div>
-                      <button type="submit" className="bgeditModalPass">
+                    <h6 className="txt">
+                      <h6>*</h6>รหัสผ่าน
+                    </h6>
+                    <Row>
+                      <Col>
+                        <InputGroup className="mb-3">
+                          <Form.Control
+                            type="password"
+                            name="password"
+                            id="password"
+                            aria-describedby="passwordHelpBlock"
+                            onChange={handleInput}
+                          />
+                        </InputGroup>
+                      </Col>
+                      {errors.password && (
+                        <Col md={4}>
+                          <span className="text-danger">{errors.password}</span>
+                        </Col>
+                      )}
+                    </Row>
+                    <h6 className="txt">
+                      <h6>*</h6>ยืนยันรหัสผ่าน
+                    </h6>
+                    <Row>
+                      <Col>
+                        <InputGroup className="mb-3">
+                          <Form.Control
+                            type="password"
+                            aria-describedby="passwordHelpBlock"
+                            name="password2"
+                            id="password2"
+                            onChange={handleInput}
+                          />
+                        </InputGroup>
+                      </Col>
+                      {errors.password2 && (
+                        <Col md={4}>
+                          <span className="text-danger">
+                            {errors.password2}
+                          </span>
+                        </Col>
+                      )}
+                    </Row>
+                    <div style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      margin: "5px",
+                    }}>
+                    {/* <button
+                      className="btn btn-danger left-button"
+                      onClick={() => {
+                        handleCloseModal();
+                        // handleDeleteProductLotALL();
+                      }}
+                    >
+                      ยกเลิก
+                    </button> */}
+                      <button type="submit" className="bgeditModalPass right-button">
                         แก้ไข
                       </button>
                     </div>
@@ -434,9 +477,6 @@ function EditMe() {
                     ))}
                   </Form.Select>
                 </InputGroup>
-                {errors.districts && (
-                  <span className="text-danger">{errors.districts}</span>
-                )}
               </Col>
               <Col>
                 <h6 className="txt mb-2">
@@ -453,9 +493,6 @@ function EditMe() {
                   value={values.zip_code}
                   onChange={handleInput}
                 />
-                {errors.zip_code && (
-                  <span className="text-danger">{errors.zip_code}</span>
-                )}
               </Col>
             </Row>
 
