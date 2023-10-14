@@ -191,7 +191,7 @@ function LotImport() {
       pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
       pdf.setTextColor(0); // สีข้อความดำ (RGB)
       const textWidth =
-        (pdf.getStringUnitWidth("Expire Food4Skin") *
+        (pdf.getStringUnitWidth("Import Lot Food4Skin") *
           pdf.internal.getFontSize()) /
         pdf.internal.scaleFactor;
       const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ

@@ -250,7 +250,7 @@ function ShowAgent() {
             />
           </Col>
           <Col md={2}>
-            {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
+            {/* {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
               <div>
                 <img
                   src={values.picture} // ใช้ URL ของรูปภาพจาก state values.picture
@@ -259,7 +259,14 @@ function ShowAgent() {
                   style={{ marginLeft: "20%", marginTop: "30px" }}
                 />
               </div>
-            )}
+            )} */}
+            <img
+              style={{ marginLeft: "20%", marginTop: "30px" }}
+              src={img}
+              // src={`data:image/jpeg;base64,${values.picture}`}
+              className="img"
+              alt="ภาพ"
+            ></img>
           </Col>
           {/* <Col md={2}>
             <img

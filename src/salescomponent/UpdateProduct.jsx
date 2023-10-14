@@ -19,7 +19,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AiOutlineSave } from "react-icons/ai";
 import { BiSolidUserPlus } from "react-icons/bi";
-import Validation from "../function/CreateSalesValidation.jsx";
+import Validation from "../function/CreateProduct";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
 import { useParams } from "react-router-dom";
@@ -69,16 +69,28 @@ function UpdateProduct() {
     ID_sales: "",
     // ID_sales: `${userLoginData[0].ID_sales}`,
   });
+  const [errors, setErrors] = useState({});
 
   const handleUpdate = (event) => {
     event.preventDefault();
-    axios
-      .put("http://localhost:2001/productUpdate/" + id, values)
-      .then((res) => {
-        console.log(res);
-        navigate("/Product");
-      })
-      .catch((err) => console.log(err));
+    const err = Validation({ ...values });
+    setErrors(err);
+    if (
+      err.Name_product === "" &&
+      err.Production_point === "" &&
+      err.Retail_price === "" &&
+      err.Level_1_price === "" &&
+      err.Level_2_price === "" &&
+      err.Level_3_price === ""
+    ) {
+      axios
+        .put("http://localhost:2001/productUpdate/" + id, values)
+        .then((res) => {
+          console.log(res);
+          navigate("/Product");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -102,32 +114,74 @@ function UpdateProduct() {
                 }
               />
             </Col>
+            {errors.Name_product && (
+              <div className="erroredit">
+                <Col>
+                  <span style={{ paddingBottom: "5%" }} className="text-danger">
+                    {errors.Name_product}
+                  </span>
+                </Col>
+              </div>
+            )}
           </Row>
 
           <Row>
             <Col>
-              <span>จุดต่ำกว่าจุดสั่งผลิต</span>
-              <input
-                class="form-control"
-                name="Production_point"
-                type="text"
-                value={values.Production_point}
-                onChange={(e) =>
-                  setValues({ ...values, Production_point: e.target.value })
-                }
-              />
+              <Row>
+                <Col>
+                  <span>จุดต่ำกว่าจุดสั่งผลิต</span>
+                  <input
+                    class="form-control"
+                    name="Production_point"
+                    type="number"
+                    value={values.Production_point}
+                    onChange={(e) =>
+                      setValues({ ...values, Production_point: e.target.value })
+                    }
+                  />
+                </Col>
+                {errors.Production_point && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.Production_point}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
             </Col>
+
             <Col>
-              <span>ราคาปลีก</span>
-              <input
-                class="form-control"
-                name="Retail_price"
-                type="text"
-                value={values.Retail_price}
-                onChange={(e) =>
-                  setValues({ ...values, Retail_price: e.target.value })
-                }
-              />
+              <Row>
+                <Col>
+                  <span>ราคาปลีก</span>
+                  <input
+                    class="form-control"
+                    name="Retail_price"
+                    type="number"
+                    value={values.Retail_price}
+                    onChange={(e) =>
+                      setValues({ ...values, Retail_price: e.target.value })
+                    }
+                  />
+                </Col>
+                {errors.Retail_price && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.Retail_price}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
             </Col>
           </Row>
           <Row>
@@ -136,36 +190,57 @@ function UpdateProduct() {
               <input
                 class="form-control"
                 name="Level_1_price"
-                type="text"
+                type="number"
                 value={values.Level_1_price}
                 onChange={(e) =>
                   setValues({ ...values, Level_1_price: e.target.value })
                 }
               />
+              {errors.Level_1_price && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Level_1_price}</span>
+                  </Col>
+                </div>
+              )}
             </Col>
             <Col>
               <span>ราคาระดับขั้น2</span>
               <input
                 class="form-control"
                 name="Level_2_price"
-                type="text"
+                type="number"
                 value={values.Level_2_price}
                 onChange={(e) =>
                   setValues({ ...values, Level_2_price: e.target.value })
                 }
               />
+              {errors.Level_2_price && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Level_2_price}</span>
+                  </Col>
+                </div>
+              )}
             </Col>
             <Col>
               <span>ราคาระดับขั้น3</span>
               <input
                 class="form-control"
                 name="Level_3_price"
-                type="text"
+                type="number"
                 value={values.Level_3_price}
                 onChange={(e) =>
                   setValues({ ...values, Level_3_price: e.target.value })
                 }
               />
+              {errors.Level_3_price && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Level_3_price}</span>
+                  </Col>
+                </div>
+              )}
             </Col>
           </Row>
 

@@ -33,7 +33,7 @@ function EditAboutSale() {
   const MySwal = withReactContent(Swal); //icon aleart
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log("ID",id)
+  console.log("ID", id);
 
   //จังหวัดอำเภอตำบล
   const [province, setProvince] = useState([]);
@@ -126,6 +126,7 @@ function EditAboutSale() {
           districts: res.data[0].districts,
           email: res.data[0].email,
           password: res.data[0].password,
+          password2: res.data[0].password,
           sex: res.data[0].sex,
           IDcard: res.data[0].IDcard,
           province: res.data[0].province,
@@ -149,12 +150,12 @@ function EditAboutSale() {
   // setSelectedImage(file);
 
   const [values, setValues] = useState({
-
     Persistent_status: "",
     fullname: "",
     districts: "",
     email: "",
     password: "",
+    password2: "",
     sex: "",
     IDcard: "",
     province: "",
@@ -165,32 +166,44 @@ function EditAboutSale() {
     picture: "",
     zip_code: "",
     ID_sales: "",
-
   });
   //add
   const [errors, setErrors] = useState({});
   const handleUpdate = (event) => {
     event.preventDefault();
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
-    const formattedPhone = values.Tel.replace(/-/g, "");
+    // const formattedPhone = values.Tel.replace(/-/g, "");
 
-    const err = Validation({ ...values, Tel: formattedPhone });
+    const err = Validation({ ...values });
     setErrors(err);
-    axios
-      .put("http://localhost:2001/saleUpdate/" + id, {
-        ...values,
-        Tel: formattedPhone,
-      })
-      .then((res) => {
-        console.log(res);
-        MySwal.fire({
-          title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
-          html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
-          icon: "warning",
-        });
-        navigate("/");
-      })
-      .catch((err) => console.log(err));
+    if (
+      err.fullname === "" &&
+      err.email === "" &&
+      err.password === "" &&
+      err.password2 === "" &&
+      err.sex === "" &&
+      err.IDcard === "" &&
+      err.AddressSale === "" &&
+      err.Tel === "" &&
+      err.picture === "" &&
+      err.zip_code === "" &&
+      err.contact === ""
+    ) {
+      axios
+        .put("http://localhost:2001/saleUpdate/" + id, {
+          ...values
+        })
+        .then((res) => {
+          console.log(res);
+          MySwal.fire({
+            title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
+            html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
+            icon: "warning",
+          });
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
+    }
   };
   console.log("values :", values);
   //Check
@@ -200,39 +213,40 @@ function EditAboutSale() {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
-  
-    if (name === "IDcard") {
-      const formattedCardID = value.replace(/-/g, "");
-      const formattedText1 = formattedCardID.replace(/\D/g, "")
-        
-        .slice(0, 13)
-        .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-  
-      setCradID(formattedText1);
-      setValues((prev) => ({ ...prev, [name]: formattedText1 }));
-    }
-    if (name === "Tel") {
-      const formattedPhoneNumber = value.replace(/-/g, "");
-      const formattedText = formattedPhoneNumber.replace(/\D/g, "");
-  
-      let formattedPhoneNumberFinal;
-      if (formattedText.length === 9) {
-        formattedPhoneNumberFinal = formattedText.replace(
-          /(\d{2})(\d{3})(\d{4})/,
-          "$1-$2-$3"
-        );
-      } else {
-        formattedPhoneNumberFinal = formattedText 
-          .slice(0, 10)
-          .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-      }
-  
-      setPhoneNumber(formattedPhoneNumberFinal);
-      setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
-    } else {
-      setValues((prev) => ({ ...prev, [name]: value }));
-    }
-  
+
+    // if (name === "IDcard") {
+    //   const formattedCardID = value.replace(/-/g, "");
+    //   const formattedText1 = formattedCardID.replace(/\D/g, "")
+
+    //     .slice(0, 13)
+    //     .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+
+    //   setCradID(formattedText1);
+    //   setValues((prev) => ({ ...prev, [name]: formattedText1 }));
+    // }
+    // if (name === "Tel") {
+    //   const formattedPhoneNumber = value.replace(/-/g, "");
+    //   const formattedText = formattedPhoneNumber.replace(/\D/g, "");
+
+    //   let formattedPhoneNumberFinal;
+    //   if (formattedText.length === 9) {
+    //     formattedPhoneNumberFinal = formattedText.replace(
+    //       /(\d{2})(\d{3})(\d{4})/,
+    //       "$1-$2-$3"
+    //     );
+    //   } else {
+    //     formattedPhoneNumberFinal = formattedText
+    //       .slice(0, 10)
+    //       .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+    //   }
+
+    //   setPhoneNumber(formattedPhoneNumberFinal);
+    //   setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
+    // } else {
+    //   setValues((prev) => ({ ...prev, [name]: value }));
+    // }
+    setValues((prev) => ({ ...prev, [name]: value }));
+
     if (name === "picture") {
       const selectedFile = event.target.files[0];
       if (selectedFile) {
@@ -240,7 +254,6 @@ function EditAboutSale() {
       }
     }
   };
-  
 
   return (
     <div>
@@ -284,53 +297,86 @@ function EditAboutSale() {
                   {/* <option value="อื่น ๆ">อื่น ๆ</option> */}
                 </Form.Select>
               </Col>
+              {errors.sex && <span className="text-danger">{errors.sex}</span>}
             </Row>
 
-            <h6 className="txt">เลขบัตรประชาชน</h6>
-            <input
-              name="IDcard"
-              className="Input20"
-              id="IDcard"
-              type="text"
-              maxLength={17} 
-              value={values.IDcard}
-              // onChange={(e) =>
-              //   setValues({ ...values, IDcard: e.target.value })
-              // }
-              onChange={handleInput}
-            />
-            {errors.IDcard && (
-              <span className="text-danger">{errors.IDcard}</span>
-            )}
+            <Row>
+              <Col>
+                <h6 className="txt">เลขบัตรประชาชน</h6>
+                <input
+                  name="IDcard"
+                  className="Input20"
+                  id="IDcard"
+                  type="text"
+                  maxLength={13}
+                  value={values.IDcard}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, IDcard: e.target.value })
+                  // }
+                  onChange={handleInput}
+                />
+              </Col>
 
-            <h6 className="txt">ชื่อ-นามสกุล</h6>
-            <input
-              className="Input20"
-              id="fullname"
-              name="fullname"
-              type="text"
-              value={values.fullname}
-              onChange={(e) =>
-                setValues({ ...values, fullname: e.target.value })
-              }
-            />
+              {errors.IDcard && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.IDcard}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
-            <h6 className="txt">อีเมล</h6>
-            <input
-              name="email"
-              className="Input20"
-              id="email"
-              type="text"
-              value={values.email}
-              // onChange={(e) =>
-              //   setValues({ ...values, email: e.target.value })
-              // }
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">ชื่อ-นามสกุล</h6>
+                <input
+                  className="Input20"
+                  id="fullname"
+                  name="fullname"
+                  type="text"
+                  value={values.fullname}
+                  onChange={(e) =>
+                    setValues({ ...values, fullname: e.target.value })
+                  }
+                />
+              </Col>
+              {errors.fullname && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.fullname}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
+
+            <Row>
+              <Col>
+                <h6 className="txt">อีเมล</h6>
+                <input
+                  name="email"
+                  className="Input20"
+                  id="email"
+                  type="text"
+                  value={values.email}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, email: e.target.value })
+                  // }
+                  onChange={handleInput}
+                />
+              </Col>
+              {errors.email && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.email}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
             <Row>
               <Col>
                 <h6 className="txt">รหัสผ่าน</h6>
                 <input
+                  style={{ backgroundColor: " rgb(211, 211, 211)" }}
                   // name="password"
                   className="Input20"
                   // id="password"
@@ -341,31 +387,70 @@ function EditAboutSale() {
 
                 <div className="AppModal">
                   <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <h6 className="txt">รหัสผ่าน</h6>
-                    <input
-                      name="password"
-                      className="Input40"
-                      id="password"
-                      type="password"
-                      aria-describedby="passwordHelpBlock"
-                      // value={values.password}
-                      // onChange={(e) =>
-                      //   setValues({ ...values, password: e.target.value })
-                      // }
-                      onChange={handleInput}
-                    />
-                    <h6 className="txt">ยืนยันรหัสผ่าน</h6>
-                    <input
-                      // name="password"
-                      className="Input40"
-                      // id="password"
-                      type="password"
-                      // aria-describedby="passwordHelpBlock"
-                      // value={values.password}
-                    />
-
-                    <div>
-                      <button type="submit" className="bgeditModalPass">
+                    <h6 className="txt">
+                      <h6>*</h6>รหัสผ่าน
+                    </h6>
+                    <Row>
+                      <Col>
+                        <InputGroup className="mb-3">
+                          <Form.Control
+                            type="password"
+                            name="password"
+                            id="password"
+                            aria-describedby="passwordHelpBlock"
+                            onChange={handleInput}
+                          />
+                        </InputGroup>
+                      </Col>
+                      {errors.password && (
+                        <Col md={4}>
+                          <span className="text-danger">{errors.password}</span>
+                        </Col>
+                      )}
+                    </Row>
+                    <h6 className="txt">
+                      <h6>*</h6>ยืนยันรหัสผ่าน
+                    </h6>
+                    <Row>
+                      <Col>
+                        <InputGroup className="mb-3">
+                          <Form.Control
+                            type="password"
+                            aria-describedby="passwordHelpBlock"
+                            name="password2"
+                            id="password2"
+                            onChange={handleInput}
+                          />
+                        </InputGroup>
+                      </Col>
+                      {errors.password2 && (
+                        <Col md={4}>
+                          <span className="text-danger">
+                            {errors.password2}
+                          </span>
+                        </Col>
+                      )}
+                    </Row>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        margin: "5px",
+                      }}
+                    >
+                      <button
+                        className="btn btn-danger left-button"
+                        onClick={() => {
+                          handleCloseModal();
+                          // handleDeleteProductLotALL();
+                        }}
+                      >
+                        ยกเลิก
+                      </button>
+                      <button
+                        type="submit"
+                        className="bgeditModalPass right-button"
+                      >
                         แก้ไข
                       </button>
                     </div>
@@ -397,6 +482,13 @@ function EditAboutSale() {
                       ))}
                     </Form.Select>
                   </InputGroup>
+                  {errors.province && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.province}</span>
+                      </Col>
+                    </div>
+                  )}
                 </Col>
                 <Col md={6}>
                   <h6 className="txt mb-2">อำเภอ</h6>
@@ -416,6 +508,13 @@ function EditAboutSale() {
                       ))}
                     </Form.Select>
                   </InputGroup>
+                  {errors.districts && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.districts}</span>
+                      </Col>
+                    </div>
+                  )}
                 </Col>
               </Row>
             </Col>
@@ -440,8 +539,12 @@ function EditAboutSale() {
                     ))}
                   </Form.Select>
                 </InputGroup>
-                {errors.districts && (
-                  <span className="text-danger">{errors.districts}</span>
+                {errors.subdistricts && (
+                  <div className="erroredit">
+                    <Col>
+                      <span className="text-danger">{errors.subdistricts}</span>
+                    </Col>
+                  </div>
                 )}
               </Col>
               <Col>
@@ -453,42 +556,69 @@ function EditAboutSale() {
                 <input
                   name="zip_code"
                   className="InputZip"
-                  id="contact"
+                  id="zip_code"
                   type="text"
                   disabled
                   value={values.zip_code}
                   onChange={handleInput}
                 />
                 {errors.zip_code && (
-                  <span className="text-danger">{errors.zip_code}</span>
+                  <div className="erroredit">
+                    <Col>
+                      <span className="text-danger">{errors.zip_code}</span>
+                    </Col>
+                  </div>
                 )}
               </Col>
             </Row>
 
-            <h6 className="txt">เบอร์โทรศัพท์</h6>
-            <input
-              name="Tel"
-              className="Input0"
-              id="Tel"
-              type="text"
-              aria-describedby="passwordHelpBlock"
-              // value={phoneNumber}
-              value={values.Tel}
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">เบอร์โทรศัพท์</h6>
+                <input
+                  name="Tel"
+                  className="Input0"
+                  id="Tel"
+                  type="text"
+                  // aria-describedby="passwordHelpBlock"
+                  // value={phoneNumber}
+                  maxLength={10}
+                  value={values.Tel}
+                  onChange={handleInput}
+                />
+              </Col>
+              {errors.Tel && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Tel}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
-            <h6 className="txt">ช่องทางติดต่อ</h6>
-            <input
-              name="contact"
-              className="Input0"
-              id="contact"
-              type="text"
-              value={values.contact}
-              // onChange={(e) =>
-              //   setValues({ ...values, contact: e.target.value })
-              // }
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">ช่องทางติดต่อ</h6>
+                <input
+                  name="contact"
+                  className="Input0"
+                  id="contact"
+                  type="text"
+                  value={values.contact}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, contact: e.target.value })
+                  // }
+                  onChange={handleInput}
+                />
+              </Col>
+              {errors.contact && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.contact}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
             <Row>
               <Col>
@@ -514,16 +644,13 @@ function EditAboutSale() {
                   onChange={handleInput}
                 />
               </Col>
-              <Col>
-                {/* <h6 className="txt">สถานะ</h6>
-                <input
-                  name="text"
-                  className="Input3"
-                  id="Persistent_status"
-                  type="text"
-                  disabled
-                /> */}
-              </Col>
+              {errors.AddressSale && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.AddressSale}</span>
+                  </Col>
+                </div>
+              )}
             </Row>
 
             {/* <div className="AppModal">
@@ -562,6 +689,16 @@ function EditAboutSale() {
             </div> */}
           </Col>
           <Col md={2}>
+            <h6
+              className="txt"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "20%",
+              }}
+            >
+              <h6>*</h6>ภาพถ่ายพร้อมบัตรประชาชน
+            </h6>
             <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
               src={img}
@@ -569,7 +706,6 @@ function EditAboutSale() {
               className="img"
               alt="ภาพ"
             ></img>
-
             {/* <div>
               {values.picture && (
                 <img
@@ -579,6 +715,27 @@ function EditAboutSale() {
                 />
               )}
             </div> */}
+            <Row>
+              <Col>
+                <InputGroup
+                  className="mb-3"
+                  style={{ marginLeft: "20%", width: "85%", marginTop: "5%" }}
+                >
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    id="picture"
+                    name="picture"
+                    onChange={handleInput}
+                  />
+                </InputGroup>
+              </Col>
+              {errors.picture && (
+                <span style={{ marginLeft: "10%" ,display:"flex",alignItems:"center",justifyContent:"center" }} className="text-danger">
+                  {errors.picture}
+                </span>
+              )}
+            </Row>
           </Col>
         </Row>
 

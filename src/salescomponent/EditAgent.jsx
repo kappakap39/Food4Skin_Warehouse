@@ -27,6 +27,7 @@ import MenuNavSales from "./MenuNavSales";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Validation from "../function/CreateSalesValidation.jsx";
 
 function EditAgent() {
   const MySwal = withReactContent(Swal); //icon aleart
@@ -170,28 +171,40 @@ function EditAgent() {
   //   };
 
   //!
-  //   const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
   const handleUpdate = (event) => {
     event.preventDefault();
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
-    const formattedPhone = values.Tel.replace(/-/g, "");
-    // const err = Validation({ ...values, Tel: formattedPhone });
-    // setErrors(err);
-    axios
-      .put("http://localhost:2001/agentUpdate/" + id, {
-        ...values,
-        Tel: formattedPhone,
-      })
-      .then((res) => {
-        console.log(res);
-        // MySwal.fire({
-        //   title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
-        //   html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
-        //   icon: "warning",
-        // });
-        navigate("/TableAgent");
-      })
-      .catch((err) => console.log(err));
+    // const formattedPhone = values.Tel.replace(/-/g, "");
+    const err = Validation({ ...values });
+    setErrors(err);
+    if (
+      err.sex === "" &&
+      err.IDcard === "" &&
+      err.fullname === "" &&
+      err.email === "" &&
+      err.picture === "" &&
+      err.Address === "" &&
+      err.Tel === "" &&
+      err.zip_code === "" &&
+      err.level === "" &&
+      err.contact === ""
+    ) {
+      axios
+        .put("http://localhost:2001/agentUpdate/" + id, {
+          ...values,
+        })
+        .then((res) => {
+          console.log(res);
+          // MySwal.fire({
+          //   title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
+          //   html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
+          //   icon: "warning",
+          // });
+          navigate("/TableAgent");
+        })
+        .catch((err) => console.log(err));
+    }
   };
   console.log("values :", values);
   //Check
@@ -202,38 +215,39 @@ function EditAgent() {
   const handleInput = (event) => {
     const { name, value } = event.target;
 
-    if (name === "IDcard") {
-      const formattedCardID = value.replace(/-/g, "");
-      const formattedText1 = formattedCardID
-        .replace(/\D/g, "")
+    // if (name === "IDcard") {
+    //   const formattedCardID = value.replace(/-/g, "");
+    //   const formattedText1 = formattedCardID
+    //     .replace(/\D/g, "")
 
-        .slice(0, 13)
-        .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+    //     .slice(0, 13)
+    //     .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
 
-      setCradID(formattedText1);
-      setValues((prev) => ({ ...prev, [name]: formattedText1 }));
-    }
-    if (name === "Tel") {
-      const formattedPhoneNumber = value.replace(/-/g, "");
-      const formattedText = formattedPhoneNumber.replace(/\D/g, "");
+    //   setCradID(formattedText1);
+    //   setValues((prev) => ({ ...prev, [name]: formattedText1 }));
+    // }
+    // if (name === "Tel") {
+    //   const formattedPhoneNumber = value.replace(/-/g, "");
+    //   const formattedText = formattedPhoneNumber.replace(/\D/g, "");
 
-      let formattedPhoneNumberFinal;
-      if (formattedText.length === 9) {
-        formattedPhoneNumberFinal = formattedText.replace(
-          /(\d{2})(\d{3})(\d{4})/,
-          "$1-$2-$3"
-        );
-      } else {
-        formattedPhoneNumberFinal = formattedText
-          .slice(0, 10)
-          .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-      }
+    //   let formattedPhoneNumberFinal;
+    //   if (formattedText.length === 9) {
+    //     formattedPhoneNumberFinal = formattedText.replace(
+    //       /(\d{2})(\d{3})(\d{4})/,
+    //       "$1-$2-$3"
+    //     );
+    //   } else {
+    //     formattedPhoneNumberFinal = formattedText
+    //       .slice(0, 10)
+    //       .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+    //   }
 
-      setPhoneNumber(formattedPhoneNumberFinal);
-      setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
-    } else {
-      setValues((prev) => ({ ...prev, [name]: value }));
-    }
+    //   setPhoneNumber(formattedPhoneNumberFinal);
+    //   setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
+    // } else {
+    //   setValues((prev) => ({ ...prev, [name]: value }));
+    // }
+    setValues((prev) => ({ ...prev, [name]: value }));
 
     if (name === "picture") {
       const selectedFile = event.target.files[0];
@@ -284,42 +298,77 @@ function EditAgent() {
                   <option value="หญิง">หญิง</option>
                   {/* <option value="อื่น ๆ">อื่น ๆ</option> */}
                 </Form.Select>
+                {errors.sex && (
+                  <span className="text-danger">{errors.sex}</span>
+                )}
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <h6 className="txt">เลขบัตรประชาชน</h6>
+                <input
+                  name="IDcard"
+                  className="Input2"
+                  id="IDcard"
+                  type="text"
+                  onChange={handleInput}
+                  style={{ backgroundColor: "white" }}
+                  value={values.IDcard}
+                  maxLength={13}
+                />
+              </Col>
+              {errors.IDcard && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.IDcard}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
-            <h6 className="txt">เลขบัตรประชาชน</h6>
-            <input
-              name="IDcard"
-              className="Input2"
-              id="IDcard"
-              type="text"
-              onChange={handleInput}
-              style={{ backgroundColor: "white" }}
-              value={values.IDcard}
-              maxLength={17} 
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">ชื่อ-นามสกุล</h6>
+                <input
+                  name="fullname"
+                  className="Input2"
+                  id="fullname"
+                  type="text"
+                  onChange={handleInput}
+                  style={{ backgroundColor: "white" }}
+                  value={values.fullname}
+                />
+              </Col>
+              {errors.fullname && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.fullname}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
-            <h6 className="txt">ชื่อ-นามสกุล</h6>
-            <input
-              name="fullname"
-              className="Input2"
-              id="fullname"
-              type="text"
-              onChange={handleInput}
-              style={{ backgroundColor: "white" }}
-              value={values.fullname}
-            />
-
-            <h6 className="txt">อีเมล</h6>
-            <input
-              name="email"
-              className="Input2"
-              id="email"
-              type="text"
-              onChange={handleInput}
-              value={values.email}
-              style={{ backgroundColor: "white" }}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">อีเมล</h6>
+                <input
+                  name="email"
+                  className="Input2"
+                  id="email"
+                  type="text"
+                  onChange={handleInput}
+                  value={values.email}
+                  style={{ backgroundColor: "white" }}
+                />
+              </Col>
+              {errors.email && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.email}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
             {/* <h6 className="txt">พนักงานที่เพิ่มตัวแทน</h6>
             <input
@@ -335,85 +384,129 @@ function EditAgent() {
           <Col md={4}>
             <Row style={{ marginBottom: "20px" }}>
               <Col>
-                <h6 className="txt">จังหวัด</h6>
-                {/* <h6 className="txt">*จังหวัด</h6> */}
-                <InputGroup className="mb-3">
-                  {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
-                  <Form.Select
-                    aria-label="จังหวัด"
-                    type="text"
-                    name="province"
-                    id="province"
-                    onChange={(e) => onChangeProvince(e)}
-                  >
-                    <option>{values.province}</option>
-                    {province.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name_in_thai}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
+                <Row>
+                  <Col>
+                    <h6 className="txt">จังหวัด</h6>
+                    {/* <h6 className="txt">*จังหวัด</h6> */}
+                    <InputGroup className="mb-3">
+                      {/* <InputGroup.Text>จังหวัด</InputGroup.Text> */}
+                      <Form.Select
+                        aria-label="จังหวัด"
+                        type="text"
+                        name="province"
+                        id="province"
+                        onChange={(e) => onChangeProvince(e)}
+                      >
+                        <option>{values.province}</option>
+                        {province.map((item, index) => (
+                          <option key={index} value={item.id}>
+                            {item.name_in_thai}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </InputGroup>
+                  </Col>
+                  {errors.province && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.province}</span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
 
-                <h6 className="txt">ตำบล</h6>
-                {/* <h6 className="txt">*ตำบล</h6> */}
-                <InputGroup className="">
-                  {/* <InputGroup.Text>ตำบล</InputGroup.Text> */}
-                  <Form.Select
-                    aria-label="ตำบล"
-                    type="text"
-                    name="subdistricts"
-                    id="subdistricts"
-                    onChange={(e) => onChangeSubdistricts(e)}
-                  >
-                    <option>{values.subdistricts}</option>
-                    {subdistricts.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name_in_thai}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
+                <Row>
+                  <Col>
+                    <h6 className="txt">ตำบล</h6>
+                    {/* <h6 className="txt">*ตำบล</h6> */}
+                    <InputGroup className="">
+                      {/* <InputGroup.Text>ตำบล</InputGroup.Text> */}
+                      <Form.Select
+                        aria-label="ตำบล"
+                        type="text"
+                        name="subdistricts"
+                        id="subdistricts"
+                        onChange={(e) => onChangeSubdistricts(e)}
+                      >
+                        <option>{values.subdistricts}</option>
+                        {subdistricts.map((item, index) => (
+                          <option key={index} value={item.id}>
+                            {item.name_in_thai}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </InputGroup>
+                  </Col>
+                  {errors.subdistricts && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">
+                          {errors.subdistricts}
+                        </span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
+
                 {/* {errors.districts && (
                   <span className="text-danger">{errors.districts}</span>
                 )} */}
               </Col>
               <Col>
-                <h6 className="txt">อำเภอ</h6>
-                <InputGroup className="" style={{ width: "230px" }}>
-                  <Form.Select
-                    aria-label="อำเภอ"
-                    type="text"
-                    name="districts"
-                    id="districts"
-                    onChange={(e) => onChangeDistricts(e)}
-                  >
-                    <option>{values.districts}</option>
-                    {districts.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name_in_thai}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </InputGroup>
+                <Row>
+                  <Col>
+                    <h6 className="txt">อำเภอ</h6>
+                    <InputGroup className="" style={{ width: "230px" }}>
+                      <Form.Select
+                        aria-label="อำเภอ"
+                        type="text"
+                        name="districts"
+                        id="districts"
+                        onChange={(e) => onChangeDistricts(e)}
+                      >
+                        <option>{values.districts}</option>
+                        {districts.map((item, index) => (
+                          <option key={index} value={item.id}>
+                            {item.name_in_thai}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </InputGroup>
+                  </Col>
+                  {errors.districts && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.districts}</span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
 
-                <h6 className="txt" style={{ marginTop: "15px" }}>
-                  รหัสไปรษณีย์
-                  <h6></h6>
-                </h6>
-                <input
-                  name="zip_code"
-                  class="form-control"
-                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                  id="contact"
-                  type="text"
-                  disabled
-                  value={values.zip_code}
-                  onChange={handleInput}
-                />
-                {/* {errors.zip_code && (
-                  <span className="text-danger">{errors.zip_code}</span>
-                )} */}
+                <Row>
+                  <Col>
+                    <h6 className="txt" style={{ marginTop: "15px" }}>
+                      รหัสไปรษณีย์
+                      <h6></h6>
+                    </h6>
+                    <input
+                      name="zip_code"
+                      class="form-control"
+                      style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                      id="contact"
+                      type="text"
+                      disabled
+                      value={values.zip_code}
+                      onChange={handleInput}
+                    />
+                  </Col>
+                  {errors.zip_code && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.zip_code}</span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
               </Col>
             </Row>
             <Row style={{ marginBottom: "15px" }}>
@@ -433,9 +526,18 @@ function EditAgent() {
                   type="text"
                   aria-describedby="passwordHelpBlock"
                   onChange={handleInput}
+                  maxLength={10}
                   value={values.Tel}
                 />
+                {errors.Tel && (
+                  <div className="erroredit">
+                    <Col>
+                      <span className="text-danger">{errors.Tel}</span>
+                    </Col>
+                  </div>
+                )}
               </Col>
+
               <Col>
                 <h6 className="txt">ระดับขั้นตัวแทนจำหน่าย</h6>
                 <Form.Select
@@ -450,43 +552,117 @@ function EditAgent() {
                   <option value="ระดับขั้น 2">ระดับขั้น 2</option>
                   <option value="ระดับขั้น 3">ระดับขั้น 3</option>
                 </Form.Select>
+                {errors.level && (
+                  <div className="erroredit">
+                    <Col>
+                      <span className="text-danger">{errors.level}</span>
+                    </Col>
+                  </div>
+                )}
               </Col>
             </Row>
-            <div style={{ marginBottom: "15px" }}>
-              <h6 className="txt">ช่องทางติดต่อ</h6>
-              <input
-                name="contact"
-                class="form-control"
-                id="contact"
-                type="text"
-                onChange={handleInput}
-                value={values.contact}
-              />
-            </div>
-            <div>
-              <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
-              <textarea
-                name="Address"
-                className="textareaaddAgent"
-                id="Address"
-                type="text"
-                aria-describedby="passwordHelpBlock"
-                onChange={handleInput}
-                value={values.Address}
-              />
-            </div>
+            <Row>
+              <Col>
+                <div style={{ marginBottom: "15px" }}>
+                  <h6 className="txt">ช่องทางติดต่อ</h6>
+                  <input
+                    name="contact"
+                    class="form-control"
+                    id="contact"
+                    type="text"
+                    onChange={handleInput}
+                    value={values.contact}
+                  />
+                </div>
+              </Col>
+              {errors.contact && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.contact}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
+            <Row>
+              <Col>
+                <div>
+                  <h6 className="txt">ที่อยู่เพิ่มเติม</h6>
+                  <textarea
+                    name="Address"
+                    className="textareaaddAgent"
+                    id="Address"
+                    type="text"
+                    aria-describedby="passwordHelpBlock"
+                    onChange={handleInput}
+                    value={values.Address}
+                  />
+                </div>
+              </Col>
+              {errors.Address && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Address}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
           </Col>
           <Col md={2}>
-            {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
-              <div>
+            <h6
+              className="txt"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "10%",
+              }}
+            >
+              <h6>*</h6>ภาพถ่ายพร้อมบัตรประชาชน
+            </h6>
+            <img
+              style={{ marginLeft: "20%", marginTop: "30px" }}
+              src={img}
+              // src={`data:image/jpeg;base64,${values.picture}`}
+              className="img"
+              alt="ภาพ"
+            ></img>
+            {/* <div>
+              {values.picture && (
                 <img
-                  src={values.picture} // ใช้ URL ของรูปภาพจาก state values.picture
-                  // alt={values.picture}
-                  alt={"ไม่สามารถแสดงภาพได้"}
-                  style={{ marginLeft: "20%", marginTop: "30px" }}
+                  style={{ width: "100px", height: "100px" }}
+                  src={`data:image/jpeg;base64,${values.picture}`}
+                  alt="ภาพ"
                 />
-              </div>
-            )}
+              )}
+            </div> */}
+            <Row>
+              <Col>
+                <InputGroup
+                  className="mb-3"
+                  style={{ marginLeft: "20%", width: "85%", marginTop: "5%" }}
+                >
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    id="picture"
+                    name="picture"
+                    onChange={handleInput}
+                  />
+                </InputGroup>
+              </Col>
+              {errors.picture && (
+                <span
+                  style={{
+                    marginLeft: "25%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  className="text-danger"
+                >
+                  {errors.picture}
+                </span>
+              )}
+            </Row>
           </Col>
           {/* <Col md={2}>
             <img

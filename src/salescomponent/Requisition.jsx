@@ -296,14 +296,14 @@ function Requisition() {
     const { name, value } = event.target;
     if (name === "Amount_products") {
       const Amount_productsValue = Number(value);
-      if (Amount_productsValue < 1) {
-        setValues((prev) => ({
-          ...prev,
-          [name]: "1",
-        }));
-        alert("กรุณากรอกสินค้าที่มากกว่า 1 ชิ้น");
-        return; // ไม่อัปเดตค่าใน state
-      }
+      // if (Amount_productsValue < 1) {
+      //   setValues((prev) => ({
+      //     ...prev,
+      //     [name]: "1",
+      //   }));
+      //   alert("กรุณากรอกสินค้าที่มากกว่า 1 ชิ้น");
+      //   return; // ไม่อัปเดตค่าใน state
+      // }
       setValues((prev) => ({
         ...prev,
         [name]: value,
@@ -351,6 +351,7 @@ function Requisition() {
   // ฟังก์ชันสำหรับลบทั้งหมดใน AllExport
   const handleDeleteProductLotALL = () => {
     setAllExport([]);
+    setAllImportedProducts([]);
   };
 
   //! ฟังก์ชันสำหรับการลบรายการที่เลือก
@@ -560,12 +561,8 @@ function Requisition() {
       // เคลียร์ค่า Amount ใน values โดยเซ็ตเป็นค่าว่าง
       setValues({ ...values, Amount_products: "", remark: "" });
       // เคลียร์ค่าใน input ที่มี name เป็น "Amount"
-      document.querySelector(
-        'input[name="Amount_products"]'
-      ).value = "";
-      document.querySelector(
-        'input[name="remark"]'
-      ).value = "";
+      document.querySelector('input[name="Amount_products"]').value = "";
+      document.querySelector('input[name="remark"]').value = "";
     } else {
       // แจ้งเตือนให้กรอกข้อมูลให้ครบถ้วน
       alert("กรุณากรอกข้อมูลให้ครบถ้วน");
@@ -791,7 +788,7 @@ function Requisition() {
             </Col>
             <Col md={8}>
               <Row style={{ marginBottom: "0px" }}>
-                <Col md={8}></Col>
+                <Col md={6}></Col>
                 <Col md={2}>
                   <span className="txt">สินค้ารวมทั้งสิ้น</span>
                   <input
@@ -823,6 +820,15 @@ function Requisition() {
                     disabled
                     onChange={handleInput}
                   />
+                </Col>
+                <Col md={2} className="d-flex align-self-end" >
+                  <h3
+                  style={{marginBottom:"0px", marginLeft:"40px"}}
+                    className="btn btn-danger"
+                    onClick={handleDeleteProductLotALL}
+                  >
+                    ลบทั้งหมด
+                  </h3>
                 </Col>
               </Row>
               <div className="table-containerLOT" style={{ marginTop: "10px" }}>
@@ -1024,7 +1030,7 @@ function Requisition() {
                               <th>ชื่อสินค้า</th>
                               <th>จำนวน (ชิ้น)</th>
                               <th>หมายเหตุ</th>
-                              <th>ลบ</th>
+                              {/* <th>ลบ</th> */}
                             </tr>
                           </thead>
                           <tbody>
@@ -1051,7 +1057,7 @@ function Requisition() {
                                     value={product.remark}
                                   />
                                 </td>
-                                <td>
+                                {/* <td>
                                   <h3
                                     className="btn btn-danger"
                                     onClick={() => {
@@ -1062,7 +1068,7 @@ function Requisition() {
                                   >
                                     ลบ
                                   </h3>
-                                </td>
+                                </td> */}
                               </tr>
                             ))}
                           </tbody>
@@ -1079,12 +1085,12 @@ function Requisition() {
                       margin: "10px",
                     }}
                   >
-                    <h3
+                    {/* <h3
                       className="btn btn-danger left-button"
                       onClick={handleDeleteProductLotALL}
                     >
                       ลบทั้งหมด
-                    </h3>
+                    </h3> */}
                     <button
                       className="btn btn-secondary right-button"
                       onClick={() => {

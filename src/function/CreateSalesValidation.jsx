@@ -46,6 +46,11 @@ function Validation(values) {
   } else {
     errors.AddressSale = "";
   }
+  if (values.Address === "") {
+    errors.Address = "กรุณากรอกที่อยู่เพิ่มเติม!";
+  } else {
+    errors.Address = "";
+  }
 
 
     
@@ -79,6 +84,11 @@ if (values.picture === "") {
 
 
 
+  if (values.level === "") {
+    errors.level = "กรุณาเลือกระดับขั้น!";
+  } else {
+    errors.level = "";
+  }
   if (values.Persistent_status === "") {
     errors.Persistent_status = "กรุณากรอกสถานะ!";
   } else {

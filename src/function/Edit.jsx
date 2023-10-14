@@ -46,6 +46,11 @@ function Validation(values) {
     } else {
       errors.AddressSale = "";
     }
+    if (values.Address === "") {
+      errors.Address = "กรุณากรอกที่อยู่เพิ่มเติม!";
+    } else {
+      errors.Address = "";
+    }
   
   
       
@@ -89,6 +94,7 @@ function Validation(values) {
     } else {
       errors.contact = "";
     }
+    
     if (values.zip_code === "") {
       errors.zip_code = "กรอกจังหวัดอำเภอและตำบล!";
     } else {

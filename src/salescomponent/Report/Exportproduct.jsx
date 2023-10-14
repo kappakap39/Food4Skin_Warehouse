@@ -191,7 +191,7 @@ function Exportproduct() {
       pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
       pdf.setTextColor(0); // สีข้อความดำ (RGB)
       const textWidth =
-        (pdf.getStringUnitWidth("Expire Food4Skin") * pdf.internal.getFontSize()) /
+        (pdf.getStringUnitWidth("Export Product Food4Skin") * pdf.internal.getFontSize()) /
         pdf.internal.scaleFactor;
       const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
       pdf.text("Export Product Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
@@ -203,7 +203,7 @@ function Exportproduct() {
       pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
       pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
 
-      pdf.save("ExpireFood4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
+      pdf.save("ExportFood4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
     }); // เพิ่มวงเล็บปิดนี้
   }
 

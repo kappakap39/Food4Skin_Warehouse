@@ -21,6 +21,7 @@ import { AiOutlineSave } from "react-icons/ai";
 import { BiSolidUserPlus } from "react-icons/bi";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
+import Validation from "../function/CreateProduct";
 
 function AddProduct() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
@@ -34,22 +35,36 @@ function AddProduct() {
     Level_1_price: "",
     Level_2_price: "",
     Level_3_price: "",
-    ID_sales: `${userLoginData[0].ID_sales}`, 
+    ID_sales: `${userLoginData[0].ID_sales}`,
   });
   console.log(values);
+
+  const [errors, setErrors] = useState({});
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
-    axios
-      .post("http://localhost:2001/addproduct", {
-        ...values,
-      })
-      .then((res) => {
-        console.log(res);
-        navigate("/Product");
-      })
-      .catch((err) => console.log(err));
+    const err = Validation({ ...values });
+    setErrors(err);
+
+    if (
+      err.Name_product === "" &&
+      err.Production_point === "" &&
+      err.Retail_price === "" &&
+      err.Level_1_price === "" &&
+      err.Level_2_price === "" &&
+      err.Level_3_price === ""
+    ) {
+      // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
+      axios
+        .post("http://localhost:2001/addproduct", {
+          ...values,
+        })
+        .then((res) => {
+          console.log(res);
+          navigate("/Product");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   const handleInput = (event) => {
@@ -65,43 +80,108 @@ function AddProduct() {
       <form className="containerPRODUCT" action="" onSubmit={handleSubmit}>
         <h3 className="h3">เพิ่มข้อมูลสินค้า</h3>
         <div className="bodyImport">
-          <span className="txt">
-            <h6>*</h6>ชื่อสินค้า
-          </span>
-          <input
-            class="form-control"
-            name="Name_product"
-            type="text"
-            onChange={handleInput}
-          />
           <Row>
             <Col>
-              <div className="spanProduct">
-                <span className="txt">
-                  <h6>*</h6>จุดต่ำกว่าจุดสั่งผลิต
-                </span>
-                <input
-                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                  class="form-control"
-                  name="Production_point"
-                  type="text"
-                  onChange={handleInput}
-                />
-              </div>
+              <Row>
+                <Col>
+                  <span className="txt">
+                    <h6>*</h6>ชื่อสินค้า
+                  </span>
+                  <input
+                    class="form-control"
+                    name="Name_product"
+                    type="text"
+                    onChange={handleInput}
+                  />
+                </Col>
+                {errors.Name_product && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.Name_product}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
             </Col>
             <Col>
-              <div className="spanProduct">
-                <span className="txt">
-                  <h6>*</h6>ราคาปลีก
-                </span>
-                <input
-                  // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                  class="form-control"
-                  name="Retail_price"
-                  type="text"
-                  onChange={handleInput}
-                />
-              </div>
+              <span className="txt">ผู้ทำรายการ</span>
+              <input
+                style={{ backgroundColor: "#ffffffd7" }}
+                class="form-control"
+                name=""
+                type="text"
+                value={userLoginData[0].fullname}
+                onChange={handleInput}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <Row>
+                <Col>
+                  <div className="spanProduct">
+                    <span className="txt">
+                      <h6>*</h6>จุดต่ำกว่าจุดสั่งผลิต
+                    </span>
+                    <input
+                      // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                      class="form-control"
+                      name="Production_point"
+                      type="number"
+                      onChange={handleInput}
+                    />
+                  </div>
+                </Col>
+                {errors.Production_point && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.Production_point}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
+            </Col>
+
+            <Col>
+              <Row>
+                <Col>
+                  <div className="spanProduct">
+                    <span className="txt">
+                      <h6>*</h6>ราคาปลีก
+                    </span>
+                    <input
+                      // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                      class="form-control"
+                      name="Retail_price"
+                      type="number"
+                      onChange={handleInput}
+                    />
+                  </div>
+                </Col>
+                {errors.Retail_price && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.Retail_price}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
             </Col>
           </Row>
           <Row>
@@ -114,10 +194,17 @@ function AddProduct() {
                   // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                   class="form-control"
                   name="Level_1_price"
-                  type="text"
+                  type="number"
                   onChange={handleInput}
                 />
               </div>
+              {errors.Level_1_price && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Level_1_price}</span>
+                  </Col>
+                </div>
+              )}
             </Col>
             <Col>
               <div className="spanProduct">
@@ -128,10 +215,17 @@ function AddProduct() {
                   // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                   class="form-control"
                   name="Level_2_price"
-                  type="text"
+                  type="number"
                   onChange={handleInput}
                 />
               </div>
+              {errors.Level_2_price && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Level_2_price}</span>
+                  </Col>
+                </div>
+              )}
             </Col>
             <Col>
               <div className="spanProduct">
@@ -142,10 +236,17 @@ function AddProduct() {
                   // style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                   class="form-control"
                   name="Level_3_price"
-                  type="text"
+                  type="number"
                   onChange={handleInput}
                 />
               </div>
+              {errors.Level_3_price && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Level_3_price}</span>
+                  </Col>
+                </div>
+              )}
             </Col>
           </Row>
           <div style={{ marginTop: "20px" }} className="spanProduct">

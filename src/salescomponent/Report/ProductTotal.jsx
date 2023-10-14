@@ -206,11 +206,11 @@ function ProductTotal() {
       pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
       pdf.setTextColor(0); // สีข้อความดำ (RGB)
       const textWidth =
-        (pdf.getStringUnitWidth("Expire Food4Skin") *
+        (pdf.getStringUnitWidth("Product Total Food4Skin") *
           pdf.internal.getFontSize()) /
         pdf.internal.scaleFactor;
       const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
-      pdf.text("Import Lot Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
+      pdf.text("Product Total Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
 
       pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight); // เพิ่มรูปภาพลงใน PDF
 
@@ -219,7 +219,7 @@ function ProductTotal() {
       pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
       pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
 
-      pdf.save("Product Food4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
+      pdf.save("Product_Total_Food4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
     }); // เพิ่มวงเล็บปิดนี้
   }
 

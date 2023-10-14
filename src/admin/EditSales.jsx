@@ -203,7 +203,7 @@ function EditSales() {
               type="text"
               disabled
               value={values.Card_ID}
-              maxLength={17} 
+              maxLength={17}
             />
 
             <h6 className="txt">ชื่อ-นามสกุล</h6>
@@ -350,9 +350,7 @@ function EditSales() {
 
                   //   disabled
                 >
-                  <option>
-                    {values.Persistent_status}
-                  </option>
+                  <option>{values.Persistent_status}</option>
                   <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
                   <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
                 </Form.Select>
@@ -365,7 +363,14 @@ function EditSales() {
             </div>
           </Col>
           <Col md={2}>
-            {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
+          <img
+              style={{ marginLeft: "20%", marginTop: "30px" }}
+              src={img}
+              // src={`data:image/jpeg;base64,${values.picture}`}
+              className="img"
+              alt="ภาพ"
+            ></img>
+            {/* {values.picture && ( // เช็คว่ามี URL ของรูปภาพหรือไม่
               <div>
                 <img
                   src={values.picture} // ใช้ URL ของรูปภาพจาก state values.picture
@@ -374,7 +379,7 @@ function EditSales() {
                   style={{ marginLeft: "20%", marginTop: "30px" }}
                 />
               </div>
-            )}
+            )} */}
           </Col>
           {/* <Col md={2}>
             <img
@@ -394,14 +399,19 @@ function EditSales() {
         </Row>
 
         <Row style={{ marginTop: "20px", marginBottom: "40px" }}>
-          <Col className="cancel" md={5}></Col>
+          <Col className="cancel" md={5}>
+            <Link to="/Salesperson" className="back btn btn-danger">
+              {" "}
+              กลับ{" "}
+            </Link>
+          </Col>
           <Col className="button2" md={6}>
             <Row style={{ marginRight: "25px" }}>
               <Col>
-                <Link to="/Salesperson" className="back btn btn-danger">
+                {/* <Link to="/Salesperson" className="back btn btn-danger">
                   {" "}
                   กลับ{" "}
-                </Link>
+                </Link> */}
               </Col>
               <Col>
                 <Link

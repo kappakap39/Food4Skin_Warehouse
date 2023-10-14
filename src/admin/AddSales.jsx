@@ -255,7 +255,7 @@ function AddSales() {
         <MenuNav />
       </header>
       <form className="containeradd" action="" onSubmit={handleSubmit}>
-        <h3 className="h3add">ตารางเพิ่มรายชื่อพนักงานฝ่ายขาย</h3>
+        <h3 className="h3add">เพิ่มรายชื่อพนักงานฝ่ายขาย</h3>
         {selectedImage && (
           <div className="imgSale">
             <img
@@ -661,23 +661,19 @@ function AddSales() {
         </Row>
 
         <Row style={{ marginTop: "15px", marginBottom: "30px" }}>
-          <Col className="cancel" md={5}>
-            <div></div>
+          <Col md={5}>
+            <Link
+              to="/Salesperson"
+              className="backadd btn btn-danger left-button "
+            >
+              {" "}
+              ยกเลิก{" "}
+            </Link>
           </Col>
           <Col className="button2" md={5}>
-            <Row>
-              <Col>
-                <Link to="/Salesperson" className="backadd btn btn-danger ">
-                  {" "}
-                  ยกเลิก{" "}
-                </Link>
-              </Col>
-              <Col>
-                <button type="submit" className="bgsuccess">
-                  บันทึก
-                </button>
-              </Col>
-            </Row>
+            <button type="submit" className="bgsuccess">
+              บันทึก
+            </button>
           </Col>
         </Row>
       </form>

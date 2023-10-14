@@ -25,6 +25,7 @@ import { AiOutlineSave } from "react-icons/ai";
 // import ValidationAddAgent from "../function/CrealeAgent.jsx";
 import MenuNavSales from "./MenuNavSales";
 import FormText from "react-bootstrap/esm/FormText";
+import Validation from "../function/CreateSalesValidation.jsx";
 
 function AddAgent() {
   const navigate = useNavigate();
@@ -116,21 +117,58 @@ function AddAgent() {
   // post("http://localhost:2001/addagent", values)
   //   const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (event) => {
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
+  //   const formattedPhone = values.Tel.replace(/-/g, "");
+  //   // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
+  //   axios
+  //     .post("http://localhost:2001/addagent", {
+  //       ...values,
+  //       Tel: formattedPhone,
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //       navigate("/TableAgent");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+  const [errors, setErrors] = useState({});
+
+  const handleSubmit = (event) => {
     event.preventDefault();
+
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
     const formattedPhone = values.Tel.replace(/-/g, "");
-    // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
-    axios
-      .post("http://localhost:2001/addagent", {
-        ...values,
-        Tel: formattedPhone,
-      })
-      .then((res) => {
-        console.log(res);
-        navigate("/TableAgent");
-      })
-      .catch((err) => console.log(err));
+
+    const err = Validation({ ...values, Tel: formattedPhone });
+    setErrors(err);
+
+    if (
+      err.sex === "" &&
+      err.IDcard === "" &&
+      err.fullname === "" &&
+      err.email === "" &&
+      err.picture === "" &&
+      err.Address === "" &&
+      err.Tel === "" &&
+      err.zip_code === "" &&
+      err.level === "" &&
+      err.contact === ""
+    ) {
+      // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
+      axios
+        .post("http://localhost:2001/addagent", {
+          ...values,
+          Tel: formattedPhone,
+        })
+        .then((res) => {
+          console.log(res);
+          navigate("/TableAgent");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   // const handleSubmit = (event) => {
@@ -165,7 +203,6 @@ function AddAgent() {
   //       .catch((err) => console.log(err));
   //   }
   // };
-  
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cradID, setCradID] = useState("");
@@ -222,7 +259,7 @@ function AddAgent() {
         <MenuNavSales />
       </header>
       <form className="containeradd" action="" onSubmit={handleSubmit}>
-        <h3 className="h3add">ตารางเพิ่มรายชื่อตัวแทนจำหน่าย</h3>
+        <h3 className="h3add">เพิ่มรายชื่อตัวแทนจำหน่าย</h3>
         {selectedImage && (
           <div className="imgSale">
             <img
@@ -251,9 +288,9 @@ function AddAgent() {
                   <option value="ชาย">ชาย</option>
                   <option value="หญิง">หญิง</option>
                 </Form.Select>
-                {/* {errors.sex && (
+                {errors.sex && (
                   <span className="text-danger">{errors.sex}</span>
-                )} */}
+                )}
               </Col>
               <Col>
                 <h6 className="txt">
@@ -270,12 +307,12 @@ function AddAgent() {
                       id="IDcard"
                       value={cradID}
                       onChange={handleInput}
-                      maxLength={17} 
+                      maxLength={17}
                     />
                   </InputGroup>
-                  {/* {errors.IDcard && (
+                  {errors.IDcard && (
                     <span className="text-danger">{errors.IDcard}</span>
-                  )} */}
+                  )}
                 </div>
               </Col>
             </Row>
@@ -305,9 +342,9 @@ function AddAgent() {
                       ))}
                     </Form.Select>
                   </InputGroup>
-                  {/* {errors.province && (
+                  {errors.province && (
                     <span className="text-danger">{errors.province}</span>
-                  )} */}
+                  )}
                 </div>
               </Col>
               <Col>
@@ -331,9 +368,9 @@ function AddAgent() {
                       ))}
                     </Form.Select>
                   </InputGroup>
-                  {/* {errors.districts && (
+                  {errors.districts && (
                     <span className="text-danger">{errors.districts}</span>
-                  )} */}
+                  )}
                 </div>
               </Col>
             </Row>
@@ -362,11 +399,11 @@ function AddAgent() {
                 </InputGroup>
               </Col>
 
-              {/* {errors.fullname && (
+              {errors.fullname && (
                 <Col md={4}>
                   <span className="text-danger">{errors.fullname}</span>
                 </Col>
-              )} */}
+              )}
             </Row>
 
             <Row>
@@ -384,11 +421,11 @@ function AddAgent() {
                   />
                 </InputGroup>
               </Col>
-              {/* {errors.email && (
+              {errors.email && (
                 <Col md={4}>
                   <span className="text-danger">{errors.email}</span>
                 </Col>
-              )} */}
+              )}
             </Row>
 
             {/* <h6 className="txt">*อีเมล</h6> */}
@@ -418,9 +455,9 @@ function AddAgent() {
                       ))}
                     </Form.Select>
                   </InputGroup>
-                  {/* {errors.subdistricts && (
+                  {errors.subdistricts && (
                     <span className="text-danger">{errors.subdistricts}</span>
-                  )} */}
+                  )}
                 </div>
               </Col>
               <Col>
@@ -435,9 +472,9 @@ function AddAgent() {
                     value={values.zip_code}
                     onChange={handleInput}
                   />
-                  {/* {errors.zip_code && (
+                  {errors.zip_code && (
                     <span className="text-danger">{errors.zip_code}</span>
-                  )} */}
+                  )}
                 </div>
               </Col>
             </Row>
@@ -459,11 +496,11 @@ function AddAgent() {
                   />
                 </InputGroup>
               </Col>
-              {/* {errors.Tel && (
+              {errors.Tel && (
                 <Col md={4}>
                   <span className="text-danger">{errors.Tel}</span>
                 </Col>
-              )} */}
+              )}
             </Row>
           </Col>
         </Row>
@@ -485,11 +522,11 @@ function AddAgent() {
                   />
                 </InputGroup>
               </Col>
-              {/* {errors.picture && (
+              {errors.picture && (
                 <Col md={4}>
                   <span className="text-danger">{errors.picture}</span>
                 </Col>
-              )} */}
+              )}
 
               <h6 className="txt">
                 <h6>*</h6>ช่องทางติดต่อ
@@ -506,11 +543,11 @@ function AddAgent() {
                   />
                 </InputGroup>
               </Col>
-              {/* {errors.contact && (
+              {errors.contact && (
                 <Col md={4}>
                   <span className="text-danger">{errors.contact}</span>
                 </Col>
-              )} */}
+              )}
             </Row>
 
             {/* <h6 className="txt">ภาพถ่ายพร้อมบัตรประชาชน</h6> */}
@@ -533,11 +570,11 @@ function AddAgent() {
                   onChange={handleInput}
                 ></textarea>
               </Col>
-              {/* {errors.Address && (
+              {errors.Address && (
                 <Col md={4}>
                   <span className="text-danger">{errors.Address}</span>
                 </Col>
-              )} */}
+              )}
 
               <h6 className="txt">
                 <h6>*</h6>ระดับขั้นของตัวแทน
@@ -557,28 +594,31 @@ function AddAgent() {
                   <option value="ระดับขั้น 3">ระดับขั้น 3</option>
                 </Form.Select>
               </Col>
-              {/* {errors.Persistent_status && (
+              {errors.level && (
                   <Col md={4}>
                     <span className="text-danger">
-                      {errors.Persistent_status}
+                      {errors.level}
                     </span>
                   </Col>
-                )} */}
+                )}
             </Row>
           </Col>
         </Row>
 
         <Row style={{ marginTop: "15px", marginBottom: "30px" }}>
           <Col className="cancel" md={5}>
-            <div></div>
+            <Link to="/TableAgent" className="backadd btn btn-danger ">
+              {" "}
+              ยกเลิก{" "}
+            </Link>
           </Col>
           <Col className="button2" md={5}>
             <Row>
               <Col>
-                <Link to="/TableAgent" className="backadd btn btn-danger ">
+                {/* <Link to="/TableAgent" className="backadd btn btn-danger ">
                   {" "}
                   ยกเลิก{" "}
-                </Link>
+                </Link> */}
               </Col>
               <Col>
                 <button type="submit" className="bgsuccess">

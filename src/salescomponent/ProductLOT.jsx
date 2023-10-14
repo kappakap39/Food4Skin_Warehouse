@@ -40,22 +40,20 @@ function ProductLOT() {
 
     return date.toLocaleDateString(undefined, options);
   }
-  
+
   function formatDateY(dateString) {
     if (!dateString) {
       return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
     }
-  
+
     const date = new Date(dateString);
-  
+
     // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
     const yearBC = date.getFullYear();
-  
+
     return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
-  
-  
-  
+
   //! ค้นหา
   // http://localhost:2001/NameProduct
   const [nameproduct, setNameproduct] = useState([]);
@@ -440,7 +438,7 @@ function ProductLOT() {
                 <th>สินค้าคงเหลือ (ชิ้น)</th>
                 <th>วันที่ผลิต</th>
                 <th>วันที่หมดอายุ</th>
-                <th>พนักงานที่เพิ่มสินค้า</th>
+                <th>พนักงานเพิ่มล็อต</th>
                 {/* <th>หมายเหตุ</th> */}
 
                 <th className="readtext">ข้อมูล</th>
@@ -583,6 +581,32 @@ function ProductLOT() {
           </div>
         </div>
         <nav className="Nextpage">
+          {/* <ul className="pagination">
+            <li className="page-item">
+              <a href="#" className="page-link" onClick={prePage}>
+                Prev
+              </a>
+            </li>
+            {number.length > 1 ? (
+              <>
+                <li className="page-item">
+                  <a
+                    href="#"
+                    className="page-link active" 
+                    onClick={() => changeCPage(currentPage)}
+                  >
+                    {currentPage}
+                  </a>
+                </li>
+              </>
+            ) : null}
+            <li className="page-item">
+              <a href="#" className="page-link" onClick={nextPage}>
+                Next
+              </a>
+            </li>
+          </ul> */}
+
           <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>

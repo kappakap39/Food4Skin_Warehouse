@@ -24,7 +24,7 @@ import Modal from "./Modal";
 
 import img from "../assets/002.png";
 import MenuNav from "./MenuNav";
-import Validation from "../function/EditAdmin";
+import Validation from "../function/Edit";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -123,6 +123,7 @@ function EditMe() {
           districts: res.data[0].districts,
           email: res.data[0].email,
           password: res.data[0].password,
+          password2: res.data[0].password,
           sex: res.data[0].sex,
           IDcard: res.data[0].IDcard,
           province: res.data[0].province,
@@ -160,31 +161,38 @@ function EditMe() {
     contact: "",
     picture: "",
     zip_code: "",
-    ID_admin: "",
     // PhoneNumber: "",
     // Card_ID: "",
   });
   //add
-console.log("values",values)
+  console.log("values", values);
   const [errors, setErrors] = useState({});
 
   const handleUpdate = (event) => {
     event.preventDefault();
+
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
-    const formattedPhone = values.Tel.replace(/-/g, "");
-    const err = Validation({ ...values, Tel: formattedPhone });
+    // const formattedPhone = values.Tel.replace(/-/g, "");
+    const err = Validation({ ...values });
     setErrors(err);
 
     if (
-      
+      err.fullname === "" &&
+      err.email === "" &&
       err.password === "" &&
-      err.password2 === "" 
-      
+      err.password2 === "" &&
+      err.sex === "" &&
+      err.IDcard === "" &&
+      err.Address === "" &&
+      err.Tel === "" &&
+      err.picture === "" &&
+      err.zip_code === "" &&
+      err.contact === ""
     ) {
       axios
         .put("http://localhost:2001/adminUpdate/" + id, {
           ...values,
-          Tel: formattedPhone,
+          // Tel: formattedPhone,
         })
         .then((res) => {
           console.log(res);
@@ -207,39 +215,39 @@ console.log("values",values)
   const handleInput = (event) => {
     const { name, value } = event.target;
 
-    if (name === "IDcard") {
-      const formattedCardID = value.replace(/-/g, "");
-      const formattedText1 = formattedCardID
-        .replace(/\D/g, "")
+    // if (name === "IDcard") {
+    //   const formattedCardID = value.replace(/-/g, "");
+    //   const formattedText1 = formattedCardID
+    //     .replace(/\D/g, "")
+    //     .slice(0, 13)
+    //     .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
 
-        .slice(0, 13)
-        .replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+    //   setCradID(formattedText1);
+    //   setValues((prev) => ({ ...prev, [name]: formattedText1 }));
+    // }
+    // if (name === "Tel") {
+    //   const formattedPhoneNumber = value.replace(/-/g, "");
+    //   const formattedText = formattedPhoneNumber.replace(/\D/g, "");
 
-      setCradID(formattedText1);
-      setValues((prev) => ({ ...prev, [name]: formattedText1 }));
-    }
-    if (name === "Tel") {
-      const formattedPhoneNumber = value.replace(/-/g, "");
-      const formattedText = formattedPhoneNumber.replace(/\D/g, "");
+    //   let formattedPhoneNumberFinal;
+    //   if (formattedText.length === 9) {
+    //     formattedPhoneNumberFinal = formattedText.replace(
+    //       /(\d{2})(\d{3})(\d{4})/,
+    //       "$1-$2-$3"
+    //     );
+    //   } else {
+    //     formattedPhoneNumberFinal = formattedText
+    //       .slice(0, 10)
+    //       .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+    //   }
 
-      let formattedPhoneNumberFinal;
-      if (formattedText.length === 9) {
-        formattedPhoneNumberFinal = formattedText.replace(
-          /(\d{2})(\d{3})(\d{4})/,
-          "$1-$2-$3"
-        );
-      } else {
-        formattedPhoneNumberFinal = formattedText
-          .slice(0, 10)
-          .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-      }
+    //   setPhoneNumber(formattedPhoneNumberFinal);
+    //   setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
+    // } else {
+    //   setValues((prev) => ({ ...prev, [name]: value }));
+    // }
 
-      setPhoneNumber(formattedPhoneNumberFinal);
-      setValues((prev) => ({ ...prev, [name]: formattedPhoneNumberFinal }));
-    } else {
-      setValues((prev) => ({ ...prev, [name]: value }));
-    }
-
+    setValues((prev) => ({ ...prev, [name]: value }));
     if (name === "picture") {
       const selectedFile = event.target.files[0];
       if (selectedFile) {
@@ -272,64 +280,105 @@ console.log("values",values)
                 />
               </Col>
               <Col md={8}>
-                <h6 className="txt">เพศ</h6>
-                <Form.Select
-                  className="InputSex0"
-                  aria-label="เพศ"
-                  name="sex"
-                  type="text"
-                  id="Sex"
-                  value={values.sex}
-                  // onChange={(e) =>
-                  //   setValues({ ...values, sex: e.target.value })
-                  // }
-                  onChange={handleInput}
-                >
-                  <option value="ชาย">ชาย</option>
-                  <option value="หญิง">หญิง</option>
-                  {/* <option value="อื่น ๆ">อื่น ๆ</option> */}
-                </Form.Select>
+                <Row>
+                  <Col>
+                    <h6 className="txt">เพศ</h6>
+                    <Form.Select
+                      className="InputSex0"
+                      aria-label="เพศ"
+                      name="sex"
+                      type="text"
+                      id="Sex"
+                      value={values.sex}
+                      // onChange={(e) =>
+                      //   setValues({ ...values, sex: e.target.value })
+                      // }
+                      onChange={handleInput}
+                    >
+                      <option value="ชาย">ชาย</option>
+                      <option value="หญิง">หญิง</option>
+                      {/* <option value="อื่น ๆ">อื่น ๆ</option> */}
+                    </Form.Select>
+                  </Col>
+                  {errors.sex && (
+                    <span className="text-danger">{errors.sex}</span>
+                  )}
+                </Row>
               </Col>
             </Row>
 
-            <h6 className="txt">เลขบัตรประชาชน</h6>
-            <input
-              name="IDcard"
-              className="Input20"
-              id="IDcard"
-              type="text"
-              maxLength={17}
-              value={values.IDcard}
-              // onChange={(e) =>
-              //   setValues({ ...values, IDcard: e.target.value })
-              // }
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">เลขบัตรประชาชน</h6>
+                <input
+                  name="IDcard"
+                  className="Input20"
+                  id="IDcard"
+                  type="text"
+                  maxLength={13}
+                  value={values.IDcard}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, IDcard: e.target.value })
+                  // }
+                  onChange={handleInput}
+                />
+              </Col>
 
-            <h6 className="txt">ชื่อ-นามสกุล</h6>
-            <input
-              className="Input20"
-              id="fullname"
-              name="fullname"
-              type="text"
-              value={values.fullname}
-              onChange={(e) =>
-                setValues({ ...values, fullname: e.target.value })
-              }
-            />
+              {errors.IDcard && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.IDcard}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
+            <Row>
+              <Col>
+                <h6 className="txt">ชื่อ-นามสกุล</h6>
+                <input
+                  className="Input20"
+                  id="fullname"
+                  name="fullname"
+                  type="text"
+                  value={values.fullname}
+                  onChange={(e) =>
+                    setValues({ ...values, fullname: e.target.value })
+                  }
+                />
+              </Col>
+              {errors.fullname && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.fullname}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
-            <h6 className="txt">อีเมล</h6>
-            <input
-              name="email"
-              className="Input20"
-              id="email"
-              type="text"
-              value={values.email}
-              // onChange={(e) =>
-              //   setValues({ ...values, email: e.target.value })
-              // }
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">อีเมล</h6>
+                <input
+                  name="email"
+                  className="Input20"
+                  id="email"
+                  type="text"
+                  value={values.email}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, email: e.target.value })
+                  // }
+                  onChange={handleInput}
+                />
+              </Col>
+              {errors.email && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.email}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
+
             <Row>
               <Col>
                 <h6 className="txt">รหัสผ่าน</h6>
@@ -388,12 +437,14 @@ console.log("values",values)
                         </Col>
                       )}
                     </Row>
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      margin: "5px",
-                    }}>
-                    {/* <button
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        margin: "5px",
+                      }}
+                    >
+                      <button
                       className="btn btn-danger left-button"
                       onClick={() => {
                         handleCloseModal();
@@ -401,8 +452,11 @@ console.log("values",values)
                       }}
                     >
                       ยกเลิก
-                    </button> */}
-                      <button type="submit" className="bgeditModalPass right-button">
+                    </button>
+                      <button
+                        type="submit"
+                        className="bgeditModalPass right-button"
+                      >
                         แก้ไข
                       </button>
                     </div>
@@ -434,6 +488,13 @@ console.log("values",values)
                       ))}
                     </Form.Select>
                   </InputGroup>
+                  {errors.province && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.province}</span>
+                      </Col>
+                    </div>
+                  )}
                 </Col>
                 <Col md={6}>
                   <h6 className="txt mb-2">อำเภอ</h6>
@@ -453,6 +514,13 @@ console.log("values",values)
                       ))}
                     </Form.Select>
                   </InputGroup>
+                  {errors.districts && (
+                    <div className="erroredit">
+                      <Col>
+                        <span className="text-danger">{errors.districts}</span>
+                      </Col>
+                    </div>
+                  )}
                 </Col>
               </Row>
             </Col>
@@ -477,6 +545,13 @@ console.log("values",values)
                     ))}
                   </Form.Select>
                 </InputGroup>
+                {errors.subdistricts && (
+                  <div className="erroredit">
+                    <Col>
+                      <span className="text-danger">{errors.subdistricts}</span>
+                    </Col>
+                  </div>
+                )}
               </Col>
               <Col>
                 <h6 className="txt mb-2">
@@ -487,39 +562,69 @@ console.log("values",values)
                 <input
                   name="zip_code"
                   className="InputZip"
-                  id="contact"
+                  id="zip_code"
                   type="text"
                   disabled
                   value={values.zip_code}
                   onChange={handleInput}
                 />
+                {errors.zip_code && (
+                  <div className="erroredit">
+                    <Col>
+                      <span className="text-danger">{errors.zip_code}</span>
+                    </Col>
+                  </div>
+                )}
               </Col>
             </Row>
 
-            <h6 className="txt">เบอร์โทรศัพท์</h6>
-            <input
-              name="Tel"
-              className="Input0"
-              id="Tel"
-              type="text"
-              aria-describedby="passwordHelpBlock"
-              // value={phoneNumber}
-              value={values.Tel}
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">เบอร์โทรศัพท์</h6>
+                <input
+                  name="Tel"
+                  className="Input0"
+                  id="Tel"
+                  type="text"
+                  // aria-describedby="passwordHelpBlock"
+                  // value={phoneNumber}
+                  maxLength={10}
+                  value={values.Tel}
+                  onChange={handleInput}
+                />
+              </Col>
+              {errors.Tel && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Tel}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
-            <h6 className="txt">ช่องทางติดต่อ</h6>
-            <input
-              name="contact"
-              className="Input0"
-              id="contact"
-              type="text"
-              value={values.contact}
-              // onChange={(e) =>
-              //   setValues({ ...values, contact: e.target.value })
-              // }
-              onChange={handleInput}
-            />
+            <Row>
+              <Col>
+                <h6 className="txt">ช่องทางติดต่อ</h6>
+                <input
+                  name="contact"
+                  className="Input0"
+                  id="contact"
+                  type="text"
+                  value={values.contact}
+                  // onChange={(e) =>
+                  //   setValues({ ...values, contact: e.target.value })
+                  // }
+                  onChange={handleInput}
+                />
+              </Col>
+              {errors.contact && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.contact}</span>
+                  </Col>
+                </div>
+              )}
+            </Row>
 
             <Row>
               <Col>
@@ -545,16 +650,13 @@ console.log("values",values)
                   onChange={handleInput}
                 />
               </Col>
-              <Col>
-                {/* <h6 className="txt">สถานะ</h6>
-                <input
-                  name="text"
-                  className="Input3"
-                  id="Persistent_status"
-                  type="text"
-                  disabled
-                /> */}
-              </Col>
+              {errors.Address && (
+                <div className="erroredit">
+                  <Col>
+                    <span className="text-danger">{errors.Address}</span>
+                  </Col>
+                </div>
+              )}
             </Row>
 
             {/* <div className="AppModal">
@@ -593,6 +695,16 @@ console.log("values",values)
             </div> */}
           </Col>
           <Col md={2}>
+            <h6
+              className="txt"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "20%",
+              }}
+            >
+              <h6>*</h6>ภาพถ่ายพร้อมบัตรประชาชน
+            </h6>
             <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
               src={img}
@@ -600,7 +712,6 @@ console.log("values",values)
               className="img"
               alt="ภาพ"
             ></img>
-
             {/* <div>
               {values.picture && (
                 <img
@@ -610,6 +721,27 @@ console.log("values",values)
                 />
               )}
             </div> */}
+            <Row>
+              <Col>
+                <InputGroup
+                  className="mb-3"
+                  style={{ marginLeft: "20%", width: "85%", marginTop: "5%" }}
+                >
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    id="picture"
+                    name="picture"
+                    onChange={handleInput}
+                  />
+                </InputGroup>
+              </Col>
+              {errors.picture && (
+                <span style={{ marginLeft: "10%" }} className="text-danger">
+                  {errors.picture}
+                </span>
+              )}
+            </Row>
           </Col>
         </Row>
 

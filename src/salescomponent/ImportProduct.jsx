@@ -21,6 +21,7 @@ import { AiOutlineSave } from "react-icons/ai";
 import { BiSolidUserPlus } from "react-icons/bi";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
+import Validation from "../function/CreateLot";
 //!alert EF
 // npm install --save sweetalert2 sweetalert2-react-content
 import Swal from "sweetalert2";
@@ -31,14 +32,13 @@ function ImportProduct() {
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
 
-
   //!date
   useEffect(() => {
     // สร้างวันที่ปัจจุบันในรูปแบบ ISO (YYYY-MM-DD)
     const currentDate = new Date().toISOString().split("T")[0];
 
     // กำหนดค่าเริ่มต้นให้กับ date_import เป็นวันที่ปัจจุบัน
-    setValues((prev) => ({ ...prev, date_import: currentDate }));
+    // setValues((prev) => ({ ...prev, date_import: currentDate }));
   }, []);
 
   //! สร้าง state สำหรับเก็บค่า latestIDLot ดึงไอดี่าสุด+1
@@ -56,14 +56,15 @@ function ImportProduct() {
         .then((res) => {
           // ในกรณีที่ API คืนค่า Lot_ID ล่าสุดเป็นตัวเลข
           // คุณสามารถเซ็ตค่า latestLotID และ Lot_ID ดังนี้
-          const latestLotID = res.data.length > 0 ? res.data[res.data.length - 1].Lot_ID + 1 : 1;
+          const latestLotID =
+            res.data.length > 0 ? res.data[res.data.length - 1].Lot_ID + 1 : 1;
           setLatestIDLot(latestLotID);
           setValues((prev) => ({ ...prev, Lot_ID: latestLotID })); // เซ็ต Lot_ID
         })
         .catch((err) => console.log(err));
     }
   }, [currentIDProduct]); // เรียกใช้ useEffect เมื่อ currentIDProduct เปลี่ยนแปลง
-  
+
   console.log("currentIDProduct :", currentIDProduct);
 
   //! select
@@ -89,24 +90,40 @@ function ImportProduct() {
   });
 
   console.log("ข้อมูลที่กรอก", values);
+
+  const [errors, setErrors] = useState({});
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const err = Validation({ ...values });
+    setErrors(err);
+
     // ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือประมวลผลต่อไป
-    axios
-      .post("http://localhost:2001/addproductLOT", {
-        ...values,
-      })
-      .then((res) => {
-        console.log(res);
-        MySwal.fire({
-          title: <strong>ทำรายการนำเข้าเสร็จสิ้น</strong>,
-          // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
-          icon: "success",
+    if (
+      err.ID_product === "" &&
+      err.date_import === "" &&
+      err.date_list === "" &&
+      err.date_list_EXP === "" &&
+      err.Quantity === "" &&
+      err.Inventories_lot === "" &&
+      err.remark === ""
+    ) {
+      axios
+        .post("http://localhost:2001/addproductLOT", {
+          ...values,
         })
-        navigate("/ProductLOT");
-      })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          console.log(res);
+          MySwal.fire({
+            title: <strong>ทำรายการนำเข้าเสร็จสิ้น</strong>,
+            // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+            icon: "success",
+          });
+          navigate("/ProductLOT");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   // ใช้ useEffect เพื่อติดตามการเปลี่ยนแปลงใน Quantity
@@ -191,42 +208,60 @@ function ImportProduct() {
                 </Row>
               </Col>
               <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่รับเข้า
-                </span>
-                <input
-                  class="form-control"
-                  name="date_import"
-                  type="date"
-                  onChange={handleInput}
-                />
+                <Row>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>วันที่รับเข้า
+                    </span>
+                    <input
+                      class="form-control"
+                      name="date_import"
+                      type="date"
+                      onChange={handleInput}
+                    />
+                  </Col>
+                  {errors.date_import && (
+                    <div className="erroredit">
+                      <Col>
+                        <span
+                          style={{ paddingTop: "10%" }}
+                          className="text-danger"
+                        >
+                          {errors.date_import}
+                        </span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
               </Col>
             </Row>
           </div>
           <Row>
             <Col>
-              <div className="spanProduct">
-                <span className="txt">
-                  <h6>*</h6>ชื่อสินค้า
-                </span>
-                <select
-                  name="ID_product"
-                  id="ID_product"
-                  type="text"
-                  className="form-select"
-                  onChange={(event) => {
-                    handleInput(event);
-                    setCurrentIDProduct(event.target.value); // เมื่อเลือก ID_product ให้เซ็ตค่า currentIDProduct
-                  }}
-                >
-                  <option value="">เลือกสินค้า</option>
-                  {nameproduct.map((item, index) => (
-                    <option key={index} value={item.ID_product}>
-                      {item.Name_product}
-                    </option>
-                  ))}
-                </select>
-                {/* <select
+              <Row>
+                <Col>
+                  <div className="spanProduct">
+                    <span className="txt">
+                      <h6>*</h6>ชื่อสินค้า
+                    </span>
+                    <select
+                      name="ID_product"
+                      id="ID_product"
+                      type="text"
+                      className="form-select"
+                      onChange={(event) => {
+                        handleInput(event);
+                        setCurrentIDProduct(event.target.value); // เมื่อเลือก ID_product ให้เซ็ตค่า currentIDProduct
+                      }}
+                    >
+                      <option value="">เลือกสินค้า</option>
+                      {nameproduct.map((item, index) => (
+                        <option key={index} value={item.ID_product}>
+                          {item.Name_product}
+                        </option>
+                      ))}
+                    </select>
+                    {/* <select
                   name="ID_product"
                   id="ID_product"
                   type="text"
@@ -240,20 +275,50 @@ function ImportProduct() {
                     </option>
                   ))}
                 </select> */}
-              </div>
+                  </div>
+                </Col>
+                {errors.ID_product && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.ID_product}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
             </Col>
             <Col>
-              <div className="spanProduct">
-                <span className="txt">
-                  <h6>*</h6>จำนวนสินค้า
-                </span>
-                <input
-                  class="form-control"
-                  name="Quantity"
-                  type="number"
-                  onChange={handleInput}
-                />
-              </div>
+              <Row>
+                <Col>
+                  <div className="spanProduct">
+                    <span className="txt">
+                      <h6>*</h6>จำนวนสินค้า
+                    </span>
+                    <input
+                      class="form-control"
+                      name="Quantity"
+                      type="number"
+                      onChange={handleInput}
+                    />
+                  </div>
+                </Col>
+                {errors.Quantity && (
+                  <div className="erroredit">
+                    <Col>
+                      <span
+                        style={{ paddingTop: "10%" }}
+                        className="text-danger"
+                      >
+                        {errors.Quantity}
+                      </span>
+                    </Col>
+                  </div>
+                )}
+              </Row>
             </Col>
             {/* <Col>
               <div className="spanProduct">
@@ -271,41 +336,87 @@ function ImportProduct() {
           <div className="spanProduct">
             <Row>
               <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่ผลิต
-                </span>
-                <input
-                  class="form-control"
-                  name="date_list"
-                  type="date"
-                  onChange={handleInput}
-                />
+                <Row>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>วันที่ผลิต
+                    </span>
+                    <input
+                      class="form-control"
+                      name="date_list"
+                      type="date"
+                      onChange={handleInput}
+                    />
+                  </Col>
+                  {errors.date_list && (
+                    <div className="erroredit">
+                      <Col>
+                        <span
+                          style={{ paddingTop: "10%" }}
+                          className="text-danger"
+                        >
+                          {errors.date_list}
+                        </span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
               </Col>
               <Col>
-                <span className="txt">
-                  <h6>*</h6>วันที่หมดอายุ
-                </span>
-                <input
-                  class="form-control"
-                  name="date_list_EXP"
-                  type="date"
-                  onChange={handleInput}
-                />
+                <Row>
+                  <Col>
+                    <span className="txt">
+                      <h6>*</h6>วันที่หมดอายุ
+                    </span>
+                    <input
+                      class="form-control"
+                      name="date_list_EXP"
+                      type="date"
+                      onChange={handleInput}
+                    />
+                  </Col>
+                  {errors.date_list_EXP && (
+                    <div className="erroredit">
+                      <Col>
+                        <span
+                          style={{ paddingTop: "10%" }}
+                          className="text-danger"
+                        >
+                          {errors.date_list_EXP}
+                        </span>
+                      </Col>
+                    </div>
+                  )}
+                </Row>
               </Col>
             </Row>
           </div>
-          <div className="spanProduct">
-            <span className="txt">
-              <h6>*</h6>หมายเหตุ
-            </span>
-            <textarea
-              class="form-control"
-              name="remark"
-              type="text"
-              placeholder="หมายเหตุ"
-              onChange={handleInput}
-            />
-          </div>
+          <Row>
+            <Col>
+              <div className="spanProduct">
+                <span className="txt">
+                  <h6>*</h6>หมายเหตุ
+                </span>
+                <textarea
+                  class="form-control"
+                  name="remark"
+                  type="text"
+                  placeholder="หมายเหตุ"
+                  onChange={handleInput}
+                />
+              </div>
+            </Col>
+            {errors.remark && (
+              <div className="erroredit">
+                <Col>
+                  <span style={{ paddingTop: "10%" }} className="text-danger">
+                    {errors.remark}
+                  </span>
+                </Col>
+              </div>
+            )}
+          </Row>
+
           <div style={{ marginTop: "20px" }} className="spanProduct">
             <Row>
               <Col>

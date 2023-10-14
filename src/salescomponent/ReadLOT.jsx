@@ -38,6 +38,7 @@ function ReadLOT() {
   const [values, setValues] = useState({
     ID_product: "",
     Name_product: "",
+    Bill: "",
     Quantity: "",
     Inventories_lot: "",
     date_list: "",
@@ -97,10 +98,22 @@ function ReadLOT() {
 
     return date.toLocaleDateString(undefined, options);
   }
+  function formatDateY(dateString) {
+    if (!dateString) {
+      return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
+    }
+  
+    const date = new Date(dateString);
+  
+    // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
+    const yearBC = date.getFullYear();
+  
+    return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
+  }
 
   //!next page
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 8;
+  const recordsPerPage = 5;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = dataLOT.slice(firstIndex, lastIndex);
@@ -295,12 +308,12 @@ function ReadLOT() {
               </div>
             </Col>
             <Col md={8}>
-              <div className="table-containerLOT">
-                <table className=" table table-striped table-dark ">
+              <div className="table-containerLOT" style={{height:"330px"}} >
+                <table className=" table table-striped table-dark " >
                   <thead className="table-secondary">
                     <tr>
-                      <th>รหัสเบิก</th>
-                      {/* <th>ชื่อสินค้า</th> */}
+                      <th>รหัสบิล</th>
+                      <th>รหัสล็อต</th>
                       <th>จำนวน(ชิ้น)</th>
                       <th>ชื่อผู้รับ</th>
                       <th>วันที่ทำรายการ</th>
@@ -313,7 +326,12 @@ function ReadLOT() {
                     {records.map((records, index) => {
                       return (
                         <tr key={index}>
-                          <td scope="row">{records.ID_requisition}</td>
+                          <td scope="row">{`${formatDateY(
+                            records.Dete_requisition
+                          )}-${records.Bill}`}</td>
+                          <td scope="row">{`${formatDateY(
+                            records.date_list
+                          )}-${records.Lot_ID}`}</td>
                           {/* <td>{records.Name_product}</td> */}
                           <td>{records.Amount_products}</td>
                           <td>{records.agent_fullname}</td>
@@ -325,6 +343,7 @@ function ReadLOT() {
                     })}
                   </tbody>
                 </table>
+              </div>
                 <nav className="Nextpage">
                   {/* <ul className="pagination">
             <li className="page-item">
@@ -382,7 +401,6 @@ function ReadLOT() {
                     </li>
                   </ul>
                 </nav>
-              </div>
             </Col>
           </Row>
 

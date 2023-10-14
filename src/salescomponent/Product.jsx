@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MenuNavSales from "./MenuNavSales";
+import { BsPlusSquare, BsSignIntersectionFill, BsArchiveFill, BsFillClipboard2PlusFill } from "react-icons/bs";
 
 function Product() {
   const navigate = useNavigate();
@@ -190,7 +191,7 @@ console.log(data)
                 รับเข้าสินค้า
               </button> */}
                 <button className="add mb-3" onClick={() => navigate("/AddProduct")}>
-                  <BiSolidUserPlus /> เพิ่ม
+                  <BsFillClipboard2PlusFill /> เพิ่ม
                 </button>
               </Col>
             </Col>
