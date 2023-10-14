@@ -68,6 +68,15 @@ function Validation(values) {
   } else {
     errors.remark = "";
   }
+  if (values.Amount === "") {
+    errors.Amount = "กรุณากรอกจำนวนสินค้า !";
+  } else if( Number(values.Amount) <= 0 ){
+    errors.Amount = "กรุณากรอกจำนวนสินค้าที่มากกว่า0 !";
+  }else if (Number(values.Amount) > Number(values.TotalInventories)){
+    errors.Amount = "กรุณากรอกจำนวนสินค้าที่น้อยกว่าคงเหลือ !";
+ } else {
+    errors.Amount = "";
+  }
 
   return errors;
 }

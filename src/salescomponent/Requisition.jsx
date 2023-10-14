@@ -33,18 +33,21 @@ function Requisition() {
   //!เพิ่มลงตาราง
   const [importedProducts, setImportedProducts] = useState([]); // เก็บข้อมูลสินค้าที่เพิ่มแต่ละชุด
   const [allImportedProducts, setAllImportedProducts] = useState([]); // เก็บข้อมูลทั้งหมดที่คุณต้องการบันทึกลงในฐานข้อมูล
+  const [errors, setErrors] = useState({});
+
   const handleAddProduct = () => {
-    // ตรวจสอบว่าข้อมูลสินค้าถูกกรอกครบหรือไม่
+    // ตรวจสอบว่าข้อมูลสินค้าถูกกรอกครบหรือไม่ และไม่มี errors
     if (
       values.Dete_requisition &&
       values.ID_sales &&
       values.Nameproduct &&
       values.Bill &&
       values.ID_product &&
-      values.Amount &&
+      Number(values.Amount) <= Number(values.TotalInventories) &&
+      Number(0) < Number(values.Amount) &&
       values.ID_agent
     ) {
-      // สร้างอ็อบเจ็กต์ใหม่เพื่อเก็บข้อมูลสินค้าที่เพิ่ม
+      // เพิ่มสินค้าเมื่อไม่มี errors
       const newProduct = {
         ID_sales: values.ID_sales,
         Amount: values.Amount,
@@ -55,20 +58,19 @@ function Requisition() {
         remark: values.remark,
         TotalInventories: values.TotalInventories,
         Dete_requisition: values.Dete_requisition,
-        ID_product: values.ID_product, // เพิ่ม ID_product ลงในข้อมูลสินค้า
+        ID_product: values.ID_product,
       };
       setImportedProducts([...importedProducts, newProduct]);
       setAllImportedProducts([...allImportedProducts, newProduct]);
-
-      // เคลียร์ค่า Amount ใน values โดยเซ็ตเป็นค่าว่าง
       setValues({ ...values, Amount: "" });
-      // เคลียร์ค่าใน input ที่มี name เป็น "Amount"
       document.querySelector('input[name="Amount"]').value = "";
     } else {
-      // แจ้งเตือนให้กรอกข้อมูลให้ครบถ้วน
-      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      // แสดงข้อผิดพลาดหรือแจ้งเตือนอื่น ๆ
+      alert("กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง");
+      return;
     }
   };
+
   console.log("importedProducts", importedProducts);
   console.log("allImportedProducts", allImportedProducts);
 
@@ -533,7 +535,11 @@ function Requisition() {
   const [AllExport, setAllExport] = useState([]);
   const handleAddItem = (index) => {
     const selectedItem = nameLot[index];
-    if (values.Amount_products && values.remark) {
+    if (
+      Number(values.Amount_products) >= 1 &&
+      // Number(values.Amount_products) >= Number(Amount) &&
+      values.remark
+    ) {
       const newProductSave = {
         ID_product: selectedItem.ID_product,
         Bill: latestBill,
@@ -565,7 +571,8 @@ function Requisition() {
       document.querySelector('input[name="remark"]').value = "";
     } else {
       // แจ้งเตือนให้กรอกข้อมูลให้ครบถ้วน
-      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      alert("กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง");
+      return;
     }
   };
 
@@ -734,7 +741,7 @@ function Requisition() {
                 </Row>
               </div>
               <Row>
-                <Col md={6}>
+                <Col md={4}>
                   <div className="spanProduct">
                     <span className="txt">
                       <h6>*</h6>ชื่อสินค้า
@@ -745,18 +752,36 @@ function Requisition() {
                       type="text"
                       className="form-select"
                       onChange={(e) => onChangeProduct(e)}
-                      // style={{ marginLeft: "15px" }}
                     >
-                      <option value="">เลือกสินค้า</option>
+                      <option style={{ fontSize: "14pxs" }} value="">
+                        เลือกสินค้า
+                      </option>
                       {nameproduct.map((item, index) => (
                         <option
+                          style={{ fontSize: "14px" }}
                           key={index}
                           value={`${item.Name_product}:${item.ID_product}:${item.TotalInventories}`} // Combine both values as a string
                         >
-                          {item.Name_product} : {item.TotalInventories}
+                          {item.Name_product}
+                          {/* : {item.TotalInventories} */}
                         </option>
                       ))}
                     </select>
+                  </div>
+                </Col>
+                <Col>
+                  <div className="spanProduct">
+                    <span className="txt">คงเหลือ</span>
+                    <input
+                      class="form-control"
+                      id="TotalInventories"
+                      name="TotalInventories"
+                      type="number"
+                      onChange={handleInput}
+                      value={values.TotalInventories}
+                      disabled
+                      style={{backgroundColor:"rgba(240, 248, 255, 0.814)"}}
+                    />
                   </div>
                 </Col>
                 <Col>
@@ -821,9 +846,9 @@ function Requisition() {
                     onChange={handleInput}
                   />
                 </Col>
-                <Col md={2} className="d-flex align-self-end" >
+                <Col md={2} className="d-flex align-self-end">
                   <h3
-                  style={{marginBottom:"0px", marginLeft:"40px"}}
+                    style={{ marginBottom: "0px", marginLeft: "40px" }}
                     className="btn btn-danger"
                     onClick={handleDeleteProductLotALL}
                   >
@@ -855,7 +880,24 @@ function Requisition() {
                       return (
                         <tr key={index}>
                           <td>{product.Nameproduct}</td>
-                          <td>{product.TotalInventories - totalAmount}</td>
+                          <td>
+                            {Number(product.TotalInventories - totalAmount) <=
+                            -1 ? (
+                              <span className="red-text">
+                                {product.TotalInventories - totalAmount}
+                              </span>
+                            ) : Number(product.TotalInventories - totalAmount) <=
+                              0 ? (
+                              <span style={{ color: "#dfc500" }}>
+                                {product.TotalInventories - totalAmount}
+                              </span>
+                            ) : (
+                              `${product.TotalInventories - totalAmount}`
+                            )}
+                            {/* {product.TotalInventories - totalAmount} */}
+                          </td>
+
+                          {/* <td>{product.TotalInventories - totalAmount}</td> */}
                           {/* <td>{product.TotalInventories}</td> */}
                           <td>{product.Amount}</td>
                           <td>{totalAmount}</td>
@@ -1030,7 +1072,7 @@ function Requisition() {
                               <th>ชื่อสินค้า</th>
                               <th>จำนวน (ชิ้น)</th>
                               <th>หมายเหตุ</th>
-                              {/* <th>ลบ</th> */}
+                              <th>ลบ</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1057,7 +1099,7 @@ function Requisition() {
                                     value={product.remark}
                                   />
                                 </td>
-                                {/* <td>
+                                <td>
                                   <h3
                                     className="btn btn-danger"
                                     onClick={() => {
@@ -1068,7 +1110,7 @@ function Requisition() {
                                   >
                                     ลบ
                                   </h3>
-                                </td> */}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
