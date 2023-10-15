@@ -65,8 +65,9 @@ color: white;
   }
   
   .lot-table{
-    height: 435px;
+    height: 350px;
     overflow-y: auto;
+    margin-bottom: 10px;
   }
 
   .adressAD{

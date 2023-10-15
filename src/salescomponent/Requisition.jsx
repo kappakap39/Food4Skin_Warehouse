@@ -350,12 +350,10 @@ function Requisition() {
         product.ID_product !== index;
       });
     });
-    
-    
   };
 
   const handleDeleteProductLot = (index) => {
-    console.log("handleDeleteProductLot",index)
+    console.log("handleDeleteProductLot", index);
 
     // // ก่อนอื่นคัดลอกข้อมูล AllExport ไปยังอาเรย์ใหม่
     // const updatedAllExport = [...AllExport];
@@ -366,9 +364,8 @@ function Requisition() {
     setAllExport((prevAll) => {
       return prevAll.filter((product) => {
         return product.ID_lot !== index;
-      })
-    })
-
+      });
+    });
   };
 
   // ฟังก์ชันสำหรับลบทั้งหมดใน AllExport
@@ -379,7 +376,7 @@ function Requisition() {
 
   //! ฟังก์ชันสำหรับการลบรายการที่เลือก
   const handleDeleteItem = (indexToDelete) => {
-    console.log("handleDeleteItem",indexToDelete)
+    console.log("handleDeleteItem", indexToDelete);
 
     // ดึงข้อมูลรายการที่เลือกที่จะลบ
     const itemToDelete = AllExport[indexToDelete];
@@ -396,7 +393,7 @@ function Requisition() {
   };
 
   const handleDeleteItemPR = (indexToDelete) => {
-    console.log("handleDeleteItemPR",indexToDelete)
+    console.log("handleDeleteItemPR", indexToDelete);
 
     // ดึงข้อมูลรายการที่เลือกที่จะลบ
     const itemToDelete = AllExport[indexToDelete];
@@ -637,6 +634,81 @@ function Requisition() {
   );
   console.log("filteredExport", filteredExport);
 
+  //!next page
+  // กำหนด state และฟังก์ชันสำหรับเปลี่ยนหน้า
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage2, setCurrentPage2] = useState(1);
+  const [currentPage3, setCurrentPage3] = useState(1);
+  const recordsPerPage = 4;
+  const recordsPerPage2 = 5;
+  const recordsPerPage3 = 5;
+  // คำนวณดัชนีแรกและดัชนีสุดท้ายของรายการที่ต้องแสดง
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const lastIndex2 = currentPage2 * recordsPerPage2;
+  const firstIndex2 = lastIndex2 - recordsPerPage2;
+  const lastIndex3 = currentPage3 * recordsPerPage3;
+  const firstIndex3 = lastIndex3 - recordsPerPage3;
+  // คัดลอกรายการที่ต้องแสดงสำหรับหน้าปัจจุบัน
+  const records = allImportedProducts.slice(firstIndex, lastIndex);
+  const records2 = nameLot.slice(firstIndex2, lastIndex2);
+  const records3 = filteredExport.slice(firstIndex3, lastIndex3);
+  // คำนวณจำนวนหน้าทั้งหมด
+  const npage = Math.ceil(allImportedProducts.length / recordsPerPage);
+  const npage2 = Math.ceil(nameLot.length / recordsPerPage2);
+  const npage3 = Math.ceil(filteredExport.length / recordsPerPage3);
+  // สร้างรายการของหมายเลขหน้า
+  const number = [...Array(npage + 1).keys()].slice(1);
+  const number2 = [...Array(npage2 + 1).keys()].slice(1);
+  const number3 = [...Array(npage3 + 1).keys()].slice(1);
+
+  function prePage() {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  function changeCPage(id) {
+    setCurrentPage(id);
+  }
+
+  function nextPage() {
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function prePage2() {
+    if (currentPage2 > 1) {
+      setCurrentPage2(currentPage2 - 1);
+    }
+  }
+
+  function changeCPage2(id) {
+    setCurrentPage2(id);
+  }
+
+  function nextPage2() {
+    if (currentPage2 < npage2) {
+      setCurrentPage2(currentPage2 + 1);
+    }
+  }
+  function prePage3() {
+    if (currentPage3 > 1) {
+      setCurrentPage3(currentPage3 - 1);
+    }
+  }
+
+  function changeCPage3(id) {
+    setCurrentPage3(id);
+  }
+
+  function nextPage3() {
+    if (currentPage3 < npage3) {
+      setCurrentPage3(currentPage3 + 1);
+    }
+  }
+
   return (
     <div>
       <header className="headernav ">
@@ -805,7 +877,7 @@ function Requisition() {
                       onChange={handleInput}
                       value={values.TotalInventories}
                       disabled
-                      style={{backgroundColor:"rgba(240, 248, 255, 0.814)"}}
+                      style={{ backgroundColor: "rgba(240, 248, 255, 0.814)" }}
                     />
                   </div>
                 </Col>
@@ -881,7 +953,10 @@ function Requisition() {
                   </h3>
                 </Col>
               </Row>
-              <div className="table-containerLOT" style={{ marginTop: "10px" }}>
+              <div
+                className="table-containerLOTpr"
+                style={{ marginTop: "10px" }}
+              >
                 <table className=" table table-striped table-dark ">
                   <thead className="table-secondary">
                     <tr>
@@ -895,7 +970,7 @@ function Requisition() {
                     </tr>
                   </thead>
                   <tbody>
-                    {allImportedProducts.map((product, index) => {
+                    {records.map((product, index) => {
                       // ค้นหาผลรวม Amount_products สำหรับสินค้านี้
                       const totalAmount =
                         totalAmountByProduct[product.ID_product] || 0;
@@ -911,8 +986,9 @@ function Requisition() {
                               <span className="red-text">
                                 {product.TotalInventories - totalAmount}
                               </span>
-                            ) : Number(product.TotalInventories - totalAmount) <=
-                              0 ? (
+                            ) : Number(
+                                product.TotalInventories - totalAmount
+                              ) <= 0 ? (
                               <span style={{ color: "#dfc500" }}>
                                 {product.TotalInventories - totalAmount}
                               </span>
@@ -957,6 +1033,36 @@ function Requisition() {
                   </tbody>
                 </table>
               </div>
+              <nav className="Nextpage">
+                <ul className="pagination">
+                  <li className="page-item">
+                    <a href="#" className="page-link" onClick={prePage}>
+                      หน้าก่อน
+                    </a>
+                  </li>
+                  {number.map((n, i) => (
+                    <li
+                      className={`page-item ${
+                        currentPage === n ? "active" : ""
+                      }`}
+                      key={i}
+                    >
+                      <a
+                        href="#"
+                        className="page-link"
+                        onClick={() => changeCPage(n)}
+                      >
+                        {n}
+                      </a>
+                    </li>
+                  ))}
+                  <li className="page-item">
+                    <a href="#" className="page-link" onClick={nextPage}>
+                      หน้าถัดไป
+                    </a>
+                  </li>
+                </ul>
+              </nav>
               <div>
                 <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                   <h3 className="h3LOT">ข้อมูลล็อตของ {selectedNProduct}</h3>
@@ -1036,7 +1142,7 @@ function Requisition() {
                   </div>
                   <Row>
                     <Col>
-                      <div className="lot-table">
+                      <div className="lot-table ">
                         <table className="table table-striped table-dark">
                           <thead className="table-secondary">
                             <tr>
@@ -1047,7 +1153,7 @@ function Requisition() {
                             </tr>
                           </thead>
                           <tbody>
-                            {nameLot.map((item, index) => {
+                            {records2.map((item, index) => {
                               const matchingFilteredExport =
                                 filteredExport.find(
                                   (product) => product.ID_lot === item.ID_lot
@@ -1087,6 +1193,47 @@ function Requisition() {
                           </tbody>
                         </table>
                       </div>
+                      <nav
+                        style={{ marginBottom: "10px" }}
+                        className="Nextpage"
+                      >
+                        <ul className="pagination">
+                          <li className="page-item">
+                            <a
+                              href="#"
+                              className="page-link"
+                              onClick={prePage2}
+                            >
+                              หน้าก่อน
+                            </a>
+                          </li>
+                          {number2.map((n, i) => (
+                            <li
+                              className={`page-item ${
+                                currentPage2 === n ? "active" : ""
+                              }`}
+                              key={i}
+                            >
+                              <a
+                                href="#"
+                                className="page-link"
+                                onClick={() => changeCPage2(n)}
+                              >
+                                {n}
+                              </a>
+                            </li>
+                          ))}
+                          <li className="page-item">
+                            <a
+                              href="#"
+                              className="page-link"
+                              onClick={nextPage2}
+                            >
+                              หน้าถัดไป
+                            </a>
+                          </li>
+                        </ul>
+                      </nav>
                     </Col>
                     <Col>
                       <div className="lot-table">
@@ -1101,7 +1248,7 @@ function Requisition() {
                             </tr>
                           </thead>
                           <tbody>
-                            {filteredExport.map((product, index) => (
+                            {records3.map((product, index) => (
                               <tr key={index}>
                                 <td>{`${formatDateY(product.date_import)}-${
                                   product.Lot_ID
@@ -1141,6 +1288,47 @@ function Requisition() {
                           </tbody>
                         </table>
                       </div>
+                      <nav
+                        style={{ marginBottom: "10px" }}
+                        className="Nextpage"
+                      >
+                        <ul className="pagination">
+                          <li className="page-item">
+                            <a
+                              href="#"
+                              className="page-link"
+                              onClick={prePage3}
+                            >
+                              หน้าก่อน
+                            </a>
+                          </li>
+                          {number3.map((n, i) => (
+                            <li
+                              className={`page-item ${
+                                currentPage3 === n ? "active" : ""
+                              }`}
+                              key={i}
+                            >
+                              <a
+                                href="#"
+                                className="page-link"
+                                onClick={() => changeCPage3(n)}
+                              >
+                                {n}
+                              </a>
+                            </li>
+                          ))}
+                          <li className="page-item">
+                            <a
+                              href="#"
+                              className="page-link"
+                              onClick={nextPage3}
+                            >
+                              หน้าถัดไป
+                            </a>
+                          </li>
+                        </ul>
+                      </nav>
                     </Col>
                   </Row>
 
@@ -1152,12 +1340,6 @@ function Requisition() {
                       margin: "10px",
                     }}
                   >
-                    {/* <h3
-                      className="btn btn-danger left-button"
-                      onClick={handleDeleteProductLotALL}
-                    >
-                      ลบทั้งหมด
-                    </h3> */}
                     <button
                       className="btn btn-secondary right-button"
                       onClick={() => {

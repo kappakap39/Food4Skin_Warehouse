@@ -45,7 +45,7 @@ function TestRe() {
       
           // บันทึกรูปภาพลงในโฟลเดอร์โดยใช้ URL.createObjectURL
           const imageURL = URL.createObjectURL(imgBlob);
-          setImgs(imageURL)
+          setImgs(base64Image)
       
           // ทำสิ่งอื่น ๆ กับข้อมูลรูปภาพหรือ UUID ตามที่คุณต้องการ
           console.log('base64Image', base64Image);
