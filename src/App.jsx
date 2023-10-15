@@ -35,7 +35,7 @@ import Exportproduct from "./salescomponent/Report/Exportproduct";
 import Menutab from "./salescomponent/Report/Menutab";
 import Requisition from "./salescomponent/Requisition";
 import ReadExport from "./salescomponent/Report/ReadExport";
-import TestRe from "./TestRe";
+import TestRe from "./salescomponent/Subport/TestRe";
 
 
 function App() {

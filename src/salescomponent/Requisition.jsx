@@ -333,24 +333,42 @@ function Requisition() {
   //! Function to delete a product by index
 
   const handleDeleteProduct = (index) => {
-    alert("index",index)
-    // ก่อนอื่นคัดลอกข้อมูล allImportedProducts ไปยังอาเรย์ใหม่
-    const updatedAllImportedProducts = [...allImportedProducts];
-    // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
-    updatedAllImportedProducts.splice(index, 1);
-    // อัปเดต state ด้วยอาเรย์ใหม่ที่ไม่รวมรายการที่ถูกลบ
-    setAllImportedProducts(updatedAllImportedProducts);
+    // // ก่อนอื่นคัดลอกข้อมูล allImportedProducts ไปยังอาเรย์ใหม่
+    // const updatedAllImportedProducts = [...allImportedProducts];
+    // // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
+    // updatedAllImportedProducts.splice(index, 1);
+    // // อัปเดต state ด้วยอาเรย์ใหม่ที่ไม่รวมรายการที่ถูกลบ
+    // setAllImportedProducts(updatedAllImportedProducts);
+
+    setAllExport((prevAll) => {
+      prevAll.filter((product) => {
+        product.ID_product !== index;
+      });
+    });
+    setAllImportedProducts((prevAll) => {
+      prevAll.filter((product) => {
+        product.ID_product !== index;
+      });
+    });
+    
+    
   };
 
   const handleDeleteProductLot = (index) => {
     console.log("handleDeleteProductLot",index)
 
-    // ก่อนอื่นคัดลอกข้อมูล AllExport ไปยังอาเรย์ใหม่
-    const updatedAllExport = [...AllExport];
-    // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
-    updatedAllExport.splice(index, 1);
-    // อัปเดต state ด้วยอาเรย์ใหม่ที่ไม่รวมรายการที่ถูกลบ
-    setAllExport(updatedAllExport);
+    // // ก่อนอื่นคัดลอกข้อมูล AllExport ไปยังอาเรย์ใหม่
+    // const updatedAllExport = [...AllExport];
+    // // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
+    // updatedAllExport.splice(index, 1);
+    // // อัปเดต state ด้วยอาเรย์ใหม่ที่ไม่รวมรายการที่ถูกลบ
+    // setAllExport(updatedAllExport);
+    setAllExport((prevAll) => {
+      return prevAll.filter((product) => {
+        return product.ID_lot !== index;
+      })
+    })
+
   };
 
   // ฟังก์ชันสำหรับลบทั้งหมดใน AllExport
@@ -873,7 +891,7 @@ function Requisition() {
                       <th>จำนวนทั้งหมด (ชิ้น)</th>
                       <th>ราคารวม</th>
                       <th>ล็อต</th>
-                      <th>ลบ</th>
+                      {/* <th>ลบ</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -922,7 +940,7 @@ function Requisition() {
                               ล็อต
                             </h3>
                           </td>
-                          <td>
+                          {/* <td>
                             <h3
                               className="btn btn-danger"
                               onClick={() => {
@@ -932,7 +950,7 @@ function Requisition() {
                             >
                               ลบ
                             </h3>
-                          </td>
+                          </td> */}
                         </tr>
                       );
                     })}
@@ -1079,7 +1097,7 @@ function Requisition() {
                               <th>ชื่อสินค้า</th>
                               <th>จำนวน (ชิ้น)</th>
                               <th>หมายเหตุ</th>
-                              <th>ลบ</th>
+                              {/* <th>ลบ</th> */}
                             </tr>
                           </thead>
                           <tbody>
@@ -1106,7 +1124,7 @@ function Requisition() {
                                     value={product.remark}
                                   />
                                 </td>
-                                <td>
+                                {/* <td>
                                   <h3
                                     className="btn btn-danger"
                                     onClick={() => {
@@ -1117,7 +1135,7 @@ function Requisition() {
                                   >
                                     ลบ
                                   </h3>
-                                </td>
+                                </td> */}
                               </tr>
                             ))}
                           </tbody>
