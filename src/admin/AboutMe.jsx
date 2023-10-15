@@ -31,6 +31,7 @@ function AboutMe() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
 
+  console.log(userLoginData)
   //showpassword
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -280,7 +281,7 @@ function AboutMe() {
           <Col md={2}>
             <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
-              src={img}
+              src={userLoginData[0].picture}
               // src={`data:image/jpeg;base64,${values.picture}`}
               className="img"
               alt="ภาพ"

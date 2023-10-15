@@ -35,6 +35,8 @@ import Exportproduct from "./salescomponent/Report/Exportproduct";
 import Menutab from "./salescomponent/Report/Menutab";
 import Requisition from "./salescomponent/Requisition";
 import ReadExport from "./salescomponent/Report/ReadExport";
+import TestRe from "./TestRe";
+
 
 function App() {
   return (
@@ -71,6 +73,7 @@ function App() {
           <Route path="/Exportproduct" element={<Exportproduct/>} ></Route>
           <Route path="/MenutabReport" element={<Menutab/>} ></Route>
           <Route path="/Requisition" element={<Requisition/>} ></Route>
+          <Route path="/TestRe" element={<TestRe/>}></Route>
 
         </Routes>
       </BrowserRouter>

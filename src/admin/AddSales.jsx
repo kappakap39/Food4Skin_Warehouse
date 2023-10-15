@@ -1,30 +1,17 @@
 import React, { useEffect } from "react";
 import "../css/Addsales.css";
-
 import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "react-bootstrap/Button";
-
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-
-import Figure from "react-bootstrap/Figure";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-
 import { Link } from "react-router-dom";
-import { AiOutlineSave } from "react-icons/ai";
-
 import Validation from "../function/CreateSalesValidation.jsx";
 import MenuNav from "./MenuNav";
-import FormText from "react-bootstrap/esm/FormText";
+import { v4 as uuidv4 } from "uuid";
 
 // import { subdistricts } from "../../../../Backend/controller/provinces";
 function AddSales() {
@@ -116,9 +103,16 @@ function AddSales() {
 
   // post("http://localhost:2001/addsale", values)
   const [errors, setErrors] = useState({});
+  // const [filename, setFilename] = useState({});
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // const file = event.target.files;
+    // const fileex = file.picture.split('.').toLowerCase();
+    // const uuid = uuid()
+    // const filename = `${uuid}.${fileex}`
+    // setFilename(filename)
 
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
     const formattedPhone = values.Tel.replace(/-/g, "");
@@ -153,6 +147,11 @@ function AddSales() {
         .catch((err) => console.log(err));
     }
   };
+  // console.log("filename",filename)
+
+  // const uuid = ()=> {
+  //   return 'xxx'
+  // }
 
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -202,6 +201,7 @@ function AddSales() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cradID, setCradID] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imgs, setImgs] = useState();
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -242,12 +242,35 @@ function AddSales() {
       const selectedFile = event.target.files[0]; // Get the selected image file
       if (selectedFile) {
         setSelectedImage(selectedFile); // Set the selected image to the state
+
+        if (name === "picture") {
+          const selectedFile = event.target.files[0]; // Get the selected image file
+          if (selectedFile) {
+            setSelectedImage(selectedFile); // Set the selected image to the state
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const base64Image = event.target.result;
+
+              // นำรูปภาพมาเพิ่มใน values
+              setValues({
+                ...values,
+                picture: base64Image,
+              });
+
+              // นำ base64 ของรูปภาพไปเก็บลงในโฟลเดอร์ (ถ้าต้องการ)
+              // saveBase64ImageToFile(base64Image);
+            };
+
+            reader.readAsDataURL(selectedFile);
+          }
+        }
       }
     }
   };
   console.log(cradID);
 
-  console.log(values);
+  console.log("values", values);
 
   return (
     <div>
@@ -515,7 +538,6 @@ function AddSales() {
                 <InputGroup className="mb-3">
                   <Form.Control
                     type="file"
-                    accept="image/*"
                     id="picture"
                     name="picture"
                     onChange={handleInput}

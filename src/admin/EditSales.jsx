@@ -365,7 +365,7 @@ function EditSales() {
           <Col md={2}>
           <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
-              src={img}
+              src={values.picture}
               // src={`data:image/jpeg;base64,${values.picture}`}
               className="img"
               alt="ภาพ"

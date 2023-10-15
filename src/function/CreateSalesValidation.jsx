@@ -76,9 +76,11 @@ if (values.Tel === "") {
 
 if (values.picture === "") {
   errors.picture = "กรุณาเลือกที่อยู่ภาพ!";
-} else if (!/\.(jpg|jpeg|png|gif)$/i.test(values.picture)) {
-  errors.picture = "กรุณาอัปโหลดไฟล์ภาพที่มีนามสกุลเป็น .jpg, .jpeg, .png หรือ .gif เท่านั้น!";
-} else {
+} 
+// else if (!/\.(jpg|jpeg|png|gif)$/i.test(values.picture)) {
+//   errors.picture = "กรุณาอัปโหลดไฟล์ภาพที่มีนามสกุลเป็น .jpg, .jpeg, .png หรือ .gif เท่านั้น!";
+// } 
+else {
   errors.picture = "";
 }
 
