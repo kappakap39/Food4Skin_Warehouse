@@ -22,7 +22,8 @@ import { AiOutlineSave } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import Modal from "./Modal";
 
-import img from "../assets/002.png";
+// import img from "../assets/002.png";
+import imgpr from "../../../../Backend/ImgUP/Fw0X_JBiI.jpg";
 import MenuNav from "./MenuNav";
 import { useLocation } from "react-router-dom";
 import { AiOutlineEye } from "react-icons/ai";

@@ -246,12 +246,34 @@ function EditMe() {
     // } else {
     //   setValues((prev) => ({ ...prev, [name]: value }));
     // }
-
     setValues((prev) => ({ ...prev, [name]: value }));
     if (name === "picture") {
-      const selectedFile = event.target.files[0];
+      const selectedFile = event.target.files[0]; // Get the selected image file
       if (selectedFile) {
-        setSelectedImage(selectedFile);
+        setSelectedImage(selectedFile); // Set the selected image to the state
+
+        if (name === "picture") {
+          const selectedFile = event.target.files[0]; // Get the selected image file
+          if (selectedFile) {
+            setSelectedImage(selectedFile); // Set the selected image to the state
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const base64Image = event.target.result;
+
+              // นำรูปภาพมาเพิ่มใน values
+              setValues({
+                ...values,
+                picture: base64Image,
+              });
+
+              // นำ base64 ของรูปภาพไปเก็บลงในโฟลเดอร์ (ถ้าต้องการ)
+              // saveBase64ImageToFile(base64Image);
+            };
+
+            reader.readAsDataURL(selectedFile);
+          }
+        }
       }
     }
   };

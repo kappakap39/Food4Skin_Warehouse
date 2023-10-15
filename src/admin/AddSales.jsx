@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Validation from "../function/CreateSalesValidation.jsx";
 import MenuNav from "./MenuNav";
 import { v4 as uuidv4 } from "uuid";
+import shortid  from 'shortid'
 
 // import { subdistricts } from "../../../../Backend/controller/provinces";
 function AddSales() {

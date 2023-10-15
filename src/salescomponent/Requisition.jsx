@@ -333,6 +333,7 @@ function Requisition() {
   //! Function to delete a product by index
 
   const handleDeleteProduct = (index) => {
+    alert("index",index)
     // ก่อนอื่นคัดลอกข้อมูล allImportedProducts ไปยังอาเรย์ใหม่
     const updatedAllImportedProducts = [...allImportedProducts];
     // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
@@ -342,6 +343,8 @@ function Requisition() {
   };
 
   const handleDeleteProductLot = (index) => {
+    console.log("handleDeleteProductLot",index)
+
     // ก่อนอื่นคัดลอกข้อมูล AllExport ไปยังอาเรย์ใหม่
     const updatedAllExport = [...AllExport];
     // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
@@ -358,6 +361,8 @@ function Requisition() {
 
   //! ฟังก์ชันสำหรับการลบรายการที่เลือก
   const handleDeleteItem = (indexToDelete) => {
+    console.log("handleDeleteItem",indexToDelete)
+
     // ดึงข้อมูลรายการที่เลือกที่จะลบ
     const itemToDelete = AllExport[indexToDelete];
     // หาค่า ID_lot ของรายการที่จะลบ
@@ -373,6 +378,8 @@ function Requisition() {
   };
 
   const handleDeleteItemPR = (indexToDelete) => {
+    console.log("handleDeleteItemPR",indexToDelete)
+
     // ดึงข้อมูลรายการที่เลือกที่จะลบ
     const itemToDelete = AllExport[indexToDelete];
     // หาค่า ID_lot ของรายการที่จะลบ
@@ -919,8 +926,8 @@ function Requisition() {
                             <h3
                               className="btn btn-danger"
                               onClick={() => {
-                                handleDeleteProduct(index); // เรียกใช้ handleDeleteProduct
-                                handleDeleteItemPR(index); // เรียกใช้ handleDeleteItem
+                                handleDeleteProduct(product.ID_product); // เรียกใช้ handleDeleteProduct
+                                handleDeleteItemPR(product.ID_product); // เรียกใช้ handleDeleteItem
                               }}
                             >
                               ลบ
@@ -1103,8 +1110,8 @@ function Requisition() {
                                   <h3
                                     className="btn btn-danger"
                                     onClick={() => {
-                                      handleDeleteProductLot(index); // เรียกใช้ handleDeleteProductLot
-                                      handleDeleteItem(index); // เรียกใช้ handleDeleteItem
+                                      handleDeleteProductLot(product.ID_lot); // เรียกใช้ handleDeleteProductLot
+                                      handleDeleteItem(product.ID_lot); // เรียกใช้ handleDeleteItem
                                     }}
                                     style={{ margin: "0px" }}
                                   >
