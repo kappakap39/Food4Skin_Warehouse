@@ -88,12 +88,14 @@ function TableAgent() {
       } else {
         setData([
           {
-            ID_sales: "ไม่พบข้อมูล",
+            ID_agent: "ไม่พบข้อมูล",
             fullname: "ไม่พบข้อมูล",
-            PhoneNumber: "ไม่พบข้อมูล",
-            contact: "ไม่พบข้อมูล",
             email: "ไม่พบข้อมูล",
+            PhoneNumber: "ไม่พบข้อมูล",
             Card_ID: "ไม่พบข้อมูล",
+            contact: "ไม่พบข้อมูล",
+            level: "ไม่พบข้อมูล",
+            
           },
         ]);
       }
@@ -121,10 +123,11 @@ function TableAgent() {
           {
             ID_agent: "ไม่พบข้อมูล",
             fullname: "ไม่พบข้อมูล",
-            PhoneNumber: "ไม่พบข้อมูล",
-            contact: "ไม่พบข้อมูล",
             email: "ไม่พบข้อมูล",
+            PhoneNumber: "ไม่พบข้อมูล",
             Card_ID: "ไม่พบข้อมูล",
+            contact: "ไม่พบข้อมูล",
+            level: "ไม่พบข้อมูล",
           },
         ]);
       }
@@ -241,8 +244,8 @@ function TableAgent() {
                   <tr key={index}>
                     <td scope="row">{records.ID_agent}</td>
                     <td>{records.fullname}</td>
-                    <td>{records.PhoneNumber}</td>
                     <td>{records.email}</td>
+                    <td>{records.PhoneNumber}</td>
                     <td>{records.Card_ID}</td>
                     <td>{records.contact}</td>
                     <td>{records.level}</td>

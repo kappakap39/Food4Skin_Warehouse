@@ -22,10 +22,13 @@ import { BiSolidUserPlus } from "react-icons/bi";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
 import Validation from "../function/CreateProduct";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function AddProduct() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
 
   //add
   const [values, setValues] = useState({
@@ -61,6 +64,11 @@ function AddProduct() {
         })
         .then((res) => {
           console.log(res);
+          MySwal.fire({
+            title: <strong>ทำการเพิ่มรายการสินค้าเสร็จสิ้น</strong>,
+            // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+            icon: "success",
+          });
           navigate("/Product");
         })
         .catch((err) => console.log(err));

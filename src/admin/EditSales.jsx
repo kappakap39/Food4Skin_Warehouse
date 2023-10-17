@@ -25,9 +25,13 @@ import Modal from "./Modal";
 import img from "../assets/002.png";
 import MenuNav from "./MenuNav";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 function EditSales() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal); //icon aleart
 
   //!read
   // const [Data, setData] = useState([]);
@@ -113,6 +117,11 @@ function EditSales() {
       .put("http://localhost:2001/saleUpdate/" + id, values)
       .then((res) => {
         console.log(res);
+        MySwal.fire({
+          title: <strong>ปรับสถานะเสร็จสิ้น</strong>,
+          // html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
+          icon: "warning",
+        });
         navigate("/Salesperson");
       })
       .catch((err) => console.log(err));
@@ -354,8 +363,23 @@ function EditSales() {
                   <option value="กำลังดำเนินงานอยู่">กำลังดำเนินงานอยู่</option>
                   <option value="พ้นสภาพการทำงาน">พ้นสภาพการทำงาน</option>
                 </Form.Select>
-                <div className="bgedit2">
-                  <button type="submit" className="bgeditModal">
+                <div
+                  className="bgedit2"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <button
+                    className="btn btn-danger left-button"
+                    onClick={() => {
+                      handleCloseModal();
+                      // handleDeleteProductLotALL();
+                    }}
+                  >
+                    ยกเลิก
+                  </button>
+                  <button type="submit" className="bgeditModal right-button">
                     แก้ไข
                   </button>
                 </div>
@@ -363,7 +387,7 @@ function EditSales() {
             </div>
           </Col>
           <Col md={2}>
-          <img
+            <img
               style={{ marginLeft: "20%", marginTop: "30px" }}
               src={values.picture}
               // src={`data:image/jpeg;base64,${values.picture}`}

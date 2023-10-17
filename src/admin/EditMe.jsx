@@ -25,6 +25,7 @@ import Modal from "./Modal";
 import img from "../assets/002.png";
 import MenuNav from "./MenuNav";
 import Validation from "../function/Edit";
+
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 

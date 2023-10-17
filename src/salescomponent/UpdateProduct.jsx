@@ -23,6 +23,8 @@ import Validation from "../function/CreateProduct";
 import FormText from "react-bootstrap/esm/FormText";
 import MenuNavSales from "./MenuNavSales";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function UpdateProduct() {
   const { id } = useParams();
@@ -87,6 +89,12 @@ function UpdateProduct() {
         .put("http://localhost:2001/productUpdate/" + id, values)
         .then((res) => {
           console.log(res);
+          const MySwal = withReactContent(Swal);
+          MySwal.fire({
+            title: <strong>ทำรายการแก้ไขข้อมูลสินค้าเสร็จสิ้น</strong>,
+            // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+            icon: "warning",
+          });
           navigate("/Product");
         })
         .catch((err) => console.log(err));

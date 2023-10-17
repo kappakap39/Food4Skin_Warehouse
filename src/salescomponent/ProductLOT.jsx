@@ -522,7 +522,7 @@ function ProductLOT() {
                     .map((data, index) => (
                       <tr key={index}>
                         <td scope="row">{`${formatDateY(data.date_import)}-${
-                          data.ID_lot
+                          data.Lot_ID
                         }`}</td>
                         {/* <td scope="row">{data.ID_lot}</td> */}
                         <td>{data.Name_product}</td>

@@ -17,6 +17,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 function Exportproduct() {
   const navigate = useNavigate();
+  const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
 
   //!date
   function formatDate(dateString) {
@@ -37,12 +38,12 @@ function Exportproduct() {
     if (!dateString) {
       return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
     }
-  
+
     const date = new Date(dateString);
-  
+
     // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
     const yearBC = date.getFullYear();
-  
+
     return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
@@ -66,7 +67,12 @@ function Exportproduct() {
       setShowtable(initialData); // แสดงข้อมูลเริ่มต้นเมื่อยังไม่ได้เลือกสินค้า
     } else {
       axios
-        .get("http://localhost:2001/ShowProductTABExport/" + saveoption)
+        .get(
+          "http://localhost:2001/ShowProductTABExport2/" +
+            saveoption +
+            "/" +
+            userLoginData[0].ID_sales
+        )
         .then((res) => setShowtable(res.data))
         .catch((err) => console.log(err));
     }
@@ -96,7 +102,8 @@ function Exportproduct() {
   const [endDate, setEndDate] = useState(""); // เก็บวันสิ้นสุด
 
   useEffect(() => {
-    let apiUrl = "http://localhost:2001/selectlotExport";
+    let apiUrl =
+      "http://localhost:2001/selectlotExport/" + userLoginData[0].ID_sales;
 
     if (startDate && endDate) {
       apiUrl += `?startDate=${startDate}&endDate=${endDate}`;
@@ -191,7 +198,8 @@ function Exportproduct() {
       pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
       pdf.setTextColor(0); // สีข้อความดำ (RGB)
       const textWidth =
-        (pdf.getStringUnitWidth("Export Product Food4Skin") * pdf.internal.getFontSize()) /
+        (pdf.getStringUnitWidth("Export Product Food4Skin") *
+          pdf.internal.getFontSize()) /
         pdf.internal.scaleFactor;
       const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
       pdf.text("Export Product Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
@@ -299,7 +307,7 @@ function Exportproduct() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
+                  //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
                 }}
                 onClick={generatePDF}
               >
@@ -321,7 +329,6 @@ function Exportproduct() {
                 <th>วันที่ทำรายการ</th>
                 <th>พนักงานที่ทำรายการ</th>
                 <th>หมายเหตุ</th>
-                
               </tr>
             </thead>
 
@@ -338,9 +345,9 @@ function Exportproduct() {
                     .map((data, index) => (
                       <tr key={index}>
                         {/* <td scope="row">{data.ID_lot}</td> */}
-                        <td scope="row">{`${formatDateY(data.Dete_requisition)}-${
-                          data.Bill
-                        }`}</td>
+                        <td scope="row">{`${formatDateY(
+                          data.Dete_requisition
+                        )}-${data.Bill}`}</td>
                         <td scope="row">{`${formatDateY(data.date_import)}-${
                           data.Lot_ID
                         }`}</td>
@@ -371,6 +378,9 @@ function Exportproduct() {
                     .map((data, index) => (
                       <tr key={index}>
                         {/* <td scope="row">{data.ID_lot}</td> */}
+                        <td scope="row">{`${formatDateY(
+                          data.Dete_requisition
+                        )}-${data.Bill}`}</td>
                         <td scope="row">{`${formatDateY(data.date_import)}-${
                           data.Lot_ID
                         }`}</td>

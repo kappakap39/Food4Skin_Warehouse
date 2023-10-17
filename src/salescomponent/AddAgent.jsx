@@ -21,7 +21,8 @@ import axios from "axios";
 
 import { Link } from "react-router-dom";
 import { AiOutlineSave } from "react-icons/ai";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 // import ValidationAddAgent from "../function/CrealeAgent.jsx";
 import MenuNavSales from "./MenuNavSales";
 import FormText from "react-bootstrap/esm/FormText";
@@ -30,6 +31,8 @@ import Validation from "../function/CreateSalesValidation.jsx";
 function AddAgent() {
   const navigate = useNavigate();
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
+  const MySwal = withReactContent(Swal);
+
 
   //จังหวัดอำเภอตำบล
   const [province, setProvince] = useState([]);
@@ -165,6 +168,11 @@ function AddAgent() {
         })
         .then((res) => {
           console.log(res);
+          MySwal.fire({
+            title: <strong>เพิ่มข้อมูลตัวแทนจำหน่ายเสร็จสิ้น</strong>,
+            // html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
+            icon: "success",
+          });
           navigate("/TableAgent");
         })
         .catch((err) => console.log(err));

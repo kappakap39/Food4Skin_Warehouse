@@ -29,6 +29,12 @@ function Requisition() {
   const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
+  // MySwal.fire({
+  //   title: <strong>ทำรายการเพิ่มพนักงานฝ่ายขายเสร็จสิ้น</strong>,
+  //   // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+  //   icon: "success",
+  // });
+  
 
   //!เพิ่มลงตาราง
   const [importedProducts, setImportedProducts] = useState([]); // เก็บข้อมูลสินค้าที่เพิ่มแต่ละชุด

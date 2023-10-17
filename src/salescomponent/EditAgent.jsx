@@ -196,11 +196,11 @@ function EditAgent() {
         })
         .then((res) => {
           console.log(res);
-          // MySwal.fire({
-          //   title: <strong>อัพเดทข้อมูลส่วนตัวสำเร็จ</strong>,
-          //   html: <i>ออกจากระบบเพื่ออัพเดทข้อมูลการล็อคอิน</i>,
-          //   icon: "warning",
-          // });
+          MySwal.fire({
+            title: <strong>อัพเดทข้อมูลส่วนตัวตัวแทนจำหน่ายเสร็จสิ้น</strong>,
+            // html: <i></i>,
+            icon: "warning",
+          });
           navigate("/TableAgent");
         })
         .catch((err) => console.log(err));

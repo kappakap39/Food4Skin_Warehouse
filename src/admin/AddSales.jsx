@@ -12,11 +12,16 @@ import { Link } from "react-router-dom";
 import Validation from "../function/CreateSalesValidation.jsx";
 import MenuNav from "./MenuNav";
 import { v4 as uuidv4 } from "uuid";
-import shortid  from 'shortid'
+import shortid from "shortid";
+
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 
 // import { subdistricts } from "../../../../Backend/controller/provinces";
 function AddSales() {
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
 
   //จังหวัดอำเภอตำบล
   const [province, setProvince] = useState([]);
@@ -117,7 +122,6 @@ function AddSales() {
 
     // ตรวจสอบและลบขีดคั่นออกจากเบอร์โทรศัพท์
     const formattedPhone = values.Tel.replace(/-/g, "");
-
     const err = Validation({ ...values, Tel: formattedPhone });
     setErrors(err);
 
@@ -143,6 +147,11 @@ function AddSales() {
         })
         .then((res) => {
           console.log(res);
+          MySwal.fire({
+            title: <strong>ทำรายการเพิ่มพนักงานฝ่ายขายเสร็จสิ้น</strong>,
+            // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
+            icon: "success",
+          });
           navigate("/Salesperson");
         })
         .catch((err) => console.log(err));
