@@ -102,12 +102,12 @@ function ReadLOT() {
     if (!dateString) {
       return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
     }
-  
+
     const date = new Date(dateString);
-  
+
     // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
     const yearBC = date.getFullYear();
-  
+
     return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
@@ -308,8 +308,19 @@ function ReadLOT() {
               </div>
             </Col>
             <Col md={8}>
-              <div className="table-containerLOT" style={{height:"330px"}} >
-                <table className=" table table-striped table-dark " >
+              <div className="table-containerLOT" style={{ height: "330px" }}>
+                <Row>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4>รายการเบิก</h4>
+                  </div>
+                </Row>
+                <table className=" table table-striped table-dark ">
                   <thead className="table-secondary">
                     <tr>
                       <th>รหัสบิล</th>
@@ -329,9 +340,9 @@ function ReadLOT() {
                           <td scope="row">{`${formatDateY(
                             records.Dete_requisition
                           )}-${records.Bill}`}</td>
-                          <td scope="row">{`${formatDateY(
-                            records.date_list
-                          )}-${records.Lot_ID}`}</td>
+                          <td scope="row">{`${formatDateY(records.date_list)}-${
+                            records.Lot_ID
+                          }`}</td>
                           {/* <td>{records.Name_product}</td> */}
                           <td>{records.Amount_products}</td>
                           <td>{records.agent_fullname}</td>
@@ -344,8 +355,8 @@ function ReadLOT() {
                   </tbody>
                 </table>
               </div>
-                <nav className="Nextpage">
-                  {/* <ul className="pagination">
+              <nav className="Nextpage">
+                {/* <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>
                 Prev
@@ -372,35 +383,35 @@ function ReadLOT() {
             </li>
           </ul> */}
 
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <a href="#" className="page-link" onClick={prePage}>
-                        หน้าก่อน
-                      </a>
-                    </li>
-                    {number.map((n, i) => (
-                      <li
-                        className={`page-item ${
-                          currentPage === n ? "active" : ""
-                        }`}
-                        key={i}
+                <ul className="pagination">
+                  <li className="page-item">
+                    <a href="#" className="page-link" onClick={prePage}>
+                      หน้าก่อน
+                    </a>
+                  </li>
+                  {number.map((n, i) => (
+                    <li
+                      className={`page-item ${
+                        currentPage === n ? "active" : ""
+                      }`}
+                      key={i}
+                    >
+                      <a
+                        href="#"
+                        className="page-link"
+                        onClick={() => changeCPage(n)}
                       >
-                        <a
-                          href="#"
-                          className="page-link"
-                          onClick={() => changeCPage(n)}
-                        >
-                          {n}
-                        </a>
-                      </li>
-                    ))}
-                    <li className="page-item">
-                      <a href="#" className="page-link" onClick={nextPage}>
-                        หน้าถัดไป
+                        {n}
                       </a>
                     </li>
-                  </ul>
-                </nav>
+                  ))}
+                  <li className="page-item">
+                    <a href="#" className="page-link" onClick={nextPage}>
+                      หน้าถัดไป
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </Col>
           </Row>
 

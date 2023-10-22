@@ -830,8 +830,8 @@ function Requisition() {
 อำเภอ: ${adress.length > 0 ? adress[0].districts : ""} 
 ตำบล: ${adress.length > 0 ? adress[0].subdistricts : ""} 
 รหัสไปรษณีย์: ${adress.length > 0 ? adress[0].zip_code : ""}
-ที่อยู่: ${adress.length > 0 ? adress[0].Address : ""}
-เบอร์โทร: ${adress.length > 0 ? adress[0].Tel : ""} `}
+เบอร์โทร: ${adress.length > 0 ? adress[0].Tel : ""} 
+ที่อยู่เพิ่มเติม: ${adress.length > 0 ? adress[0].Address : ""} `}
                       onChange={(e) => {
                         // เมื่อมีการเปลี่ยนแปลงใน textarea ให้อัปเดตค่าในตัวแปร adress
                         const updatedAdress = [

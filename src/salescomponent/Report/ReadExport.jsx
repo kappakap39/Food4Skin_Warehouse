@@ -31,21 +31,25 @@ import html2canvas from "html2canvas";
 function ReadExport() {
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log("ID_Lot", id);
+  console.log("Bill", id);
   // const userLoginData = JSON.parse(sessionStorage.getItem("userlogin"));
 
   const [values, setValues] = useState({
-    ID_product: "",
-    Name_product: "",
-    Quantity: "",
-    Inventories_lot: "",
-    date_list: "",
-    date_list_EXP: "",
-    remark: "",
-    ID_sales: "",
-    ID_lot: "",
-    fullname: "",
+    Bill: "",
+    Dete_requisition: "",
+    agent_fullname: "",
+    sales_fullname: "",
+    province: "",
+    districts: "",
+    subdistricts: "",
+    zip_code: "",
+    Address: "",
+    Tel: "",
+    //!ข้อมูลในตาราง
     date_import: "",
+    Lot_ID: "",
+    Name_product: "",
+    Amount_products: "",
   });
 
   //!Read
@@ -53,33 +57,32 @@ function ReadExport() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:2001/Showlot/" + id)
+      .get("http://localhost:2001/ShowBill/" + id)
       .then((res) => {
         console.log(res);
         setValues({
           ...values,
-          Name_product: res.data[0].Name_product,
-          Quantity: res.data[0].Quantity,
-          Inventories_lot: res.data[0].Inventories_lot,
-          date_list: res.data[0].date_list,
-          date_list_EXP: res.data[0].date_list_EXP,
-          remark: res.data[0].remark,
-          ID_sales: res.data[0].ID_sales,
-          ID_product: res.data[0].ID_product,
-          ID_lot: res.data[0].ID_lot,
-          fullname: res.data[0].fullname,
-          date_import: res.data[0].date_import,
+          Bill: res.data[0].Bill,
+          Dete_requisition: res.data[0].Dete_requisition,
+          agent_fullname: res.data[0].agent_fullname,
+          sales_fullname: res.data[0].sales_fullname,
+          province: res.data[0].province,
+          districts: res.data[0].districts,
+          subdistricts: res.data[0].subdistricts,
+          zip_code: res.data[0].zip_code,
+          Address: res.data[0].Address,
+          Tel: res.data[0].Tel,
         });
       })
       .catch((err) => console.log(err));
   }, []);
-
+  console.log("values", values);
   //แสดงข้อมูลทั้งหมด
   const [dataLOT, setDataLOT] = useState([]);
   //! Export
   useEffect(() => {
     axios
-      .get("http://localhost:2001/ShowProductLOT/" + id)
+      .get("http://localhost:2001/ShowProductBill/" + id)
       .then((res) => setDataLOT(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -104,18 +107,18 @@ function ReadExport() {
     if (!dateString) {
       return ""; // ถ้าไม่มีข้อมูลวันที่ให้แสดงเป็นข้อความว่าง
     }
-  
+
     const date = new Date(dateString);
-  
+
     // ลบ 543 จากปีพ.ศ. เพื่อแสดงในรูปแบบค.ศ.
     const yearBC = date.getFullYear();
-  
+
     return yearBC.toString(); // แสดงปีค.ศ. เป็นข้อความ
   }
 
   //!next page
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 8;
+  const recordsPerPage = 6;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = dataLOT.slice(firstIndex, lastIndex);
@@ -205,7 +208,7 @@ function ReadExport() {
         <MenuNavSales />
       </header>
       <form form className="containerPRODUCT">
-        <h3 className="h3">แสดงข้อมูลล็อตสินค้า</h3>
+        <h3 className="h3">แสดงข้อมูลรายการบิลเบิก</h3>
 
         <div className="bodyImportLOT">
           {/* <input name="Name_product" type="text" className="" onChange={handleInput}/> */}
@@ -214,25 +217,26 @@ function ReadExport() {
               <Row>
                 <Col>
                   <div className="spanProduct">
-                    <span>ชื่อสินค้า</span>
+                    <span>รหัสบิล</span>
                     <input
-                      style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                      class="form-control"
-                      name="fullname"
+                      style={{ backgroundColor: "rgba(240, 248, 255, 0.814)" }}
+                      className="form-control"
                       type="text"
-                      value={values.Name_product}
+                      value={`${formatDateY(values.Dete_requisition)}-${
+                        values.Bill
+                      }`}
                     />
                   </div>
                 </Col>
                 <Col>
                   <div className="spanProduct">
-                    <span>วันที่นำเข้า</span>
+                    <span>วันที่ทำรายการ</span>
                     <input
                       style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                       class="form-control"
-                      name="date_import"
+                      name="Dete_requisition"
                       type="text"
-                      value={formatDate(values.date_import)}
+                      value={formatDate(values.Dete_requisition)}
                     />
                   </div>
                 </Col>
@@ -240,87 +244,68 @@ function ReadExport() {
               <Row>
                 <Col>
                   <div className="spanProduct">
-                    <span>จำนวนสินค้า</span>
+                    <span>ตัวแทนจำหน่าย</span>
                     <input
                       style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                       class="form-control"
-                      name="Quantity"
+                      name="agent_fullname"
                       type="text"
-                      value={values.Quantity}
+                      value={values.agent_fullname}
                     />
                   </div>
                 </Col>
                 <Col>
                   <div className="spanProduct">
-                    <span>สินค้าคงเหลือ</span>
+                    <span>พนักงานที่ทำรายการ</span>
                     <input
                       style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
                       class="form-control"
-                      name="Inventories_lot"
+                      name="sales_fullname"
                       type="text"
-                      value={values.Inventories_lot}
+                      value={values.sales_fullname}
                     />
                   </div>
                 </Col>
               </Row>
 
               <div className="spanProduct">
-                <Row>
-                  <Col>
-                    <span>วันที่ผลิต</span>
-                    <input
-                      style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                      class="form-control"
-                      name="date_list"
-                      type="text"
-                      value={formatDate(values.date_list)}
-                    />
-                  </Col>
-                  <Col>
-                    <span>วันที่หมดอายุ</span>
-                    <input
-                      style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                      class="form-control"
-                      name="date_list_EXP"
-                      type="text"
-                      value={formatDate(values.date_list_EXP)}
-                    />
-                  </Col>
-                </Row>
-                <div className="spanProduct">
-                  <span>พนักงานที่เพิ่มสินค้า</span>
-                  <input
-                    style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
-                    class="form-control"
-                    name="fullname"
-                    type="text"
-                    value={values.fullname}
-                  />
-                </div>
-              </div>
-              <div className="spanProduct">
-                <span>หมายเหตุ</span>
+                <span>ที่อยู่</span>
                 <textarea
-                  style={{ backgroundColor: " rgba(240, 248, 255, 0.814)" }}
+                  style={{
+                    backgroundColor: " rgba(240, 248, 255, 0.814)",
+                    height: "160px",
+                  }}
                   class="form-control"
-                  name="remark"
+                  name=""
                   type="text"
-                  value={values.remark}
+                  value={`จังหวัด: ${values.province} 
+อำเภอ: ${values.districts} 
+ตำบล: ${values.subdistricts} 
+รหัสไปรษณีย์: ${values.zip_code}
+เบอร์โทร: ${values.Tel} 
+ที่อยู่เพิ่มเติม: ${values.Address} `}
                 />
               </div>
             </Col>
             <Col md={8}>
-              <div className="table-containerLOT">
+              <div className="table-containerLOT" style={{ height: "350px" }}>
+                <Row>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4>รายการบิล</h4>
+                  </div>
+                </Row>
                 <table className=" table table-striped table-dark ">
                   <thead className="table-secondary">
                     <tr>
-                      <th>รหัสเบิก</th>
-                      {/* <th>ชื่อสินค้า</th> */}
+                      <th>รหัสล็อต</th>
+                      <th>ชื่อสินค้า</th>
                       <th>จำนวน(ชิ้น)</th>
-                      <th>ชื่อผู้รับ</th>
-                      <th>วันที่ทำรายการ</th>
-                      <th>พนักงาน</th>
-                      <th>หมายเหตุ</th>
                     </tr>
                   </thead>
 
@@ -328,20 +313,19 @@ function ReadExport() {
                     {records.map((records, index) => {
                       return (
                         <tr key={index}>
-                          <td scope="row">{records.ID_requisition}</td>
-                          {/* <td>{records.Name_product}</td> */}
+                          <td scope="row">{`${formatDateY(
+                            records.date_import
+                          )}-${records.Lot_ID}`}</td>
+                          <td>{records.Name_product}</td>
                           <td>{records.Amount_products}</td>
-                          <td>{records.agent_fullname}</td>
-                          <td>{formatDate(records.Dete_requisition)}</td>
-                          <td>{records.sales_fullname}</td>
-                          <td>{records.remark}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
-                <nav className="Nextpage">
-                  {/* <ul className="pagination">
+              </div>
+              <nav className="Nextpage">
+                {/* <ul className="pagination">
             <li className="page-item">
               <a href="#" className="page-link" onClick={prePage}>
                 Prev
@@ -368,43 +352,45 @@ function ReadExport() {
             </li>
           </ul> */}
 
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <a href="#" className="page-link" onClick={prePage}>
-                        หน้าก่อน
-                      </a>
-                    </li>
-                    {number.map((n, i) => (
-                      <li
-                        className={`page-item ${
-                          currentPage === n ? "active" : ""
-                        }`}
-                        key={i}
+                <ul className="pagination">
+                  <li className="page-item">
+                    <a href="#" className="page-link" onClick={prePage}>
+                      หน้าก่อน
+                    </a>
+                  </li>
+                  {number.map((n, i) => (
+                    <li
+                      className={`page-item ${
+                        currentPage === n ? "active" : ""
+                      }`}
+                      key={i}
+                    >
+                      <a
+                        href="#"
+                        className="page-link"
+                        onClick={() => changeCPage(n)}
                       >
-                        <a
-                          href="#"
-                          className="page-link"
-                          onClick={() => changeCPage(n)}
-                        >
-                          {n}
-                        </a>
-                      </li>
-                    ))}
-                    <li className="page-item">
-                      <a href="#" className="page-link" onClick={nextPage}>
-                        หน้าถัดไป
+                        {n}
                       </a>
                     </li>
-                  </ul>
-                </nav>
-              </div>
+                  ))}
+                  <li className="page-item">
+                    <a href="#" className="page-link" onClick={nextPage}>
+                      หน้าถัดไป
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </Col>
           </Row>
 
           <div style={{ marginTop: "20px" }} className="spanProduct">
             <Row>
               <Col>
-                <Link to="/MenutabReport" className="backProduct btn btn-danger">
+                <Link
+                  to="/MenutabReport"
+                  className="backProduct btn btn-danger"
+                >
                   {" "}
                   กลับ{" "}
                 </Link>

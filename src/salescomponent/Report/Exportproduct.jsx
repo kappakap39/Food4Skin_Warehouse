@@ -100,20 +100,23 @@ function Exportproduct() {
 
   const [startDate, setStartDate] = useState(""); // เก็บวันเริ่มต้น
   const [endDate, setEndDate] = useState(""); // เก็บวันสิ้นสุด
+  const [fullDate, setFullDate] = useState("");
+  const [fullyear, setFullyear] = useState("");
+  const [monthyear, setMonthyear] = useState("");
 
   useEffect(() => {
     let apiUrl =
       "http://localhost:2001/selectlotExport/" + userLoginData[0].ID_sales;
 
     if (startDate && endDate) {
-      apiUrl += `?startDate=${startDate}&endDate=${endDate}`;
+      apiUrl += `?startDate=${startDate}&endDate=${endDate}&fullDate=${fullDate}&monthyear=${monthyear}&fullyear=${fullyear}`;
     }
 
     axios
       .get(apiUrl)
       .then((res) => setInitialData(res.data))
       .catch((err) => console.log(err));
-  }, [startDate, endDate]);
+  }, [startDate, endDate, fullDate, monthyear, fullyear]);
 
   //!next page
   // กำหนด state และฟังก์ชันสำหรับเปลี่ยนหน้า
@@ -148,73 +151,98 @@ function Exportproduct() {
   console.log("start-endDate", startDate, endDate);
 
   // นับผลรวมของคอลัมน์ Amount_products
-  const totalAmount_products = showtable.reduce((total, item) => {
-    return total + item.Amount_products;
-  }, 0);
-
-  console.log("totalAmount_products", totalAmount_products);
-  console.log("Amount_products", data.Amount_products);
+  // const totalAmount_products = showtable.reduce((total, item) => {
+  //   return total + item.Amount_products;
+  // }, 0);
 
   //!PDF
-  function generatePDF() {
-    const pdf = new jsPDF("l", "mm", "a4"); // สร้างอ็อบเจ็กต์ PDF แนวนอน (landscape)
-    const pdfWidth = pdf.internal.pageSize.width;
-    const pdfHeight = pdf.internal.pageSize.height;
-    const margin = 10; // ขอบ 10 พิกเซล
+  // function generatePDF() {
+  //   const pdf = new jsPDF("l", "mm", "a4"); // สร้างอ็อบเจ็กต์ PDF แนวนอน (landscape)
+  //   const pdfWidth = pdf.internal.pageSize.width;
+  //   const pdfHeight = pdf.internal.pageSize.height;
+  //   const margin = 10; // ขอบ 10 พิกเซล
 
-    // กำหนดสีพื้นหลังของเอกสารเป็นสีดำ
-    pdf.setFillColor(255); // สีพื้นหลังขาว (RGB)
-    pdf.rect(0, 0, pdfWidth, pdfHeight, "F"); // วาดกล่องสีดำลงบนหน้ากระดาษทั้งหมด
+  //   // กำหนดสีพื้นหลังของเอกสารเป็นสีดำ
+  //   pdf.setFillColor(255); // สีพื้นหลังขาว (RGB)
+  //   pdf.rect(0, 0, pdfWidth, pdfHeight, "F"); // วาดกล่องสีดำลงบนหน้ากระดาษทั้งหมด
 
-    const table = document.querySelector(".table"); // เลือกตาราง HTML
+  //   const table = document.querySelector(".table"); // เลือกตาราง HTML
 
-    // กำหนดสีขอบเป็นสีดำ
-    pdf.setDrawColor(255); // สีขอบขาว (RGB)
+  //   // กำหนดสีขอบเป็นสีดำ
+  //   pdf.setDrawColor(255); // สีขอบขาว (RGB)
 
-    html2canvas(table).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png"); // แปลง HTML เป็นรูปภาพ
+  //   html2canvas(table).then((canvas) => {
+  //     const imgData = canvas.toDataURL("image/png"); // แปลง HTML เป็นรูปภาพ
 
-      const imgWidth = pdfWidth - 2 * margin; // ขนาดกว้างของรูปภาพเท่ากับความกว้างของเอกสารลบขอบมารอบ
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //     const imgWidth = pdfWidth - 2 * margin; // ขนาดกว้างของรูปภาพเท่ากับความกว้างของเอกสารลบขอบมารอบ
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      // ปรับค่าของ imgX, imgY, และ downloadDateX ดังนี้
-      const imgX = (pdfWidth - imgWidth) / 2; // ภาพอยู่ตรงกลางแนวนอน
-      const imgY = (pdfHeight - imgHeight) / 2; // ภาพอยู่ตรงกลางแนวตั้ง
-      // const downloadDateX = pdfWidth - margin - downloadDateWidth; // คำอธิบายอยู่ทางขวาขอบกระดาษ
+  //     // ปรับค่าของ imgX, imgY, และ downloadDateX ดังนี้
+  //     const imgX = (pdfWidth - imgWidth) / 2; // ภาพอยู่ตรงกลางแนวนอน
+  //     const imgY = (pdfHeight - imgHeight) / 2; // ภาพอยู่ตรงกลางแนวตั้ง
+  //     // const downloadDateX = pdfWidth - margin - downloadDateWidth; // คำอธิบายอยู่ทางขวาขอบกระดาษ
 
-      // คำนวณตำแหน่งแนวนอนของภาพและคำอธิบาย
-      // const imgX = margin; // ภาพอยู่ทางซ้าย
-      // const imgY = margin + 20; // ภาพอยู่ห่างจากด้านบน 20 พิกเซล
-      const downloadDateX =
-        pdfWidth -
-        margin -
-        (pdf.getStringUnitWidth(
-          "Download date : " + new Date().toLocaleDateString()
-        ) *
-          10) /
-          pdf.internal.scaleFactor; // คำอธิบายอยู่ทางขวา
+  //     // คำนวณตำแหน่งแนวนอนของภาพและคำอธิบาย
+  //     // const imgX = margin; // ภาพอยู่ทางซ้าย
+  //     // const imgY = margin + 20; // ภาพอยู่ห่างจากด้านบน 20 พิกเซล
+  //     const downloadDateX =
+  //       pdfWidth -
+  //       margin -
+  //       (pdf.getStringUnitWidth(
+  //         "Download date : " + new Date().toLocaleDateString()
+  //       ) *
+  //         10) /
+  //         pdf.internal.scaleFactor; // คำอธิบายอยู่ทางขวา
 
-      // เริ่มเพิ่มเนื้อหาใน PDF
-      pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
-      pdf.setTextColor(0); // สีข้อความดำ (RGB)
-      const textWidth =
-        (pdf.getStringUnitWidth("Export Product Food4Skin") *
-          pdf.internal.getFontSize()) /
-        pdf.internal.scaleFactor;
-      const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
-      pdf.text("Export Product Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
+  //     // เริ่มเพิ่มเนื้อหาใน PDF
+  //     pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
+  //     pdf.setTextColor(0); // สีข้อความดำ (RGB)
+  //     const textWidth =
+  //       (pdf.getStringUnitWidth("Export Product Food4Skin") *
+  //         pdf.internal.getFontSize()) /
+  //       pdf.internal.scaleFactor;
+  //     const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
+  //     pdf.text("Export Product Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "Expire Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
 
-      pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight); // เพิ่มรูปภาพลงใน PDF
+  //     pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight); // เพิ่มรูปภาพลงใน PDF
 
-      // เพิ่มข้อความ "วันที่ดาวน์โหลด" ชิดขวา
-      const downloadDate = "Download date : " + new Date().toLocaleDateString();
-      pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
-      pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
+  //     // เพิ่มข้อความ "วันที่ดาวน์โหลด" ชิดขวา
+  //     const downloadDate = "Download date : " + new Date().toLocaleDateString();
+  //     pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
+  //     pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
 
-      pdf.save("ExportFood4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
-    }); // เพิ่มวงเล็บปิดนี้
-  }
+  //     pdf.save("ExportFood4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
+  //   }); // เพิ่มวงเล็บปิดนี้
+  // }
 
+  // const [day, setDay] = useState("");
+  // const [month, setMonth] = useState("");
+  // const [year, setYear] = useState("");
+
+  const filteredRecords = records.filter((data) => {
+    const expDate = new Date(data.Dete_requisition);
+    const targetDate = new Date(fullDate); // แปลง fullDate เป็นวัตถุวันที่
+    targetDate.setDate(targetDate.getDate() - 1); // ลบ 1 วันจาก fullDate
+    const targetmonthyear = new Date(monthyear); // แปลง monthyear เป็นวัตถุวันที่เพื่อเปรียบเทียบเดือนและปี
+    const targetfullyear = new Date(fullyear); // แปลง fullyear เป็นวัตถุวันที่เพื่อเปรียบเทียบปี
+    return (
+      (!startDate || expDate >= new Date(startDate)) &&
+      (!endDate || expDate <= new Date(endDate)) &&
+      (!fullDate ||
+        expDate.toISOString().split("T")[0] ===
+          targetDate.toISOString().split("T")[0]) &&
+      (!monthyear ||
+        (expDate.getFullYear() === targetmonthyear.getFullYear() &&
+          expDate.getMonth() === targetmonthyear.getMonth())) &&
+      (!fullyear ||
+        expDate.getFullYear() + 543 === targetfullyear.getFullYear())
+
+      // (!day || expDate.getDate() === parseInt(day)) &&
+      // (!month || expDate.getMonth() + 1 === parseInt(month)) &&
+      // (!year || expDate.getFullYear() === parseInt(year))
+    );
+  });
+  console.log("fullDate", fullDate);
   return (
     <div>
       <div className="containerTAB ">
@@ -238,7 +266,7 @@ function Exportproduct() {
               </select>
             </div>
           </Col>
-          <Col md={4}>
+          <Col md={3}>
             <div className="selectSale">
               <Row>
                 <Col style={{ paddingTop: " 5px", color: "white" }}>
@@ -272,8 +300,72 @@ function Exportproduct() {
               </Row>
             </div>
           </Col>
-          <Col>
-            <div className="selectSale">
+          <Col md={3}>
+            <Row>
+              <div style={{ display: "flex", marginTop: "15px" }}>
+                <Col
+                  style={{
+                    paddingTop: " 5px",
+                    color: "white",
+                    marginRight: "10px",
+                  }}
+                >
+                  <div className="text-end">
+                    <span>
+                      วันที่{" "}
+                      <FcSynchronize
+                        className="FcSynchronize"
+                        onClick={() => {
+                          setFullDate("");
+                        }}
+                      />
+                    </span>
+                  </div>
+                </Col>
+                <Col>
+                  <Form.Control
+                    type="date"
+                    value={fullDate}
+                    onChange={(e) => setFullDate(e.target.value)}
+                  />
+                </Col>
+              </div>
+            </Row>
+          </Col>
+          <Col md={2}>
+            <Row>
+              <div style={{ display: "flex", marginTop: "15px" }}>
+                <Col
+                  style={{
+                    paddingTop: " 5px",
+                    color: "white",
+                    marginRight: "10px",
+                  }}
+                >
+                  <div className="text-end">
+                    <span>
+                      เดือน/ปี{" "}
+                      <FcSynchronize
+                        className="FcSynchronize"
+                        onClick={() => {
+                          setMonthyear("");
+                        }}
+                      />
+                    </span>
+                  </div>
+                </Col>
+
+                <Form.Control
+                  style={{ width: "150px" }}
+                  type="month"
+                  value={monthyear}
+                  onChange={(e) => setMonthyear(e.target.value)}
+                />
+              </div>
+            </Row>
+          </Col>
+          <Col md={2}>
+            {/* <div className="selectSale">
               <input
                 style={{
                   width: "155px",
@@ -285,119 +377,179 @@ function Exportproduct() {
                 value={`รวมทั้งสิ้น : ${totalAmount_products} ชิ้น`} // แสดงผลรวมแบบแสดงค่าจริง
                 disabled
               />
-            </div>
+            </div> */}
+            <Row>
+              <div style={{ display: "flex", marginTop: "15px" }}>
+                <Col
+                  style={{
+                    paddingTop: " 5px",
+                    color: "white",
+                    marginRight: "10px",
+                  }}
+                >
+                  <div className="text-end">
+                    <span>
+                      ปี{" "}
+                      <FcSynchronize
+                        className="FcSynchronize"
+                        onClick={() => {
+                          setFullyear("");
+                        }}
+                      />
+                    </span>
+                  </div>
+                </Col>
+
+                <Form.Control
+                  style={{ width: "150px", marginRight: "5%" }}
+                  type="year"
+                  value={fullyear}
+                  onChange={(e) => setFullyear(e.target.value)}
+                  placeholder="ปีที่ทำรายการ พ.ศ."
+                />
+              </div>
+            </Row>
           </Col>
 
-          <Col className="add2">
+          {/* <Col className="add2">
             <Col
               className="col2"
               style={{
                 marginRight: "15px",
                 marginBottom: "10px",
                 marginTop: "10px",
+                paddingTop: "5px",
               }}
             >
+              <input
+                style={{
+                  width: "60px",
+                  color: "black",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginLeft: "10px",
+                }}
+                className="form-control"
+                type="text"
+                placeholder="วันที่"
+                value={day}
+                onChange={(e) => setDay(e.target.value)}
+              />
+              <input
+                style={{
+                  width: "60px",
+                  color: "black",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginLeft: "10px",
+                }}
+                className="form-control"
+                type="text"
+                placeholder="เดือน"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+              />
+              <input
+                style={{
+                  width: "80px",
+                  color: "black",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginLeft: "10px",
+                }}
+                className="form-control"
+                type="text"
+                placeholder="ปี"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              />
+
               <button
                 style={{
                   backgroundColor: "white",
                   borderRadius:
-                    "10%" /* กำหนดให้มีรูปร่างวงกลมโดยใช้ border-radius */,
-                  width: "80px" /* กำหนดความกว้างของปุ่ม */,
-                  height: "40px" /* กำหนดความสูงของปุ่ม */,
+                    "10%" ,
+                  width: "80px" ,
+                  height: "40px" ,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
                 }}
-                onClick={generatePDF}
+                // onClick={generatePDF}
               >
                 <BsPrinterFill />
               </button>
             </Col>
-          </Col>
+          </Col> */}
         </Row>
         {/* <hr /> */}
-        <div className="table-container">
+        <div className="table-container" style={{ marginTop: "10px" }}>
           <table className=" table table-striped table-dark ">
             <thead className="table-secondary">
               <tr>
                 <th>รหัสบิล</th>
-                <th>รหัสล็อต</th>
-                <th>ชื่อผลิตภัณฑ์</th>
-                <th>จำนวนสินค้า (ชิ้น)</th>
-                <th>ชื่อผู้รับ</th>
                 <th>วันที่ทำรายการ</th>
+                <th>ชื่อผู้รับ</th>
                 <th>พนักงานที่ทำรายการ</th>
-                <th>หมายเหตุ</th>
+                <th>เพิ่มเติม</th>
               </tr>
             </thead>
 
             <tbody>
               {saveoption === ""
-                ? records
-                    .filter((data) => {
-                      const expDate = new Date(data.Dete_requisition);
-                      return (
-                        (!startDate || expDate >= new Date(startDate)) &&
-                        (!endDate || expDate <= new Date(endDate))
-                      );
-                    })
+                ? filteredRecords
+                    // .filter((data) => {
+                    //   const expDate = new Date(data.Dete_requisition);
+                    //   return (
+                    //     (!startDate || expDate >= new Date(startDate)) &&
+                    //     (!endDate || expDate <= new Date(endDate))
+                    //   );
+                    // })
                     .map((data, index) => (
                       <tr key={index}>
-                        {/* <td scope="row">{data.ID_lot}</td> */}
                         <td scope="row">{`${formatDateY(
                           data.Dete_requisition
                         )}-${data.Bill}`}</td>
-                        <td scope="row">{`${formatDateY(data.date_import)}-${
-                          data.Lot_ID
-                        }`}</td>
-                        <td>{data.Name_product}</td>
-                        <td>{data.Amount_products}</td>
-                        <td>{data.agent_fullname}</td>
                         <td>{formatDate(data.Dete_requisition)}</td>
+                        <td>{data.agent_fullname}</td>
                         <td>{data.sales_fullname}</td>
-                        <td>{data.remark}</td>
-                        {/* <td className="centericon">
+                        <td className="centericon">
                           <div
-                            className="read2"
-                            onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                            // className="read2"
+                            onClick={() => navigate(`/ReadExport/${data.Bill}`)}
                           >
                             <BiSearchAlt />
                           </div>
-                        </td> */}
+                        </td>
                       </tr>
                     ))
-                : records
-                    .filter((data) => {
-                      const expDate = new Date(data.Dete_requisition);
-                      return (
-                        (!startDate || expDate >= new Date(startDate)) &&
-                        (!endDate || expDate <= new Date(endDate))
-                      );
-                    })
+                : filteredRecords
+                    // .filter((data) => {
+                    //   const expDate = new Date(data.Dete_requisition);
+                    //   return (
+                    //     (!startDate || expDate >= new Date(startDate)) &&
+                    //     (!endDate || expDate <= new Date(endDate))
+                    //   );
+                    // })
                     .map((data, index) => (
                       <tr key={index}>
-                        {/* <td scope="row">{data.ID_lot}</td> */}
                         <td scope="row">{`${formatDateY(
                           data.Dete_requisition
                         )}-${data.Bill}`}</td>
-                        <td scope="row">{`${formatDateY(data.date_import)}-${
-                          data.Lot_ID
-                        }`}</td>
-                        <td>{data.Name_product}</td>
-                        <td>{data.Amount_products}</td>
-                        <td>{data.agent_fullname}</td>
                         <td>{formatDate(data.Dete_requisition)}</td>
+                        <td>{data.agent_fullname}</td>
                         <td>{data.sales_fullname}</td>
-                        <td>{data.remark}</td>
-                        {/* <td className="centericon">
+                        <td className="centericon">
                           <div
-                            className="read2"
-                            onClick={() => navigate(`/ReadLOT/${data.ID_lot}`)}
+                            // className="read2"
+                            onClick={() => navigate(`/ReadExport/${data.Bill}`)}
                           >
                             <BiSearchAlt />
                           </div>
-                        </td> */}
+                        </td>
                       </tr>
                     ))}
             </tbody>
