@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@david.kucsai/react-pdf-table": "^0.4.1",
+    "@react-pdf/renderer": "^3.1.13",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",

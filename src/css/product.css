@@ -1,9 +1,9 @@
 
 .containerPRODUCT{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -16,62 +16,62 @@ width: 1000px;
 color: white;
 }
 .bodyImportLOT{
-  padding: 30px;
-  height: 560px;
-  /* margin: 30px; */
-  display: grid;
-  width: 1500px;
-  color: white;
-  }
-  
+padding: 30px;
+height: 560px;
+/* margin: 30px; */
+display: grid;
+width: 1500px;
+color: white;
+}
+
 
 .save {
-    background-color: rgb(0, 255, 72);
-    height: 40px;
-    width: 100px;
-  }
-  
+  background-color: rgb(0, 255, 72);
+  height: 40px;
+  width: 100px;
+}
+
 
 .backProduct {
-    /* margin-left: 66px; */
-    background-color: rgb(255, 0, 0);
-    height: 40px;
-    width: 100px;
-  }
+  /* margin-left: 66px; */
+  background-color: rgb(255, 0, 0);
+  height: 40px;
+  width: 100px;
+}
 .backProduct:hover {
-    filter: drop-shadow(0 0 2em #ff0000bc);
+  filter: drop-shadow(0 0 2em #ff0000bc);
 
-    
-  }
+  
+}
 
 .spanProduct{
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .FcSynchronize {
-    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปมือชี้ */
-    transition: transform 0.2s; /* เพิ่มการเปลี่ยนแปลงที่เรียบของรูปร่าง */
-  }
-  
-  .FcSynchronize:hover {
-    transform: scale(1.2); /* เพิ่มขนาดของปุ่มเมื่อชี้ */
-    filter: drop-shadow(0 5 10em #ffa200);
+  cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปมือชี้ */
+  transition: transform 0.2s; /* เพิ่มการเปลี่ยนแปลงที่เรียบของรูปร่าง */
+}
 
-  }
+.FcSynchronize:hover {
+  transform: scale(1.2); /* เพิ่มขนาดของปุ่มเมื่อชี้ */
+  filter: drop-shadow(0 5 10em #ffa200);
 
-  .red-text {
-    color: red;
-    font-size: 17px;
-  }
-  
-  .lot-table{
-    height: 350px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
+}
 
-  .adressAD{
-    background-color: #ffffffd7;
-    padding: 10px;
-    height: 170px;
-  }
+.red-text {
+  color: red;
+  font-size: 17px;
+}
+
+.lot-table{
+  height: 350px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.adressAD{
+  background-color: #ffffffd7;
+  padding: 10px;
+  height: 170px;
+}

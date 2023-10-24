@@ -400,13 +400,13 @@ function ProductLOT() {
                 marginTop: "10px",
               }}
             >
-              <button
+              {/* <button
                 style={{ backgroundColor: "white" }}
                 className="addProduct"
                 onClick={generatePDF}
               >
                 <BsPrinterFill />
-              </button>
+              </button> */}
 
               <button
                 className="addProductLOT"

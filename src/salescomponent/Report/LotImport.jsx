@@ -295,28 +295,27 @@ function LotImport() {
                 marginTop: "10px",
               }}
             >
-              <button
+              {/* <button
                 style={{
                   backgroundColor: "white",
                   borderRadius:
-                    "10%" /* กำหนดให้มีรูปร่างวงกลมโดยใช้ border-radius */,
-                  width: "80px" /* กำหนดความกว้างของปุ่ม */,
-                  height: "40px" /* กำหนดความสูงของปุ่ม */,
+                    "10%" ,
+                  width: "80px",
+                  height: "40px" ,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  //   border: "1px solid #ccc" /* เพิ่มเส้นขอบหน้าปุ่ม */,
                 }}
                 onClick={generatePDF}
               >
                 <BsPrinterFill />
-              </button>
+              </button> */}
             </Col>
           </Col>
         </Row>
         {/* <hr /> */}
         <div className="table-container">
-          <table className=" table table-striped table-dark ">
+          <table className=" table table-striped table-dark " style={{ marginTop: "42px" }}>
             <thead className="table-secondary">
               <tr>
                 <th>รหัสล็อต</th>

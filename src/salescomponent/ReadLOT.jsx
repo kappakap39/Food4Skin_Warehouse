@@ -425,14 +425,14 @@ function ReadLOT() {
               </Col>
 
               <Col style={{ display: "flex", justifyContent: "end" }}>
-                <button
+                {/* <button
                   style={{ backgroundColor: "white", marginBottom: "10px" }}
                   className="addProduct"
-                  type="button" // Add this line
+                  type="button"
                   onClick={generatePDF}
                 >
                   <BsPrinterFill />
-                </button>
+                </button> */}
               </Col>
             </Row>
           </div>

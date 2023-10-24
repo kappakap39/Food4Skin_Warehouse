@@ -972,7 +972,7 @@ function Requisition() {
                       <th>จำนวนทั้งหมด (ชิ้น)</th>
                       <th>ราคารวม</th>
                       <th>ล็อต</th>
-                      {/* <th>ลบ</th> */}
+                      <th>ลบ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1022,7 +1022,7 @@ function Requisition() {
                               ล็อต
                             </h3>
                           </td>
-                          {/* <td>
+                          <td>
                             <h3
                               className="btn btn-danger"
                               onClick={() => {
@@ -1032,7 +1032,7 @@ function Requisition() {
                             >
                               ลบ
                             </h3>
-                          </td> */}
+                          </td>
                         </tr>
                       );
                     })}
@@ -1250,7 +1250,7 @@ function Requisition() {
                               <th>ชื่อสินค้า</th>
                               <th>จำนวน (ชิ้น)</th>
                               <th>หมายเหตุ</th>
-                              {/* <th>ลบ</th> */}
+                              <th>ลบ</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1277,7 +1277,7 @@ function Requisition() {
                                     value={product.remark}
                                   />
                                 </td>
-                                {/* <td>
+                                <td>
                                   <h3
                                     className="btn btn-danger"
                                     onClick={() => {
@@ -1288,7 +1288,7 @@ function Requisition() {
                                   >
                                     ลบ
                                   </h3>
-                                </td> */}
+                                </td>
                               </tr>
                             ))}
                           </tbody>

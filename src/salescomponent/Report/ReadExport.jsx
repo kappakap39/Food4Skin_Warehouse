@@ -27,7 +27,16 @@ import { BsPrinterFill } from "react-icons/bs";
 import { FcSynchronize } from "react-icons/fc";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
+import ExportPDF from "./PDF/ExportPDF";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink,
+  Font,
+} from "@react-pdf/renderer";
 function ReadExport() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -144,64 +153,65 @@ function ReadExport() {
   }
 
   //!PDF
-  function generatePDF() {
-    const pdf = new jsPDF("l", "mm", "a4"); // สร้างอ็อบเจ็กต์ PDF แนวนอน (landscape)
-    const pdfWidth = pdf.internal.pageSize.width;
-    const pdfHeight = pdf.internal.pageSize.height;
-    const margin = 10; // ขอบ 10 พิกเซล
+  // function generatePDF() {
+  //   const pdf = new jsPDF("l", "mm", "a4"); // สร้างอ็อบเจ็กต์ PDF แนวนอน (landscape)
+  //   const pdfWidth = pdf.internal.pageSize.width;
+  //   const pdfHeight = pdf.internal.pageSize.height;
+  //   const margin = 10; // ขอบ 10 พิกเซล
 
-    // กำหนดสีพื้นหลังของเอกสารเป็นสีดำ
-    pdf.setFillColor(255); // สีพื้นหลังขาว (RGB)
-    pdf.rect(0, 0, pdfWidth, pdfHeight, "F"); // วาดกล่องสีดำลงบนหน้ากระดาษทั้งหมด
+  //   // กำหนดสีพื้นหลังของเอกสารเป็นสีดำ
+  //   pdf.setFillColor(255); // สีพื้นหลังขาว (RGB)
+  //   pdf.rect(0, 0, pdfWidth, pdfHeight, "F"); // วาดกล่องสีดำลงบนหน้ากระดาษทั้งหมด
 
-    const table = document.querySelector(".table"); // เลือกตาราง HTML
+  //   const table = document.querySelector(".table"); // เลือกตาราง HTML
 
-    // กำหนดสีขอบเป็นสีดำ
-    pdf.setDrawColor(255); // สีขอบขาว (RGB)
+  //   // กำหนดสีขอบเป็นสีดำ
+  //   pdf.setDrawColor(255); // สีขอบขาว (RGB)
 
-    html2canvas(table).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png"); // แปลง HTML เป็นรูปภาพ
+  //   html2canvas(table).then((canvas) => {
+  //     const imgData = canvas.toDataURL("image/png"); // แปลง HTML เป็นรูปภาพ
 
-      const imgWidth = pdfWidth - 2 * margin; // ขนาดกว้างของรูปภาพเท่ากับความกว้างของเอกสารลบขอบมารอบ
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //     const imgWidth = pdfWidth - 2 * margin; // ขนาดกว้างของรูปภาพเท่ากับความกว้างของเอกสารลบขอบมารอบ
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      // ปรับค่าของ imgX, imgY, และ downloadDateX ดังนี้
-      const imgX = (pdfWidth - imgWidth) / 2; // ภาพอยู่ตรงกลางแนวนอน
-      const imgY = (pdfHeight - imgHeight) / 2; // ภาพอยู่ตรงกลางแนวตั้ง
-      // const downloadDateX = pdfWidth - margin - downloadDateWidth; // คำอธิบายอยู่ทางขวาขอบกระดาษ
+  //     // ปรับค่าของ imgX, imgY, และ downloadDateX ดังนี้
+  //     const imgX = (pdfWidth - imgWidth) / 2; // ภาพอยู่ตรงกลางแนวนอน
+  //     const imgY = (pdfHeight - imgHeight) / 2; // ภาพอยู่ตรงกลางแนวตั้ง
+  //     // const downloadDateX = pdfWidth - margin - downloadDateWidth; // คำอธิบายอยู่ทางขวาขอบกระดาษ
 
-      // คำนวณตำแหน่งแนวนอนของภาพและคำอธิบาย
-      // const imgX = margin; // ภาพอยู่ทางซ้าย
-      // const imgY = margin + 20; // ภาพอยู่ห่างจากด้านบน 20 พิกเซล
-      const downloadDateX =
-        pdfWidth -
-        margin -
-        (pdf.getStringUnitWidth(
-          "Download date : " + new Date().toLocaleDateString()
-        ) *
-          10) /
-          pdf.internal.scaleFactor; // คำอธิบายอยู่ทางขวา
+  //     // คำนวณตำแหน่งแนวนอนของภาพและคำอธิบาย
+  //     // const imgX = margin; // ภาพอยู่ทางซ้าย
+  //     // const imgY = margin + 20; // ภาพอยู่ห่างจากด้านบน 20 พิกเซล
+  //     const downloadDateX =
+  //       pdfWidth -
+  //       margin -
+  //       (pdf.getStringUnitWidth(
+  //         "Download date : " + new Date().toLocaleDateString()
+  //       ) *
+  //         10) /
+  //         pdf.internal.scaleFactor; // คำอธิบายอยู่ทางขวา
 
-      // เริ่มเพิ่มเนื้อหาใน PDF
-      pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
-      pdf.setTextColor(0); // สีข้อความดำ (RGB)
-      const textWidth =
-        (pdf.getStringUnitWidth("LOT Food4Skin") * pdf.internal.getFontSize()) /
-        pdf.internal.scaleFactor;
-      const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
-      pdf.text("LOT Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "LOT Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
+  //     // เริ่มเพิ่มเนื้อหาใน PDF
+  //     pdf.setFontSize(16); // กำหนดขนาดฟอนต์สำหรับหัวข้อ
+  //     pdf.setTextColor(0); // สีข้อความดำ (RGB)
+  //     const textWidth =
+  //       (pdf.getStringUnitWidth("LOT Food4Skin") * pdf.internal.getFontSize()) /
+  //       pdf.internal.scaleFactor;
+  //     const textX = (pdfWidth - textWidth) / 2; // คำนวณตำแหน่ง X สำหรับหัวข้อ
+  //     pdf.text("LOT Food4Skin", textX, margin + 10); // เพิ่มหัวข้อ "LOT Food4Skin" ที่ตำแหน่งตรงกลางและห่างจากตาราง 20 พิกเซล
 
-      pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight); // เพิ่มรูปภาพลงใน PDF
+  //     pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth, imgHeight); // เพิ่มรูปภาพลงใน PDF
 
-      // เพิ่มข้อความ "วันที่ดาวน์โหลด" ชิดขวา
-      const downloadDate = "Download date : " + new Date().toLocaleDateString();
-      pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
-      pdf.setTextColor(0); // กำหนดสีข้อความดำ (RGB)
-      pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
+  //     // เพิ่มข้อความ "วันที่ดาวน์โหลด" ชิดขวา
+  //     const downloadDate = "Download date : " + new Date().toLocaleDateString();
+  //     pdf.setFontSize(10); // กำหนดขนาดฟอนต์สำหรับข้อความ
+  //     pdf.setTextColor(0); // กำหนดสีข้อความดำ (RGB)
+  //     pdf.text(downloadDate, downloadDateX, pdfHeight - margin - 5); // เพิ่มข้อความ "วันที่ดาวน์โหลด"
 
-      pdf.save("Food4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
-    }); // เพิ่มวงเล็บปิดนี้
-  }
+  //     pdf.save("Food4Skin.pdf"); // ดาวน์โหลด PDF ด้วยชื่อ "Food4Skin.pdf"
+  //   }); // เพิ่มวงเล็บปิดนี้
+  // }
+
   return (
     <div>
       <header className="headernav ">
@@ -397,14 +407,27 @@ function ReadExport() {
               </Col>
 
               <Col style={{ display: "flex", justifyContent: "end" }}>
-                <button
+                {/* <button
                   style={{ backgroundColor: "white", marginBottom: "10px" }}
                   className="addProduct"
                   type="button" // Add this line
                   onClick={generatePDF}
                 >
                   <BsPrinterFill />
-                </button>
+                </button> */}
+                <PDFDownloadLink
+                  className="PDFbill btn"
+                  fileName="BillProductFood4skin.pdf" // กำหนดชื่อไฟล์ PDF
+                  style={{
+                    backgroundColor: "white",
+                    marginBottom: "10px",
+                    marginRight: "3%",
+                  }}
+                  type="button"
+                  document={<ExportPDF values={values} records={records} />} // ส่งข้อมูลที่ต้องการแสดงใน PDF
+                >
+                  <BsPrinterFill />
+                </PDFDownloadLink>
               </Col>
             </Row>
           </div>
