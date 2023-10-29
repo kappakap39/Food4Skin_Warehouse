@@ -25,7 +25,7 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     flexDirection: "row",
-    backgroundColor: "#E4E4E4",
+    backgroundColor: "#fff",
     fontFamily: "fontTH",
     height: "100%",
     width: "100%",
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     fontSize: "14px",
   },
   marginT: {
-    padding: "10px",
+    padding: "7px",
     fontSize: "16px",
     backgroundColor: "#78e296",
   },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderTopWidth: 0,
     borderColor: "#000",
-    padding: 10,
+    padding: 7,
   },
 });
 
@@ -121,6 +121,7 @@ const ExportPDF = ({ values, records }) => {
     0
   );
   const currentDate = new Date().toISOString().split("T")[0];
+  const currentDateRE = formatDateToThai(values.Dete_requisition);
   const thaiCurrentDate = formatDateToThai(currentDate);
 
   return (
@@ -132,31 +133,37 @@ const ExportPDF = ({ values, records }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              marginBottom: "40px",
-              marginTop: "15px",
+              marginBottom: "30px",
+              marginTop: "10px",
               fontSize: "22px",
               fontWeight: "bold",
             }}
           >
             <Text>ฟู้ดฟอร์สกิน ไทยแลนด์</Text>
           </View>
-          <Text
+          {/* <Text
             style={{
               fontSize: "16px",
             }}
           >
-            {`รหัสบิล : ${formatDateY(values.Dete_requisition)}-${values.Bill}`}
-          </Text>
+            {``}
+          </Text> */}
           <Text
             style={{
               fontSize: "16px",
             }}
-          >{`จังหวัด: ${values.province}
+          >{`รหัสบิล : ${formatDateY(values.Dete_requisition)}-${values.Bill}
+              วันที่เบิกสินค้า : ${currentDateRE}
+              ชื่อตัวแทนจำหน่าย : ${values.agent_fullname}
+              ชื่อพนักงานทำรายการ : ${values.sales_fullname}
+              
+              ที่อยู่และช่องทางติดต่อ
+              จังหวัด: ${values.province}
               อำเภอ : ${values.districts}
               ตำบล : ${values.subdistricts}
               รหัสไปรษณีย์ : ${values.zip_code}
-              เบอร์โทร : ${values.Tel}
-              ที่อยู่เพิ่มเติม : ${values.Address}`}</Text>
+              ที่อยู่เพิ่มเติม : ${values.Address}
+              เบอร์โทร : ${values.Tel}`}</Text>
 
           <Text style={styles.HBill}>รายการบิล</Text>
 
@@ -169,7 +176,7 @@ const ExportPDF = ({ values, records }) => {
             <TableBody data={records}>
               <DataTableCell
                 style={{
-                  padding: "10px",
+                  padding: "7px",
                   fontSize: "16px",
                 }}
                 getContent={(record) =>
@@ -179,14 +186,14 @@ const ExportPDF = ({ values, records }) => {
               <DataTableCell
                 style={{
                   borderColor: "#000",
-                  padding: "10px",
+                  padding: "7px",
                   fontSize: "16px",
                 }}
                 getContent={(record) => record.Name_product}
               />
               <DataTableCell
                 style={{
-                  padding: "10px",
+                  padding: "7px",
                   fontSize: "16px",
                 }}
                 getContent={(record) => record.Amount_products}

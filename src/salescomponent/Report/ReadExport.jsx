@@ -288,12 +288,12 @@ function ReadExport() {
                   class="form-control"
                   name=""
                   type="text"
-                  value={`จังหวัด: ${values.province} 
-อำเภอ: ${values.districts} 
-ตำบล: ${values.subdistricts} 
-รหัสไปรษณีย์: ${values.zip_code}
-เบอร์โทร: ${values.Tel} 
-ที่อยู่เพิ่มเติม: ${values.Address} `}
+                  value={`จังหวัด : ${values.province} 
+อำเภอ : ${values.districts} 
+ตำบล : ${values.subdistricts} 
+รหัสไปรษณีย์ : ${values.zip_code}
+เบอร์โทร : ${values.Tel} 
+ที่อยู่เพิ่มเติม : ${values.Address} `}
                 />
               </div>
             </Col>

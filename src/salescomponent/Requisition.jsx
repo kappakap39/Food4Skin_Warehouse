@@ -34,7 +34,6 @@ function Requisition() {
   //   // html: <i>คุณเข้าสู่ระบบในตำแหน่งพนักงานฝ่ายขาย</i>,
   //   icon: "success",
   // });
-  
 
   //!เพิ่มลงตาราง
   const [importedProducts, setImportedProducts] = useState([]); // เก็บข้อมูลสินค้าที่เพิ่มแต่ละชุด
@@ -339,24 +338,52 @@ function Requisition() {
   //! Function to delete a product by index
 
   const handleDeleteProduct = (index) => {
-    // // ก่อนอื่นคัดลอกข้อมูล allImportedProducts ไปยังอาเรย์ใหม่
-    // const updatedAllImportedProducts = [...allImportedProducts];
-    // // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
-    // updatedAllImportedProducts.splice(index, 1);
-    // // อัปเดต state ด้วยอาเรย์ใหม่ที่ไม่รวมรายการที่ถูกลบ
-    // setAllImportedProducts(updatedAllImportedProducts);
-
-    setAllExport((prevAll) => {
-      prevAll.filter((product) => {
-        product.ID_product !== index;
-      });
-    });
-    setAllImportedProducts((prevAll) => {
-      prevAll.filter((product) => {
-        product.ID_product !== index;
-      });
-    });
+    setAllExport((prevAll) =>
+      prevAll.filter((product) => product.ID_product !== index)
+    );
+    setAllImportedProducts((prevAll) =>
+      prevAll.filter((product) => product.ID_product !== index)
+    );
   };
+
+  const handleDeleteItemPR = (indexToDelete) => {
+    // หารายการที่จะลบจาก AllExport
+    const itemToDelete = AllExport.find(
+      (item) => item.ID_product === indexToDelete
+    );
+
+    // หาค่า price_lot ของรายการที่จะลบ
+    const priceToDelete = itemToDelete.price_lot;
+
+    // ลบรายการที่เลือกออกจาก AllExport โดยใช้ filter
+    setAllExport((prev) =>
+      prev.filter((item) => item.ID_product !== indexToDelete)
+    );
+
+    // หักค่า price_lot ของรายการที่ลบออกจาก totalPrice
+    //   setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
+    setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
+  };
+
+  // const handleDeleteProduct = (index) => {
+  //   // // ก่อนอื่นคัดลอกข้อมูล allImportedProducts ไปยังอาเรย์ใหม่
+  //   // const updatedAllImportedProducts = [...allImportedProducts];
+  //   // // ลบรายการที่เลือกออกจากอาเรย์ใหม่ตามดัชนี
+  //   // updatedAllImportedProducts.splice(index, 1);
+  //   // // อัปเดต state ด้วยอาเรย์ใหม่ที่ไม่รวมรายการที่ถูกลบ
+  //   // setAllImportedProducts(updatedAllImportedProducts);
+
+  //   setAllExport((prevAll) => {
+  //     prevAll.filter((product) => {
+  //       product.ID_product !== index;
+  //     });
+  //   });
+  //   setAllImportedProducts((prevAll) => {
+  //     prevAll.filter((product) => {
+  //       product.ID_product !== index;
+  //     });
+  //   });
+  // };
 
   const handleDeleteProductLot = (index) => {
     console.log("handleDeleteProductLot", index);
@@ -398,22 +425,22 @@ function Requisition() {
     setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
   };
 
-  const handleDeleteItemPR = (indexToDelete) => {
-    console.log("handleDeleteItemPR", indexToDelete);
+  // const handleDeleteItemPR = (indexToDelete) => {
+  //   console.log("handleDeleteItemPR", indexToDelete);
 
-    // ดึงข้อมูลรายการที่เลือกที่จะลบ
-    const itemToDelete = AllExport[indexToDelete];
-    // หาค่า ID_lot ของรายการที่จะลบ
-    const IDPRToDelete = itemToDelete.ID_product;
+  //   // ดึงข้อมูลรายการที่เลือกที่จะลบ
+  //   const itemToDelete = AllExport[indexToDelete];
+  //   // หาค่า ID_lot ของรายการที่จะลบ
+  //   const IDPRToDelete = itemToDelete.ID_product;
 
-    // ลบรายการที่เลือกออกจาก AllExport
-    setAllExport((prev) =>
-      prev.filter((item) => item.ID_product !== IDPRToDelete)
-    );
+  //   // ลบรายการที่เลือกออกจาก AllExport
+  //   setAllExport((prev) =>
+  //     prev.filter((item) => item.ID_product !== IDPRToDelete)
+  //   );
 
-    // หัก price_lot ของรายการที่ลบออกจาก totalPrice
-    setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
-  };
+  //   // หัก price_lot ของรายการที่ลบออกจาก totalPrice
+  //   setTotalPrice((prevTotalPrice) => prevTotalPrice - itemToDelete.price_lot);
+  // };
 
   //! แสดงคงเหลือล่าสุด
   const [calculatedAmount, setCalculatedAmount] = useState({});
