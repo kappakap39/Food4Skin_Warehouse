@@ -40,8 +40,6 @@ function Login() {
     setValues((prev) => ({
       ...prev,
       [event.target.name]: [event.target.value],
-
-      //showpass
       [name]: value,
     }));
   };
